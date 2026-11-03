@@ -116,45 +116,27 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [currentUser, setCurrentUser] = useState<CustomerUser | null>(() => {
     const saved = localStorage.getItem('pkess_current_user');
-    return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS[0]; // Default logged in as Dr. Chioma for smooth demo
+    return saved ? JSON.parse(saved) : null;
   });
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
     const saved = localStorage.getItem('pkess_wishlist');
-    return saved ? JSON.parse(saved) : ["prod-clo-1", "prod-bag-1"];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [orders, setOrders] = useState<Order[]>(() => {
     const saved = localStorage.getItem('pkess_orders');
-    return saved ? JSON.parse(saved) : INITIAL_ORDERS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [savingsPlans, setSavingsPlans] = useState<SaveToBuyPlan[]>(() => {
     const saved = localStorage.getItem('pkess_savings_plans');
-    return saved ? JSON.parse(saved) : INITIAL_SAVINGS_PLANS;
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [bnplApplications, setBnplApplications] = useState<BNPLApplication[]>(() => {
     const saved = localStorage.getItem('pkess_bnpl_apps');
-    return saved ? JSON.parse(saved) : [
-      {
-        id: "bnpl-001",
-        customerId: "user-1",
-        customerName: "Dr. Chioma Okonkwo",
-        customerEmail: "chioma.okonkwo@gmail.com",
-        customerPhone: "08034567890",
-        amount: 153000,
-        itemsSummary: "The Royal Ebere Lace Boubou + Handbag",
-        status: "under_review",
-        provider: "Credibly",
-        referenceNumber: "CRD-NG-2026-9041",
-        createdAt: "2026-11-01T11:00:00Z",
-        employmentStatus: "Full-Time Medical Director",
-        monthlyIncome: 1200000,
-        bvnLast4: "4491",
-        providerNote: "Application received. Credibly Nigeria underwriting partner eligibility sync in progress."
-      }
-    ];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [wholesaleSettings, setWholesaleSettings] = useState<WholesaleSettings>(() => {
@@ -330,44 +312,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
   // Auth
-  const login = (email: string, role: 'customer' | 'admin' = 'customer'): boolean => {
-    const isAdminEmail = email.toLowerCase() === 'pkessvariety@gmail.com' || email.toLowerCase() === 'admin@pkessfashion.com' || role === 'admin';
-    const found = INITIAL_CUSTOMERS.find(c => c.email.toLowerCase() === email.toLowerCase());
-    
-    if (isAdminEmail) {
-      const adminUser: CustomerUser = {
-        id: 'user-admin',
-        name: 'P-Kess Executive Admin',
-        email: email || 'pkessvariety@gmail.com',
-        phone: '09012776272',
-        role: 'admin',
-        wishlist: [],
-        createdAt: '2026-01-01'
-      };
-      setCurrentUser(adminUser);
-      showToast("Logged in as P-Kess Executive Admin");
-      return true;
+  const login = (email: string, _role: 'customer' | 'admin' = 'customer'): boolean => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      showToast("Enter a valid email address.", "error");
+      return false;
     }
-
+    const found = INITIAL_CUSTOMERS.find(c => c.email.toLowerCase() === normalizedEmail && c.role === 'customer');
     if (found) {
       setCurrentUser(found);
       showToast(`Welcome back, ${found.name}!`);
       return true;
     }
-
-    // Auto-create customer session
-    const newCustomer: CustomerUser = {
-      id: 'cust-' + Date.now(),
-      name: email.split('@')[0],
-      email: email,
-      phone: '08000000000',
-      role: 'customer',
-      wishlist: [],
-      createdAt: new Date().toISOString()
-    };
-    setCurrentUser(newCustomer);
-    showToast(`Welcome to P-Kess Fashion World, ${newCustomer.name}!`);
-    return true;
+    showToast("Customer authentication must be connected to the approved account service before sign-in can be enabled.", "warning");
+    return false;
   };
 
   const register = (name: string, email: string, phone: string): boolean => {

@@ -23,18 +23,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   // --- CLOTHING ---
   {
     id: "prod-clo-1",
-    name: "The Royal Ebere Lace Boubou Gown",
+    name: "P-Kess Ankara Statement Boubou",
     slug: "royal-ebere-lace-boubou-gown",
     category: "clothing",
-    description: "Hand-embellished luxury Swiss dry lace boubou with metallic gold thread borders and magenta Swarovski crystal embellishments. Designed for queens and high-society occasions in Nigeria.",
+    description: "A flowing Nigerian-inspired boubou silhouette in a bold Ankara print, styled for celebrations, family occasions and elegant everyday wear.",
     retailPrice: 85000,
     wholesalePrice: 72250, // 15% off
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing2.jpg?width=1000"],
     sizes: ["One Size (UK 10-22)", "Custom Made"],
     colors: ["Metallic Gold & Magenta", "Deep Onyx Black", "Royal Emerald", "Champagne Gold"],
     stock: 24,
@@ -43,29 +39,26 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: true,
     isBestSeller: true,
-    rating: 5.0,
-    reviewCount: 38,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Fabric: 100% Premium Swiss Voile Dry Lace with Metallic Embroidery",
-      "Embellishments: Genuine Austrian Crystals & Beadwork",
+      "Style: Nigerian-inspired boubou silhouette with Ankara print",
+      "Embellishments: Genuine decorative Crystals & Beadwork",
       "Includes matching raw silk inner slip gown",
       "Dry clean only",
-      "Tailored at P-Kess Haute Couture Atelier in Asaba"
+      "Designed for P-Kess Fashion World in Asaba"
     ]
   },
   {
     id: "prod-clo-2",
-    name: "Aura Magenta Velvet Corset Gala Gown",
+    name: "P-Kess Ankara Occasion Gown",
     slug: "aura-magenta-velvet-corset-gala-gown",
     category: "clothing",
-    description: "Sculpted stretch velvet evening dress featuring a boned corset bodice, asymmetric thigh slit, and draped metallic gold accent chain. The epitome of modern Nigerian luxury.",
+    description: "A statement occasion gown with a flattering fitted shape and contemporary detailing. A polished choice for celebrations and special events.",
     retailPrice: 95000,
     wholesalePrice: 80750,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_dress.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Cowries_Print_Maxi_Dress.JPG?width=1000"],
     sizes: ["UK 8", "UK 10", "UK 12", "UK 14", "UK 16"],
     colors: ["Rich Magenta", "Midnight Black", "Regal Gold"],
     stock: 18,
@@ -74,10 +67,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: true,
     isBestSeller: true,
-    rating: 4.9,
-    reviewCount: 29,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Fabric: Micro-stretch French Velvet with Silk Lining",
+      "Style: Fitted occasion gown with contemporary detailing",
       "Boned internal corset with laced back for perfect fit",
       "Concealed back zip closure",
       "Floor-length sweeping train"
@@ -85,17 +78,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-clo-3",
-    name: "The Prestige Senator Two-Piece Suit",
+    name: "P-Kess Senator Two-Piece Set",
     slug: "prestige-senator-two-piece-suit",
     category: "clothing",
-    description: "Impeccably tailored men and unisex senator ensemble cut from Italian wool cashmere with geometric gold embroidered neck and cuff detailing.",
+    description: "A smart Nigerian senator-inspired two-piece set with a clean silhouette and refined neckline detailing for events and formal occasions.",
     retailPrice: 75000,
     wholesalePrice: 63750,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_family_in_Ankara_clothing.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_man_in_a_Guinea_clothing.jpg?width=1000"],
     sizes: ["S (Chest 38)", "M (Chest 40)", "L (Chest 42)", "XL (Chest 44)", "XXL (Chest 46)"],
     colors: ["Onyx Black & Gold", "Deep Navy", "Pure Ivory", "Burgundy Magenta"],
     stock: 30,
@@ -104,27 +94,24 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 4.8,
-    reviewCount: 42,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Fabric: Italian Super 140s Wool Blend",
+      "Style: Nigerian senator-inspired two-piece set",
       "Handcrafted gold piping along chest placket",
       "Trousers with adjustable waistband side tabs"
     ]
   },
   {
     id: "prod-clo-4",
-    name: "Sovereign Gold Brocade Blazer & Trouser Set",
+    name: "P-Kess Aso-Oke Detail Two-Piece",
     slug: "sovereign-gold-brocade-blazer-trouser-set",
     category: "clothing",
-    description: "Statement power suit woven with metallic gold jacquard leaf motifs on obsidian black fabric. Features peak lapels and sculpted waistline.",
+    description: "A coordinated two-piece outfit inspired by Nigerian occasion dressing, with a structured finish and elegant detailing.",
     retailPrice: 110000,
     wholesalePrice: 93500,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_woman_in_a_Guinea_clothing_and_the_Gele_headtie.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_Yoruba_lady_in_a_Buba_and_Gele_headtie.jpg?width=1000"],
     sizes: ["UK 8", "UK 10", "UK 12", "UK 14", "UK 16"],
     colors: ["Metallic Gold & Black", "Magenta & Gold"],
     stock: 12,
@@ -133,10 +120,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: true,
     isBestSeller: false,
-    rating: 5.0,
-    reviewCount: 16,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Fabric: Premium Jacquard Brocade with Gold Weft",
+      "Style: Coordinated two-piece outfit with structured finish",
       "Double-breasted metallic gold crested buttons",
       "Fully lined in breathable cupro silk"
     ]
@@ -145,17 +132,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   // --- SHOES ---
   {
     id: "prod-sho-1",
-    name: "The P-Kess Aurelia Metallic Gold Stiletto",
+    name: "P-Kess Classic Leather Sandals",
     slug: "pkess-aurelia-metallic-gold-stiletto",
     category: "shoes",
-    description: "Handcrafted 105mm stiletto pump in liquid mirror metallic gold calfskin, inspired by the gold high heel featured in our brand emblem. Features a cushioned red carpet memory sole.",
+    description: "A versatile footwear style selected to complement Nigerian occasion wear and contemporary outfits. Check available sizes before ordering.",
     retailPrice: 58000,
     wholesalePrice: 49300,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Nigerian_Sandal.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Handcrafted_sandals_01.jpg?width=1000"],
     sizes: ["EU 37 / UK 4", "EU 38 / UK 5", "EU 39 / UK 6", "EU 40 / UK 7", "EU 41 / UK 8", "EU 42 / UK 9"],
     colors: ["Mirror Liquid Gold", "Onyx Black Patent", "Vibrant Magenta Satin"],
     stock: 35,
@@ -164,28 +148,25 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 4.9,
-    reviewCount: 64,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "Heel height: 105mm / 4.1 inches",
-      "Upper: Genuine Italian Mirror Metallic Calfskin",
+      "Style: Classic footwear silhouette",
       "Insole: Dual-density ergonomic memory foam",
       "Sole: Non-slip natural leather with signature protective rubber tread"
     ]
   },
   {
     id: "prod-sho-2",
-    name: "Empress Magenta Suede Crystal Strappy Sandal",
+    name: "P-Kess Everyday Handmade Slides",
     slug: "empress-magenta-suede-crystal-strappy-sandal",
     category: "shoes",
-    description: "Sensational barely-there evening sandal crafted in rich magenta Italian kid suede, adorned with hand-set crystal vines that climb elegantly around the ankle.",
+    description: "A comfortable statement sandal for celebrations and everyday styling, designed to pair with dresses, native wear and casual looks.",
     retailPrice: 62000,
     wholesalePrice: 52700,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Handcrafted_sandals_02.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/A_handcrafted_pair_of_slides.jpg?width=1000"],
     sizes: ["EU 38 / UK 5", "EU 39 / UK 6", "EU 40 / UK 7", "EU 41 / UK 8", "EU 42 / UK 9"],
     colors: ["Vibrant Magenta", "Rose Gold", "Jet Black Crystal"],
     stock: 22,
@@ -194,27 +175,24 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: true,
     isBestSeller: false,
-    rating: 4.9,
-    reviewCount: 19,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "Heel height: 95mm / 3.75 inches",
-      "Upper: Premium Kidskin Suede with Crystal Micro-mesh",
+      "Style: Open-toe occasion sandal",
       "Ankle buckle strap with customizable fit"
     ]
   },
   {
     id: "prod-sho-3",
-    name: "Duke of Asaba Gold-Buckle Velvet Loafer",
+    name: "P-Kess Men's Leather Sandals",
     slug: "duke-of-asaba-gold-buckle-velvet-loafer",
     category: "shoes",
-    description: "Luxury smoking slippers for distinguished gentlemen and fashion connoisseurs. Black silk velvet with heavy 24k gold-plated crown bit ornament.",
+    description: "A classic men's footwear option with a smart finish, suitable for native wear, senator outfits and relaxed formal looks.",
     retailPrice: 68000,
     wholesalePrice: 57800,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Hand_made_Shoe.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Nigerian_Sandal.jpg?width=1000"],
     sizes: ["EU 40", "EU 41", "EU 42", "EU 43", "EU 44", "EU 45"],
     colors: ["Obsidian Black Velvet", "Wine Burgundy", "Navy Blue"],
     stock: 25,
@@ -223,26 +201,24 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 5.0,
-    reviewCount: 31,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Upper: Black Italian silk velvet with calfskin trim",
+      "Style: Men's slip-on footwear",
       "Hardware: Heavy cast gold alloy bit",
       "Goodyear welted leather outsole"
     ]
   },
   {
     id: "prod-sho-4",
-    name: "Celeste Sculpted Gold Heel Mule",
+    name: "P-Kess Women's Statement Slides",
     slug: "celeste-sculpted-gold-heel-mule",
     category: "shoes",
-    description: "Contemporary slip-on mules featuring an architectural hollow gold sphere heel and ultra-soft nappa leather band in rich midnight noir.",
+    description: "An easy-to-style slip-on footwear option for day-to-evening outfits.",
     retailPrice: 52000,
     wholesalePrice: 44200,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1596704017254-9b121068fb31?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_handcrafted_pair_of_slides.jpg?width=1000"],
     sizes: ["EU 37", "EU 38", "EU 39", "EU 40", "EU 41"],
     colors: ["Noir Black", "Magenta Crush", "Ivory Cream"],
     stock: 20,
@@ -251,8 +227,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: true,
     isBestSeller: false,
-    rating: 4.8,
-    reviewCount: 14,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "Heel height: 80mm architectural gold electroplated brass",
       "Padded footbed with arch support",
@@ -263,17 +239,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   // --- BAGS ---
   {
     id: "prod-bag-1",
-    name: "The P-Kess Sovereign Structured Top-Handle Bag",
+    name: "P-Kess Ankara Top-Handle Bag",
     slug: "pkess-sovereign-structured-top-handle-bag",
     category: "bags",
-    description: "Our signature flagship handbag as portrayed in our brand emblem. Sculpted from croc-embossed calfskin with heavy gold turn-lock closure and dual top handles.",
+    description: "A Nigerian-inspired Ankara fabric handbag with a structured shape for carrying everyday essentials and adding colour to your look.",
     retailPrice: 78000,
     wholesalePrice: 66300,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Shoulder_Bag.JPG?width=1000"],
     sizes: ["Medium (30 x 22 x 12 cm)", "Large (36 x 26 x 14 cm)"],
     colors: ["Rich Magenta Pink", "Midnight Black Croc", "Caramel Gold Croc"],
     stock: 28,
@@ -282,11 +255,11 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: true,
     isBestSeller: true,
-    rating: 5.0,
-    reviewCount: 52,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Material: Full-grain embossed calf leather",
-      "Hardware: 24K electroplated gold brass hardware",
+      "Material: Ankara fabric and supporting bag materials",
+      "Hardware: gold-tone hardware",
       "Compartments: Center zip divider, smartphone pocket, RFID card slots",
       "Includes detachable leather and gold chain shoulder strap",
       "Protective gold metal base studs"
@@ -294,17 +267,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-bag-2",
-    name: "Lumière Crystal Minaudière Evening Clutch",
+    name: "P-Kess Ankara Occasion Clutch",
     slug: "lumiere-crystal-minaudiere-evening-clutch",
     category: "bags",
-    description: "Dazzling hard-case evening clutch encrusted with thousands of multifaceted crystals set on a metallic gold frame. Comes with a discreet fold-in snake chain.",
+    description: "A compact occasion bag with an elegant finish, suitable for weddings, parties and special events.",
     retailPrice: 48000,
     wholesalePrice: 40800,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Shoulder_Bag.JPG?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=1000"],
     sizes: ["One Size (20 x 12 x 5 cm)"],
     colors: ["Champagne Gold", "Magenta Prism", "Diamond Silver", "Jet Obsidian"],
     stock: 32,
@@ -313,8 +283,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 4.9,
-    reviewCount: 47,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "Hand-applied high refractive glass crystals",
       "Velvet lined interior with card holder",
@@ -324,16 +294,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-bag-3",
-    name: "Palazzo Quilted Chain Shoulder Bag",
+    name: "P-Kess Everyday Ankara Shoulder Bag",
     slug: "palazzo-quilted-chain-shoulder-bag",
     category: "bags",
-    description: "Classic diamond-quilted lambskin shoulder bag with sliding dual gold chain and engraved P-Kess emblem clasp. Transitions seamlessly from daytime boardroom to gala dinners.",
+    description: "A practical shoulder bag designed to complement both casual outfits and Nigerian occasion wear.",
     retailPrice: 65000,
     wholesalePrice: 55250,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Shoulder_Bag.JPG?width=1000"],
     sizes: ["Medium (25 x 16 x 8 cm)"],
     colors: ["Black Onyx with Gold Chain", "Magenta Rouge", "Cream Ecru"],
     stock: 19,
@@ -342,26 +310,24 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: true,
     isBestSeller: true,
-    rating: 4.9,
-    reviewCount: 33,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Supple buttery Italian lambskin leather",
+      "Supple buttery locally selected lambskin leather",
       "Double flap closure for complete security",
       "Convertible strap can be worn shoulder or crossbody"
     ]
   },
   {
     id: "prod-bag-4",
-    name: "Executive Grand Shopper Tote",
+    name: "P-Kess Everyday Market Tote",
     slug: "executive-grand-shopper-tote",
     category: "bags",
-    description: "Spacious luxury work & shopping tote with padded 15-inch laptop compartment and reinforced leather handles. Clean, minimalist elegance for modern women on the move.",
+    description: "A roomy everyday tote for shopping, work and daily essentials.",
     retailPrice: 55000,
     wholesalePrice: 46750,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=1000"],
     sizes: ["Large (42 x 30 x 15 cm)"],
     colors: ["Midnight Black", "Warm Tan Camel", "Deep Bordeaux"],
     stock: 25,
@@ -370,10 +336,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: false,
     isBestSeller: false,
-    rating: 4.7,
-    reviewCount: 21,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Durable scratch-resistant saffiano calf leather",
+      "Durable everyday bag material",
       "Main zip enclosure with side slip organizers",
       "Fits 13-16 inch laptops and files comfortably"
     ]
@@ -382,29 +348,26 @@ export const INITIAL_PRODUCTS: Product[] = [
   // --- ACCESSORIES ---
   {
     id: "prod-acc-1",
-    name: "Imperial Majesty 24K Gold Statement Choker",
+    name: "P-Kess Traditional Beaded Necklace Set",
     slug: "imperial-majesty-gold-statement-choker",
     category: "accessories",
-    description: "Heavy gold-layered collar necklace handcrafted with tiered filigree leaves and bezel-set magenta tourmaline gems. Designed to turn heads at Nigerian weddings and royal galas.",
+    description: "A statement beaded accessory inspired by Nigerian traditional styling. A bold finishing touch for special occasions.",
     retailPrice: 38000,
     wholesalePrice: 32300,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_lady_adorned_with_the_white_bead.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=1000"],
     sizes: ["Adjustable Collar"],
-    colors: ["24K Yellow Gold Plated", "Rose Gold Plated"],
+    colors: ["Gold Tone", "Rose Gold Plated"],
     stock: 45,
     sku: "PK-ACC-001",
     discountPercent: 15,
     featured: true,
     isNewArrival: true,
     isBestSeller: true,
-    rating: 5.0,
-    reviewCount: 58,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "Base: Hypoallergenic jeweler's bronze with 3-micron 24K gold vacuum plating",
+      "Base: Hypoallergenic jeweler's bronze with gold-tone finish",
       "Stones: Hand-cut lab magenta tourmaline and cubic zirconia",
       "Includes matching drop earrings and presentation jewel box",
       "Tarnish-resistant coating guaranteed 2+ years"
@@ -412,17 +375,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-acc-2",
-    name: "P-Kess Royal Chronograph Diamond Watch",
+    name: "P-Kess Statement Headwrap & Cap",
     slug: "pkess-royal-chronograph-diamond-watch",
     category: "accessories",
-    description: "Luxury timepiece featuring a sunray dial, tachymeter bezel set with Austrian baguette crystals, and a solid stainless steel link bracelet in two-tone gold and onyx.",
+    description: "A fashion accessory selected to complete both contemporary and traditional looks.",
     retailPrice: 72000,
     wholesalePrice: 61200,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Aso_Oke.jpg?width=1000"],
     sizes: ["38mm (Women's)", "42mm (Men's / Unisex)"],
     colors: ["Two-Tone Gold & Black", "Full Gold Dial", "Rose Gold Dial"],
     stock: 20,
@@ -431,8 +391,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: true,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 4.9,
-    reviewCount: 36,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "Movement: Japanese Miyota Precision Quartz Chronograph",
       "Case: 316L Surgical Grade Stainless Steel",
@@ -442,16 +402,14 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
   {
     id: "prod-acc-3",
-    name: "Monogram Silk Twill Reversible Scarf",
+    name: "P-Kess Aso-Oke Inspired Scarf",
     slug: "monogram-silk-twill-reversible-scarf",
     category: "accessories",
-    description: "Large 90x90cm 100% mulberry silk twill scarf printed with ornate golden baroque crowns, chains, and magenta floral emblems. Hand-rolled contrast edges.",
+    description: "A versatile scarf or headwrap inspired by Nigerian styling traditions. Wear it around the head, neck or as a bag accent.",
     retailPrice: 22000,
     wholesalePrice: 18700,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Aso_oke.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=1000"],
     sizes: ["90 x 90 cm"],
     colors: ["Black, Gold & Magenta", "Cream & Champagne Gold"],
     stock: 50,
@@ -460,26 +418,24 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: true,
     isBestSeller: false,
-    rating: 4.8,
-    reviewCount: 22,
+    rating: 0,
+    reviewCount: 0,
     details: [
-      "100% Mulberry Silk, 16 momme twill weave",
+      "100% soft fabric, 16 momme twill weave",
       "Traditional hand-rolled edges",
       "Wearable as headwrap, neck scarf, or bag accessory"
     ]
   },
   {
     id: "prod-acc-4",
-    name: "Versailles Gold-Rimmed Polarized Sunglasses",
+    name: "P-Kess Fashion Finishing Accessories",
     slug: "versailles-gold-rimmed-polarized-sunglasses",
     category: "accessories",
-    description: "Oversized geometric statement sunglasses with sculpted gold metal temples featuring the engraved P-Kess emblem and gradient UV400 lenses.",
+    description: "A stylish finishing accessory for everyday outfits and special occasions.",
     retailPrice: 28000,
     wholesalePrice: 23800,
     wholesaleMinQty: 10,
-    images: [
-      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1000&q=80"
-    ],
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=1000"],
     sizes: ["One Size"],
     colors: ["Gold & Gradient Smoke", "Gold & Magenta Rose Gradient", "Gold & Amber Tortoise"],
     stock: 40,
@@ -488,14 +444,83 @@ export const INITIAL_PRODUCTS: Product[] = [
     featured: false,
     isNewArrival: false,
     isBestSeller: true,
-    rating: 4.8,
-    reviewCount: 39,
+    rating: 0,
+    reviewCount: 0,
     details: [
       "100% UVA/UVB Category 3 Polarized protection",
       "Ultra-lightweight gold titanium alloy frames",
       "Comes with hard leather travel case and microfiber cloth"
     ]
-  }
+  },
+
+  // --- T-SHIRTS ---
+  {
+    id: "prod-tee-1",
+    name: "P-Kess Naija Graphic T-Shirt",
+    slug: "pkess-naija-graphic-t-shirt",
+    category: "t-shirts",
+    description: "A relaxed everyday tee celebrating Nigerian identity. Designed as an easy-to-style wardrobe staple for casual looks.",
+    retailPrice: 25000,
+    wholesalePrice: 21250,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Tee.JPG?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Black"],
+    stock: 12,
+    sku: "PK-TEE-001",
+    discountPercent: 0,
+    featured: true,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Everyday casual styling", "Available in multiple sizes", "Confirm colour and availability before dispatch"]
+  },
+  {
+    id: "prod-tee-2",
+    name: "P-Kess African Mask Print Tee",
+    slug: "pkess-african-mask-print-tee",
+    category: "t-shirts",
+    description: "A casual graphic tee inspired by African art and visual heritage. Pair with denim, trousers or shorts for an effortless look.",
+    retailPrice: 28000,
+    wholesalePrice: 23800,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/African_Mask_Tee.JPG?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Black", "White"],
+    stock: 10,
+    sku: "PK-TEE-002",
+    discountPercent: 0,
+    featured: true,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Relaxed casual fit", "Graphic-inspired styling", "Confirm colour and availability before dispatch"]
+  },
+  {
+    id: "prod-tee-3",
+    name: "P-Kess Everyday Nigerian Cotton Tee",
+    slug: "pkess-everyday-nigerian-cotton-tee",
+    category: "t-shirts",
+    description: "A simple everyday T-shirt concept for easy pairing with jeans, skirts and casual sets.",
+    retailPrice: 22000,
+    wholesalePrice: 18700,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Batik_Africa_Tshirt.jpg?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Navy", "Black"],
+    stock: 15,
+    sku: "PK-TEE-003",
+    discountPercent: 0,
+    featured: false,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Everyday wardrobe staple", "Multiple size options", "Confirm colour and availability before dispatch"]
+  },
+
 ];
 
 export const INITIAL_WHOLESALE_SETTINGS: WholesaleSettings = {
@@ -503,19 +528,19 @@ export const INITIAL_WHOLESALE_SETTINGS: WholesaleSettings = {
   defaultDiscountPercent: 15,
   tierDiscounts: [
     { minQty: 10, discountPercent: 15 },
-    { minQty: 25, discountPercent: 18 },
-    { minQty: 50, discountPercent: 22 }
+    { minQty: 25, discountPercent: 15 },
+    { minQty: 50, discountPercent: 15 }
   ],
   enableAutoDiscount: true
 };
 
 export const INITIAL_PAYMENT_SETTINGS: PaymentSettings = {
-  bankName: "Zenith Bank PLC",
-  accountName: "P-KESS FASHION WORLD LTD",
-  accountNumber: "1019842501",
-  bankInstructions: "Please transfer the exact amount using your Order Number as your reference or transfer narration. Upload your debit receipt screenshot immediately after completing payment for fast 15-minute verification.",
-  paystackPublicKey: "pk_test_pkess_fashion_world_2026",
-  paystackSecretKey: "sk_test_pkess_secret_secured_key",
+  bankName: "",
+  accountName: "",
+  accountNumber: "",
+  bankInstructions: "Business bank details will be provided by P-Kess Fashion World and configured by an administrator before bank-transfer payments are enabled.",
+  paystackPublicKey: "",
+  paystackSecretKey: "",
   paystackLiveMode: false
 };
 

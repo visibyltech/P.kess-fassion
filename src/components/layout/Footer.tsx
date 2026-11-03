@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h4 className="text-white font-semibold text-sm">Nationwide Delivery</h4>
-              <p className="text-xs text-zinc-400">Fast dispatch across all 36 Nigerian states & FCT</p>
+              <p className="text-xs text-zinc-400">Delivery information shown at checkout</p>
             </div>
           </div>
 
@@ -49,7 +49,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <CreditCard className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm">Secure Nigerian Payments</h4>
+              <h4 className="text-white font-semibold text-sm">Payment options at checkout</h4>
               <p className="text-xs text-zinc-400">Paystack, verified bank transfer & BNPL</p>
             </div>
           </div>
@@ -121,10 +121,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </li>
             <li>
               <button 
+                onClick={() => onNavigate('shop', { category: 't-shirts' })}
+                className="hover:text-[#D4AF37] transition-colors"
+              >
+                T-Shirts
+              </button>
+            </li>
+            <li>
+              <button 
                 onClick={() => onNavigate('shop', { category: 'shoes' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Designer Stilettos & Shoes
+                Shoes & Sandals
               </button>
             </li>
             <li>
@@ -132,7 +140,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('shop', { category: 'bags' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Luxury Leather Handbags
+                Bags & Handbags
               </button>
             </li>
             <li>
@@ -140,7 +148,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('shop', { category: 'accessories' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Gold Jewelry & Accessories
+                Fashion Accessories
               </button>
             </li>
             <li>
@@ -262,12 +270,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </div>
 
+      {/* Editorial image attribution: all editorial reference photographs are sourced from Wikimedia Commons and remain subject to their individual CC BY-SA 4.0 / CC0 licences. They are not represented as P-Kess-owned product photography. */}
+      <div className="border-t border-[#1A1A22] px-4 sm:px-6 lg:px-8 py-3 text-[10px] text-zinc-500 text-center">
+        Editorial reference photography: Wikimedia Commons contributors · CC BY-SA 4.0 / CC0. These images are illustrative references, not confirmed P-Kess product photographs.
+      </div>
+
       {/* Bottom Copyright & Disclaimer Bar */}
       <div className="border-t border-[#1A1A22] py-6 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} P-Kess Fashion World Ltd. All rights reserved. RC Regulated in Nigeria.</p>
+          <p>© {new Date().getFullYear()} P-Kess Fashion World. All rights reserved.</p>
           <div className="flex items-center gap-4 text-zinc-400">
-            <span>Asaba • Lagos • Abuja • Nationwide</span>
+            <span>Asaba, Delta State, Nigeria</span>
             <span>•</span>
             <span className="text-[#D4AF37]">Creating Elegance</span>
           </div>

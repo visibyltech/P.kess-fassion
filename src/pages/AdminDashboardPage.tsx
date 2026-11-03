@@ -71,7 +71,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
     sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
     colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
-    details: ['Luxury handcrafted tailoring in Asaba atelier'],
+    details: ['Designer-led Nigerian clothing collection'],
     featured: true,
     isNewArrival: true
   });
@@ -114,7 +114,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
       sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
       colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
-      details: ['Handcrafted luxury piece made in Asaba atelier'],
+      details: ['P-Kess designer clothing and fashion collection'],
       featured: true,
       isNewArrival: true,
       rating: 5.0,
@@ -258,7 +258,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Revenue</span>
               <div className="text-2xl font-black text-[#ECC260]">₦{totalRevenue.toLocaleString()}</div>
               <span className="text-[11px] text-emerald-400 flex items-center gap-1">
-                ✓ Verified Nigerian payments
+                Payment settings
               </span>
             </div>
 
@@ -860,10 +860,11 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                     onChange={(e) => setProductForm({ ...productForm, category: e.target.value as any })}
                     className="w-full bg-[#181824] border border-[#2E2E42] rounded-xl p-2.5 text-white"
                   >
-                    <option value="clothing">Clothing & Gowns</option>
-                    <option value="shoes">Shoes & Stilettos</option>
-                    <option value="bags">Luxury Bags</option>
-                    <option value="accessories">Accessories</option>
+                    <option value="clothing">Clothing & Native Wear</option>
+                    <option value="t-shirts">T-Shirts</option>
+                    <option value="shoes">Shoes & Sandals</option>
+                    <option value="bags">Bags</option>
+                    <option value="accessories">Fashion Accessories</option>
                   </select>
                 </div>
               </div>

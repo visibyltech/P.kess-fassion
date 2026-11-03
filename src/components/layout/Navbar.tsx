@@ -10,12 +10,10 @@ import {
   X, 
   Phone, 
   MapPin, 
-  ShieldCheck, 
+  ShieldCheck,
   Sparkles,
   ChevronDown,
-  Layers,
   PiggyBank,
-  CreditCard,
   Truck
 } from 'lucide-react';
 import { BRAND_CONSTANTS } from '../../data/initialData';
@@ -33,7 +31,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     currentUser, 
     setIsAuthModalOpen, 
     isAdmin, 
-    login, 
     logout 
   } = useStore();
 
@@ -46,9 +43,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     { id: 'home', label: 'Home' },
     { id: 'shop', label: 'Shop' },
     { id: 'clothing', label: 'Clothing', filter: 'clothing' },
+    { id: 't-shirts', label: 'T-Shirts', filter: 't-shirts' },
     { id: 'shoes', label: 'Shoes', filter: 'shoes' },
     { id: 'bags', label: 'Bags', filter: 'bags' },
-    { id: 'accessories', label: 'Accessories', filter: 'accessories' },
+    { id: 'accessories', label: 'Fashion Accessories', filter: 'accessories' },
     { id: 'wholesale', label: 'Wholesale', badge: '15% Off' },
     { id: 'save-to-buy', label: 'Save to Buy', icon: PiggyBank },
     { id: 'bnpl', label: 'Buy Now Pay Later' },
@@ -83,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           <div className="flex items-center gap-4 text-[11px] sm:text-xs">
             <span className="inline-flex items-center gap-1.5 text-[#ECC260] font-medium">
               <Sparkles className="w-3.5 h-3.5 text-[#E6007A]" />
-              Wholesale Discounts: Save up to 15% on 10+ Units
+              Proudly Nigerian Fashion · Designed with Elegance
             </span>
             <span className="hidden md:inline-flex items-center gap-1 text-zinc-400">
               <MapPin className="w-3 h-3 text-[#D4AF37]" />
@@ -100,26 +98,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               {BRAND_CONSTANTS.phoneNumbers[0]}
             </a>
 
-            {/* Admin Switcher for instant testing */}
-            <div className="flex items-center gap-2">
-              {isAdmin ? (
-                <button
-                  onClick={() => onNavigate('admin')}
-                  className="px-2.5 py-0.5 rounded-full bg-[#D4AF37] text-black font-semibold text-[10px] tracking-wide flex items-center gap-1 hover:brightness-110"
-                >
-                  <ShieldCheck className="w-3 h-3" />
-                  Admin Panel Active
-                </button>
-              ) : (
-                <button
-                  onClick={() => login('pkessvariety@gmail.com', 'admin')}
-                  className="px-2 py-0.5 rounded border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37]/10 text-[10px] tracking-wider transition-colors"
-                  title="Switch to Admin Mode for managing products, orders & payments"
-                >
-                  Admin Login
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </div>
@@ -147,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           <form onSubmit={handleSearchSubmit} className="relative w-full">
             <input
               type="text"
-              placeholder="Search designer lace, heels, bags, jewelry..."
+              placeholder="Search Nigerian designs, T-shirts, shoes, bags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#131317] border border-[#2B2B38] text-white text-xs sm:text-sm rounded-full py-2 pl-10 pr-10 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] placeholder-zinc-500 transition-colors"

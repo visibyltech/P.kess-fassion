@@ -48,16 +48,28 @@ const AppContent: React.FC = () => {
     return { page: 'home', params: {} };
   });
 
+  // Keep the first in-app page in the browser history so Back returns to the store, not a blank external entry.
+  useEffect(() => {
+    if (!window.history.state?.page) {
+      window.history.replaceState({ page: navState.page, params: navState.params || {} }, '', window.location.href);
+    }
+  }, []);
+
   // Handle browser back and forward buttons
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
       if (event.state && event.state.page) {
         setNavState(event.state);
+        window.scrollTo({ top: 0, behavior: 'auto' });
       } else {
         const hash = window.location.hash.replace('#/', '');
         const [page, queryString] = hash.split('?');
         const params = queryString ? Object.fromEntries(new URLSearchParams(queryString)) : {};
-        setNavState({ page: page || 'home', params });
+        const fallbackState = { page: page || 'home', params };
+        setNavState(fallbackState);
+        // Recover gracefully if the browser restores an entry without app state.
+        window.history.replaceState(fallbackState, '', window.location.href);
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }
     };
 
@@ -100,6 +112,10 @@ const AppContent: React.FC = () => {
 
         {navState.page === 'clothing' && (
           <ShopPage onNavigate={handleNavigate} initialCategory="clothing" />
+        )}
+
+        {navState.page === 't-shirts' && (
+          <ShopPage onNavigate={handleNavigate} initialCategory="t-shirts" />
         )}
 
         {navState.page === 'shoes' && (

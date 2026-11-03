@@ -28,7 +28,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </p>
 
           <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
-            Established at our flagship showroom in Asaba, Delta State, <strong>P-Kess Fashion World</strong> has grown into one of Nigeria's premier fashion destinations. We produce and curate high-society Swiss dry lace boubous, sculpted velvet corsets, handcrafted Italian leather shoes, statement handbags, and 24K gold accessories.
+            Based in Asaba, Delta State, <strong>P-Kess Fashion World</strong> is a Nigerian fashion brand led by a designer who creates her own clothing line. The collection is centred on Nigerian style, with clothing alongside shoes, bags and fashion accessories.
           </p>
         </div>
       </div>
@@ -41,7 +41,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </div>
           <h3 className="font-serif-luxury text-xl font-bold text-white">Uncompromising Quality</h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Every garment, shoe, and handbag that carries the P-Kess emblem undergoes rigorous quality inspection in our Asaba atelier before dispatch.
+            P-Kess brings the designer's own clothing creations together with a selection of footwear, bags, T-shirts and fashion accessories in one convenient online store.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </div>
           <h3 className="font-serif-luxury text-xl font-bold text-white">Empowering Retailers</h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Through our wholesale initiative, we partner with boutique owners and fashion vendors across Nigeria, offering discounts of up to 15% - 22% on orders of 10+ units.
+            Through our wholesale initiative, we partner with boutique owners and fashion vendors across Nigeria, offering wholesale discounts of 10% to 15% on eligible orders of 10 or more units.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </div>
 
           <h2 className="font-serif-luxury text-2xl sm:text-4xl font-bold text-white">
-            Visit Our Showroom & Atelier in Asaba
+            Visit P-Kess Fashion World in Asaba
           </h2>
 
           <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
