@@ -43,8 +43,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
         onClick={() => setIsCartOpen(false)} 
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#0D0D12] border-l border-[#242432] shadow-2xl flex flex-col">
+      <div className="fixed inset-y-0 right-0 w-full max-w-md">
+        <div className="h-full w-full min-w-0 bg-[#0D0D12] border-l border-[#242432] shadow-2xl flex flex-col overflow-x-hidden">
           {/* Header */}
           <div className="p-5 border-b border-[#1E1E2A] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -70,7 +70,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
           </div>
 
           {/* Wholesale Discount Threshold Bar */}
-          <div className="bg-[#14141B] px-5 py-3 border-b border-[#222230]">
+          <div className="bg-[#14141B] px-4 sm:px-5 py-3 border-b border-[#222230] min-w-0">
             {unitsNeededForWholesale === 0 ? (
               <div className="flex items-center gap-2 text-xs text-[#ECC260] font-medium">
                 <Sparkles className="w-4 h-4 text-[#E6007A] shrink-0" />
@@ -80,7 +80,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
               </div>
             ) : (
               <div>
-                <div className="flex justify-between text-xs text-zinc-300 mb-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs text-zinc-300 mb-1.5">
                   <span className="flex items-center gap-1 font-medium">
                     <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
                     Wholesale Threshold:
@@ -100,7 +100,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
           </div>
 
           {/* Cart Items List */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto overflow-x-hidden p-3 sm:p-5 space-y-4">
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
                 <div className="w-16 h-16 rounded-full bg-[#161620] border border-[#2A2A38] flex items-center justify-center text-zinc-500 mb-4">
@@ -124,17 +124,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
               cart.map((item, index) => (
                 <div 
                   key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}-${index}`}
-                  className="p-3.5 rounded-xl bg-[#14141B] border border-[#242432] flex gap-3.5 relative group"
+                  className="w-full min-w-0 p-3 rounded-xl bg-[#14141B] border border-[#242432] flex gap-3 relative group"
                 >
                   {/* Thumbnail */}
                   <img
                     src={item.product.images[0]}
                     alt={item.product.name}
-                    className="w-20 h-24 object-cover rounded-lg bg-black shrink-0 border border-[#2A2A3A]"
+                    className="w-16 h-20 sm:w-20 sm:h-24 object-cover rounded-lg bg-black shrink-0 border border-[#2A2A3A]"
                   />
 
                   {/* Details */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                  <div className="flex-1 min-w-0 flex flex-col justify-between overflow-hidden">
                     <div>
                       <div className="flex justify-between items-start gap-2">
                         <h4 className="text-white text-xs font-semibold truncate">
@@ -168,7 +168,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
                     </div>
 
                     {/* Price and Quantity */}
-                    <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-800/60">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mt-2 pt-2 border-t border-zinc-800/60 min-w-0">
                       <div>
                         <span className="text-xs font-bold text-[#ECC260]">
                           ₦{item.unitPrice.toLocaleString()}
@@ -207,9 +207,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
 
           {/* Footer Summary & Checkout */}
           {cart.length > 0 && (
-            <div className="p-5 border-t border-[#1F1F2C] bg-[#111116] space-y-3">
-              <div className="space-y-1.5 text-xs">
-                <div className="flex justify-between text-zinc-400">
+            <div className="shrink-0 min-w-0 p-3 sm:p-5 border-t border-[#1F1F2C] bg-[#111116] space-y-3">
+              <div className="space-y-1.5 text-xs min-w-0">
+                <div className="flex justify-between gap-3 text-zinc-400 min-w-0">
                   <span>Subtotal:</span>
                   <span>₦{cartSubtotal.toLocaleString()}</span>
                 </div>
@@ -224,9 +224,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
                   </div>
                 )}
 
-                <div className="flex justify-between text-white text-base font-bold pt-2 border-t border-zinc-800">
+                <div className="flex justify-between items-center gap-3 text-white text-base font-bold pt-2 border-t border-zinc-800 min-w-0">
                   <span>Total Payable:</span>
-                  <span className="text-[#ECC260]">₦{cartTotal.toLocaleString()}</span>
+                  <span className="text-[#ECC260] text-right whitespace-nowrap">₦{cartTotal.toLocaleString()}</span>
                 </div>
                 <p className="text-[10px] text-zinc-500 text-right">
                   Delivery calculated at checkout based on Nigerian state
@@ -265,9 +265,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              <div className="pt-2 text-center flex items-center justify-center gap-2 text-[10px] text-zinc-400">
+              <div className="pt-2 text-center flex flex-wrap items-center justify-center gap-2 text-[10px] leading-relaxed text-zinc-400">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Protected by Paystack & P-Kess Verified Delivery Guarantee</span>
+                <span>Secure Checkout & P-Kess Verified Delivery Guarantee</span>
               </div>
             </div>
           )}
