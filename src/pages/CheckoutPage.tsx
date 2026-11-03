@@ -143,6 +143,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       return;
     }
 
+    // Require real transfer evidence before recording a bank-transfer order.
+    if (!uploadedProofUrl) {
+      showToast('Please upload your bank transfer receipt before submitting the order.', 'error');
+      return;
+    }
+
     // Process Bank Transfer Order
     setIsProcessing(true);
     setTimeout(() => {
@@ -166,7 +172,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         paymentMethod: 'bank_transfer',
         paymentStatus: 'awaiting_verification',
         orderStatus: 'pending',
-        proofOfPaymentUrl: uploadedProofUrl || 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80',
+        proofOfPaymentUrl: uploadedProofUrl,
         bankTransferRef: bankReference || 'TRF-' + Math.floor(10000000 + Math.random() * 90000000),
         courier: 'Pending Verification'
       });
