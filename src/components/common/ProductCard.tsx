@@ -140,7 +140,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Mobile / Direct Action Buttons */}
         <div className="pt-2 border-t border-[#1C1C28] flex items-center gap-1.5 sm:gap-2">
           <button
-            onClick={() => addToCart(product, 1)}
+            onClick={(e) => { e.stopPropagation(); addToCart(product, 1); }}
             className="flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg bg-[#181822] hover:bg-[#D4AF37] hover:text-black border border-[#2D2D3E] hover:border-[#D4AF37] text-zinc-200 text-[11px] sm:text-xs font-semibold transition-all flex items-center justify-center gap-1 sm:gap-1.5 truncate"
           >
             <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#D4AF37] group-hover:text-black shrink-0" />
