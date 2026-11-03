@@ -30,30 +30,30 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const categories = [
     {
       id: 'clothing',
-      title: 'Haute Clothing & Gowns',
-      subtitle: 'Swiss lace boubous, velvet corsets & regal senators',
-      image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80',
+      title: 'Nigerian Clothing & Native Wear',
+      subtitle: 'Ankara styles, elegant gowns, native sets & occasion wear',
+      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing2.jpg?width=900',
       itemCount: '12+ Styles'
     },
     {
       id: 'shoes',
-      title: 'Designer Shoes & Stilettos',
-      subtitle: 'Liquid metallic gold pumps & crystal evening sandals',
-      image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=800&q=80',
+      title: 'Shoes & Sandals',
+      subtitle: 'Locally crafted footwear for everyday and special occasions',
+      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Nigerian_Sandal.jpg?width=900',
       itemCount: '8+ Styles'
     },
     {
       id: 'bags',
-      title: 'Luxury Leather Handbags',
-      subtitle: 'Flagship structured top handles & crystal evening clutches',
-      image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=80',
+      title: 'Bags & Handbags',
+      subtitle: 'Ankara, fabric and statement bags',
+      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=900',
       itemCount: '10+ Styles'
     },
     {
       id: 'accessories',
-      title: 'Gold Jewelry & Accessories',
-      subtitle: '24K gold chokers, chronograph watches & silk scarves',
-      image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      title: 'Fashion Accessories',
+      subtitle: 'Beads, headwraps, caps, scarves and finishing touches',
+      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=900',
       itemCount: '14+ Styles'
     }
   ];
@@ -65,8 +65,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         {/* Background Editorial Fashion Campaign Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=85"
-            alt="P-Kess Fashion World Campaign"
+            src="https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing.jpg?width=1600"
+            alt="Nigerian model wearing Ankara fashion — editorial brand imagery"
             className="w-full h-full object-cover object-center filter brightness-[0.4] contrast-105 scale-105 animate-fade-in"
           />
           {/* Gradients to blend smoothly with dark brand identity */}
@@ -80,7 +80,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#D4AF37]/40 mb-6 shadow-xl">
             <Sparkles className="w-4 h-4 text-[#E6007A]" />
             <span className="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#FFE898]">
-              P-Kess Haute Couture & Wholesale Atelier
+              P-Kess Fashion World & Wholesale Atelier
             </span>
           </div>
 
