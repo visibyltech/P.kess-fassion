@@ -192,7 +192,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
               className="mx-auto w-[82%] py-2.5 px-3 rounded-xl bg-[#171722] hover:bg-[#E6007A]/15 border border-[#E6007A]/50 text-[#FF66B2] font-semibold text-[10px] sm:text-xs flex items-center justify-center gap-1.5 transition-colors"
             >
               <PiggyBank className="w-4 h-4" />
-              Save to Buy This Product (Installment Savings)
+              Save to Buy (Installment Payments)
             </button>
           </div>
 
