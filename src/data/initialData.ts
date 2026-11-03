@@ -42,7 +42,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 38,
     details: [
-      "Fabric: 100% Premium Nigerian-inspired Voile Dry Lace with Metallic Embroidery",
+      "Style: Nigerian-inspired boubou silhouette with Ankara print",
       "Embellishments: Genuine decorative Crystals & Beadwork",
       "Includes matching raw silk inner slip gown",
       "Dry clean only",
@@ -70,7 +70,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 29,
     details: [
-      "Fabric: Micro-stretch velvet with Silk Lining",
+      "Style: Fitted occasion gown with contemporary detailing",
       "Boned internal corset with laced back for perfect fit",
       "Concealed back zip closure",
       "Floor-length sweeping train"
@@ -97,7 +97,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 42,
     details: [
-      "Fabric: locally selected Super 140s Wool Blend",
+      "Style: Nigerian senator-inspired two-piece set",
       "Handcrafted gold piping along chest placket",
       "Trousers with adjustable waistband side tabs"
     ]
@@ -123,7 +123,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 16,
     details: [
-      "Fabric: Premium Jacquard Brocade with Gold Weft",
+      "Style: Coordinated two-piece outfit with structured finish",
       "Double-breasted metallic gold crested buttons",
       "Fully lined in breathable cupro silk"
     ]
@@ -152,7 +152,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 64,
     details: [
       "Heel height: 105mm / 4.1 inches",
-      "Upper: Genuine locally selected Mirror Metallic Calfskin",
+      "Style: Classic footwear silhouette",
       "Insole: Dual-density ergonomic memory foam",
       "Sole: Non-slip natural leather with signature protective rubber tread"
     ]
@@ -179,7 +179,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 19,
     details: [
       "Heel height: 95mm / 3.75 inches",
-      "Upper: Premium Kidskin Suede with Crystal Micro-mesh",
+      "Style: Open-toe occasion sandal",
       "Ankle buckle strap with customizable fit"
     ]
   },
@@ -204,7 +204,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 31,
     details: [
-      "Upper: Black locally selected silk velvet with calfskin trim",
+      "Style: Men's slip-on footwear",
       "Hardware: Heavy cast gold alloy bit",
       "Goodyear welted leather outsole"
     ]
@@ -258,7 +258,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 52,
     details: [
-      "Material: Full-grain embossed calf leather",
+      "Material: Ankara fabric and supporting bag materials",
       "Hardware: 24K electroplated gold brass hardware",
       "Compartments: Center zip divider, smartphone pocket, RFID card slots",
       "Includes detachable leather and gold chain shoulder strap",
@@ -339,7 +339,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 21,
     details: [
-      "Durable scratch-resistant saffiano calf leather",
+      "Durable everyday bag material",
       "Main zip enclosure with side slip organizers",
       "Fits 13-16 inch laptops and files comfortably"
     ]
