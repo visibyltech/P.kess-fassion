@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     { id: 'bags', label: 'Bags & Handbags', filter: 'bags', icon: ShoppingBag },
     { id: 'accessories', label: 'Fashion Accessories', filter: 'accessories', icon: Sparkles },
     { id: 'wholesale', label: 'Wholesale', badge: '15% Off', icon: Percent },
-    { id: 'save-to-buy', label: 'Save to Buy', icon: PiggyBank },
+    { id: 'save-to-buy', label: 'Save to Buy (Installment Payments)', icon: PiggyBank },
     { id: 'bnpl', label: 'Buy Now Pay Later', icon: CreditCard },
     { id: 'track-order', label: 'Track My Order', icon: ClipboardList },
     { id: 'about', label: 'About P-Kess', icon: Info },
