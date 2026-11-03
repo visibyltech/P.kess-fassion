@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h4 className="text-white font-semibold text-sm">Nationwide Delivery</h4>
-              <p className="text-xs text-zinc-400">Fast dispatch across all 36 Nigerian states & FCT</p>
+              <p className="text-xs text-zinc-400">Delivery information shown at checkout</p>
             </div>
           </div>
 
@@ -49,7 +49,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <CreditCard className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm">Secure Nigerian Payments</h4>
+              <h4 className="text-white font-semibold text-sm">Payment options at checkout</h4>
               <p className="text-xs text-zinc-400">Paystack, verified bank transfer & BNPL</p>
             </div>
           </div>
@@ -121,7 +121,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </li>
             <li>
               <button 
-                onClick={() => onNavigate('shop', { category: 'shoes' })}
+                onClick={() => onNavigate('shop', { category: 't-shirts' })}
+                className="hover:text-[#D4AF37] transition-colors"
+              >
+                T-Shirts
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('shop', { category: 'shoes' })
                 className="hover:text-[#D4AF37] transition-colors"
               >
                 Designer Stilettos & Shoes
