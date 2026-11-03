@@ -14,7 +14,17 @@ import {
   Sparkles,
   ChevronDown,
   PiggyBank,
-  Truck
+  Truck,
+  Home,
+  Package,
+  ClipboardList,
+  Info,
+  MessageCircle,
+  LogIn,
+  UserPlus,
+  ChevronRight,
+  Percent,
+  CreditCard
 } from 'lucide-react';
 import { BRAND_CONSTANTS } from '../../data/initialData';
 
