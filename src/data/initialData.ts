@@ -451,7 +451,76 @@ export const INITIAL_PRODUCTS: Product[] = [
       "Ultra-lightweight gold titanium alloy frames",
       "Comes with hard leather travel case and microfiber cloth"
     ]
-  }
+  },
+
+  // --- T-SHIRTS ---
+  {
+    id: "prod-tee-1",
+    name: "P-Kess Naija Graphic T-Shirt",
+    slug: "pkess-naija-graphic-t-shirt",
+    category: "t-shirts",
+    description: "A relaxed everyday tee celebrating Nigerian identity. Designed as an easy-to-style wardrobe staple for casual looks.",
+    retailPrice: 25000,
+    wholesalePrice: 21250,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Tee.JPG?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Black"],
+    stock: 12,
+    sku: "PK-TEE-001",
+    discountPercent: 0,
+    featured: true,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Everyday casual styling", "Available in multiple sizes", "Confirm colour and availability before dispatch"]
+  },
+  {
+    id: "prod-tee-2",
+    name: "P-Kess African Mask Print Tee",
+    slug: "pkess-african-mask-print-tee",
+    category: "t-shirts",
+    description: "A casual graphic tee inspired by African art and visual heritage. Pair with denim, trousers or shorts for an effortless look.",
+    retailPrice: 28000,
+    wholesalePrice: 23800,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/African_Mask_Tee.JPG?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Black", "White"],
+    stock: 10,
+    sku: "PK-TEE-002",
+    discountPercent: 0,
+    featured: true,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Relaxed casual fit", "Graphic-inspired styling", "Confirm colour and availability before dispatch"]
+  },
+  {
+    id: "prod-tee-3",
+    name: "P-Kess Everyday Nigerian Cotton Tee",
+    slug: "pkess-everyday-nigerian-cotton-tee",
+    category: "t-shirts",
+    description: "A simple everyday T-shirt concept for easy pairing with jeans, skirts and casual sets.",
+    retailPrice: 22000,
+    wholesalePrice: 18700,
+    wholesaleMinQty: 10,
+    images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Batik_Africa_Tshirt.jpg?width=1000"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Navy", "Black"],
+    stock: 15,
+    sku: "PK-TEE-003",
+    discountPercent: 0,
+    featured: false,
+    isNewArrival: true,
+    isBestSeller: false,
+    rating: 0,
+    reviewCount: 0,
+    details: ["Everyday wardrobe staple", "Multiple size options", "Confirm colour and availability before dispatch"]
+  },
+
 ];
 
 export const INITIAL_WHOLESALE_SETTINGS: WholesaleSettings = {
