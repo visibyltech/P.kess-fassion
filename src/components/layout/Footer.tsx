@@ -59,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <RefreshCcw className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-white font-semibold text-sm">Save to Buy Flexibility</h4>
+              <h4 className="text-white font-semibold text-sm">Save to Buy (Installment Payments)</h4>
               <p className="text-xs text-zinc-400">Save gradually towards luxury fashion pieces</p>
             </div>
           </div>
@@ -182,7 +182,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('save-to-buy')}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Save to Buy Programme
+                Save to Buy (Installment Payments) Programme
               </button>
             </li>
             <li>
@@ -255,7 +255,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('legal', { type: 'save-to-buy' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Save to Buy Terms
+                Save to Buy (Installment Payments) Terms
               </button>
             </li>
             <li>

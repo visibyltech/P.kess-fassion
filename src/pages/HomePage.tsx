@@ -146,7 +146,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <div className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Authentic Quality</span></div>
             <div className="flex items-center justify-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#E6007A]" /><span>Nationwide Delivery</span></div>
             <div className="flex items-center justify-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Secure Payments</span></div>
-            <div className="flex items-center justify-center gap-1.5"><PiggyBank className="w-3.5 h-3.5 text-[#E6007A]" /><span>Save to Buy</span></div>
+            <div className="flex items-center justify-center gap-1.5"><PiggyBank className="w-3.5 h-3.5 text-[#E6007A]" /><span>Save to Buy (Installment Payments)</span></div>
           </div>
         </div>
       </section>
@@ -359,7 +359,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   onClick={() => onNavigate('save-to-buy')}
                   className="px-8 py-3.5 rounded-full bg-gradient-to-r from-[#E6007A] to-[#B3005F] text-white font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all flex items-center gap-2 shadow-lg shadow-[#E6007A]/20"
                 >
-                  Start a Save to Buy Plan
+                  Start a Save to Buy (Installment Payments) Plan
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -445,7 +445,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('save-to-buy')}
                 className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-[#D4AF37] hover:brightness-110 text-black font-bold text-xs tracking-wider uppercase transition-colors"
               >
-                Use Guaranteed Save to Buy
+                Use Guaranteed Save to Buy (Installment Payments)
               </button>
             </div>
 

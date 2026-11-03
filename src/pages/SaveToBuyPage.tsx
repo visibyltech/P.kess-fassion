@@ -187,7 +187,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
         <div className="max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6007A]/20 border border-[#E6007A]/40 text-[#FF66B2] text-xs font-bold uppercase tracking-wider">
             <PiggyBank className="w-4 h-4" />
-            Official P-Kess Savings Programme
+            Save to Buy (Installment Payments)
           </div>
 
           <h1 className="font-serif-luxury text-3xl sm:text-5xl font-bold text-white leading-tight">
@@ -653,7 +653,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                 Log Installment Deposit
               </h3>
               <p className="text-xs text-zinc-400">
-                Deposit via Paystack or direct Nigerian bank transfer.
+                Make your installment deposit by bank transfer or an approved payment method.
               </p>
             </div>
 
