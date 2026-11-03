@@ -425,7 +425,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
           {activeTab === 'shipping' && (
             <div className="space-y-4">
               <p>
-                All orders are dispatched from the P-Kess Fashion World atelier & showroom located at <strong>{BRAND_CONSTANTS.address}</strong>.
+                All orders are dispatched from the P-Kess Fashion World business address located at <strong>{BRAND_CONSTANTS.address}</strong>.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl bg-black/40 border border-zinc-800">
