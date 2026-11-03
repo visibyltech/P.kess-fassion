@@ -259,7 +259,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 0,
     details: [
       "Material: Ankara fabric and supporting bag materials",
-      "Hardware: 24K electroplated gold brass hardware",
+      "Hardware: gold-tone hardware",
       "Compartments: Center zip divider, smartphone pocket, RFID card slots",
       "Includes detachable leather and gold chain shoulder strap",
       "Protective gold metal base studs"
@@ -357,7 +357,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     wholesaleMinQty: 10,
     images: ["https://commons.wikimedia.org/wiki/Special:FilePath/A_lady_adorned_with_the_white_bead.jpg?width=1000", "https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=1000"],
     sizes: ["Adjustable Collar"],
-    colors: ["24K Yellow Gold Plated", "Rose Gold Plated"],
+    colors: ["Gold Tone", "Rose Gold Plated"],
     stock: 45,
     sku: "PK-ACC-001",
     discountPercent: 15,
@@ -367,7 +367,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 0,
     reviewCount: 0,
     details: [
-      "Base: Hypoallergenic jeweler's bronze with 3-micron 24K gold vacuum plating",
+      "Base: Hypoallergenic jeweler's bronze with gold-tone finish",
       "Stones: Hand-cut lab magenta tourmaline and cubic zirconia",
       "Includes matching drop earrings and presentation jewel box",
       "Tarnish-resistant coating guaranteed 2+ years"
