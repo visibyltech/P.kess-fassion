@@ -129,10 +129,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </li>
             <li>
               <button 
-                onClick={() => onNavigate('shop', { category: 'shoes' })
+                onClick={() => onNavigate('shop', { category: 'shoes' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Designer Stilettos & Shoes
+                Shoes & Sandals
               </button>
             </li>
             <li>
@@ -148,7 +148,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('shop', { category: 'accessories' })}
                 className="hover:text-[#D4AF37] transition-colors"
               >
-                Gold Jewelry & Fashion Accessories
+                Fashion Accessories
               </button>
             </li>
             <li>
