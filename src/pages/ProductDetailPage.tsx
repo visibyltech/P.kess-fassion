@@ -166,6 +166,37 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
               {product.name}
             </h1>
 
+          {/* Primary Action Buttons — placed directly under product name */}
+          <div className="space-y-2 pt-1">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={handleAddToCart}
+                className="py-3 px-2 sm:px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-bold text-[10px] sm:text-xs uppercase tracking-wide flex items-center justify-center gap-1.5 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#D4AF37]/20"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Add to Cart (₦{totalPrice.toLocaleString()})
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="py-3.5 px-6 rounded-xl bg-white hover:bg-zinc-100 text-black font-bold text-[10px] sm:text-xs uppercase tracking-wide flex items-center justify-center gap-1.5 transition-all shadow-md"
+              >
+                Buy Now
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Save to Buy Special Button */}
+            <button
+              onClick={handleStartSaveToBuy}
+              className="mx-auto w-[82%] py-2.5 px-3 rounded-xl bg-[#171722] hover:bg-[#E6007A]/15 border border-[#E6007A]/50 text-[#FF66B2] font-semibold text-[10px] sm:text-xs flex items-center justify-center gap-1.5 transition-colors"
+            >
+              <PiggyBank className="w-4 h-4" />
+              Save to Buy This Product (Installment Savings)
+            </button>
+          </div>
+
+
             {/* Rating & Reviews */}
             {product.reviewCount > 0 && (
               <div className="flex items-center gap-2 mb-4">
@@ -332,36 +363,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
                 </button>
               </div>
             </div>
-          </div>
-
-          {/* Primary Action Buttons */}
-          <div className="space-y-3 pt-4 border-t border-[#232330]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                onClick={handleAddToCart}
-                className="py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#D4AF37]/20"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                Add to Cart (₦{totalPrice.toLocaleString()})
-              </button>
-
-              <button
-                onClick={handleBuyNow}
-                className="py-3.5 px-6 rounded-xl bg-white hover:bg-zinc-100 text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md"
-              >
-                Buy Now
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Save to Buy Special Button */}
-            <button
-              onClick={handleStartSaveToBuy}
-              className="w-full py-3 px-6 rounded-xl bg-[#171722] hover:bg-[#E6007A]/15 border border-[#E6007A]/50 text-[#FF66B2] font-semibold text-xs flex items-center justify-center gap-2 transition-colors"
-            >
-              <PiggyBank className="w-4 h-4" />
-              Save to Buy This Product (Installment Savings)
-            </button>
           </div>
 
           {/* Trust Guarantees */}
