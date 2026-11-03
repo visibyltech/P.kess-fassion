@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/common/ProductCard';
 import { BrandLogo } from '../components/common/BrandLogo';
@@ -23,6 +23,13 @@ interface HomePageProps {
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const { products } = useStore();
+  const [slideIndex, setSlideIndex] = useState(0);
+  const featuredSlides = products.filter(product => product.images?.[0]).slice(0, 8);
+  useEffect(() => {
+    if (featuredSlides.length < 2) return;
+    const timer = window.setInterval(() => setSlideIndex(index => (index + 1) % featuredSlides.length), 3200);
+    return () => window.clearInterval(timer);
+  }, [featuredSlides.length]);
 
   const newArrivals = products.filter(p => p.isNewArrival).slice(0, 4);
   const bestSellers = products.filter(p => p.isBestSeller).slice(0, 4);
@@ -66,85 +73,83 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="space-y-24">
-      {/* SECTION A — HERO BANNER */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-[#252535]">
-        {/* Background Editorial Fashion Campaign Image */}
+    <div className="space-y-8 sm:space-y-14">
+      {/* SECTION A — COMPACT HERO BANNER */}
+      <section className="relative min-h-0 overflow-hidden border-b border-[#252535]">
         <div className="absolute inset-0 z-0">
           <img
             src="https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing.jpg?width=1600"
-            alt="Nigerian model wearing Ankara fashion — editorial brand imagery"
-            className="w-full h-full object-cover object-center filter brightness-[0.4] contrast-105 scale-105 animate-fade-in"
+            alt="Nigerian Ankara fashion"
+            className="w-full h-full object-cover object-center brightness-[0.48] contrast-105"
           />
-          {/* Gradients to blend smoothly with dark brand identity */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#08080A] via-black/60 to-black/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#08080A] via-transparent to-[#08080A]/80" />
+          <div className="absolute inset-0 bg-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#08080A]/75 via-[#08080A]/35 to-[#08080A]/65" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08080A]/75 via-transparent to-[#08080A]/35" />
         </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          {/* Brand Emblem & Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#D4AF37]/40 mb-6 shadow-xl">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-12 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/35 backdrop-blur-sm border border-[#D4AF37]/40 mb-3">
             <Sparkles className="w-4 h-4 text-[#E6007A]" />
-            <span className="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#FFE898]">
-              P-Kess Fashion World · Asaba, Nigeria
-            </span>
+            <span className="text-[10px] sm:text-sm font-semibold tracking-widest uppercase text-[#FFE898]">P-Kess Fashion World · Asaba, Nigeria</span>
           </div>
-
-          {/* Headline */}
-          <h1 className="font-brand-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-2xl mb-4 leading-none">
+          <h1 className="font-brand-display text-[2rem] sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white uppercase drop-shadow-2xl mb-2 leading-[1.05]">
             Elegance in <span className="gold-gradient-text">Every Detail</span>
           </h1>
-
-          {/* Supporting Text */}
-          <p className="font-serif-luxury italic text-lg sm:text-2xl text-zinc-200 max-w-2xl mx-auto mb-8 font-light tracking-wide">
+          <p className="font-serif-luxury italic text-sm sm:text-xl text-zinc-100 max-w-2xl mx-auto mb-3 font-light tracking-wide">
             "Discover Fashion. Express Yourself. Create Elegance."
           </p>
-
-          <p className="text-xs sm:text-sm text-zinc-300 max-w-xl mx-auto mb-10 leading-relaxed font-normal">
+          <p className="text-[11px] sm:text-sm text-white/90 max-w-xl mx-auto mb-5 leading-relaxed">
             Nigerian style, beautifully made. Discover clothing, native-inspired looks, T-shirts, footwear, bags and accessories from P-Kess Fashion World.
           </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={() => onNavigate('shop')}
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-[0_0_30px_rgba(212,175,55,0.35)] flex items-center justify-center gap-2 group"
-            >
-              Shop Collection
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <div className="grid grid-cols-2 items-stretch gap-2 sm:gap-4 max-w-2xl mx-auto">
+            <button onClick={() => onNavigate('shop')} className="min-h-[54px] sm:min-h-[60px] px-3 sm:px-8 py-3 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-extrabold text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-[0_0_25px_rgba(212,175,55,0.3)] flex items-center justify-center gap-2">
+              Shop Collection <ArrowRight className="w-4 h-4 shrink-0" />
             </button>
-
-            <button
-              onClick={() => onNavigate('wholesale')}
-              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#121218]/90 hover:bg-[#1A1A24] text-white border border-[#D4AF37]/50 hover:border-[#D4AF37] font-semibold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
-            >
-              <Percent className="w-4 h-4 text-[#ECC260]" />
-              Explore Wholesale (15% Off)
+            <button onClick={() => onNavigate('wholesale')} className="min-h-[54px] sm:min-h-[60px] px-3 sm:px-8 py-3 rounded-full bg-[#121218]/75 backdrop-blur-sm text-white border border-[#D4AF37]/60 hover:border-[#D4AF37] font-bold text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest transition-all flex items-center justify-center gap-2">
+              <Percent className="w-4 h-4 text-[#ECC260] shrink-0" /> <span>Wholesale <span className="hidden sm:inline">(15% Off)</span><span className="sm:hidden">15% Off</span></span>
             </button>
           </div>
-
-          {/* Trust badges */}
-          <div className="mt-14 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-zinc-400">
-            <div className="flex items-center justify-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span>100% Authentic Quality</span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <Truck className="w-4 h-4 text-[#E6007A]" />
-              <span>All 36 States Delivery</span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
-              <span>Paystack Secured</span>
-            </div>
-            <div className="flex items-center justify-center gap-2">
-              <PiggyBank className="w-4 h-4 text-[#E6007A]" />
-              <span>Save to Buy Available</span>
-            </div>
+          <div className="mt-5 pt-3 border-t border-white/15 grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-2 text-[9px] sm:text-xs text-zinc-200/90">
+            <div className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Authentic Quality</span></div>
+            <div className="flex items-center justify-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#E6007A]" /><span>Nationwide Delivery</span></div>
+            <div className="flex items-center justify-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Secure Payments</span></div>
+            <div className="flex items-center justify-center gap-1.5"><PiggyBank className="w-3.5 h-3.5 text-[#E6007A]" /><span>Save to Buy</span></div>
           </div>
         </div>
       </section>
+
+      {/* FEATURED PRODUCT SLIDESHOW */}
+      {featuredSlides.length > 0 && (
+        <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-[#E6007A]">Made to Be Seen</span>
+              <h2 className="font-brand-display text-lg sm:text-2xl font-bold uppercase text-white">Featured <span className="gold-gradient-text">Looks</span></h2>
+            </div>
+            <button onClick={() => onNavigate('shop')} className="text-[10px] sm:text-xs text-[#ECC260] font-semibold flex items-center gap-1">Shop all <ArrowRight className="w-3.5 h-3.5" /></button>
+          </div>
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            {[0, 1, 2].map(offset => {
+              const product = featuredSlides[(slideIndex + offset) % featuredSlides.length];
+              return (
+                <button key={product.id} onClick={() => onNavigate('product-detail', { slug: product.slug })} className="group min-w-0 text-left rounded-xl overflow-hidden border border-[#2A2931] bg-[#111116]">
+                  <div className="aspect-[4/5] bg-[#F7F5F0] overflow-hidden">
+                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className="p-2">
+                    <p className="text-[9px] sm:text-xs text-white font-semibold line-clamp-1">{product.name}</p>
+                    <p className="text-[9px] sm:text-xs text-[#ECC260] mt-1">₦{product.retailPrice.toLocaleString('en-NG')}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex justify-center gap-1.5 mt-2">
+            {featuredSlides.slice(0, Math.min(featuredSlides.length, 8)).map((product, index) => (
+              <button key={product.id} onClick={() => setSlideIndex(index)} aria-label={`Show featured product ${index + 1}`} className={`h-1.5 rounded-full transition-all ${slideIndex === index ? 'w-5 bg-[#D4AF37]' : 'w-1.5 bg-zinc-600'}`} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* SECTION B — SHOP BY CATEGORY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -103,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
       </div>
 
       {/* Main Header Row */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 h-[72px] sm:h-20 flex items-center justify-between gap-1.5 sm:gap-4">
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMobileMenuOpen(prev => !prev)}
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
         {/* Brand Logo with Official Badge */}
         <BrandLogo 
-          size="md" 
+          size="sm" 
           onClick={() => onNavigate('home')} 
           className="shrink-0"
         />
@@ -144,7 +144,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
 
         {/* Actions (Wishlist, Account, Cart) */}
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-0.5 sm:gap-4 shrink-0 min-w-0">
           {/* Mobile search toggle */}
           <button
             onClick={() => setSearchOpen(prev => !prev)}
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Wishlist */}
           <button
             onClick={() => onNavigate('customer', { tab: 'wishlist' })}
-            className="relative p-2.5 text-zinc-300 hover:text-[#FF2A85] hover:bg-white/5 rounded-full transition-colors"
+            className="relative p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#FF2A85] hover:bg-white/5 rounded-full transition-colors"
             aria-label="Wishlist"
             title="Wishlist"
           >
@@ -244,7 +244,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="p-2.5 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full transition-colors flex items-center gap-1.5"
+                className="p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full transition-colors flex items-center gap-1.5"
                 title="Customer Sign In / Register"
               >
                 <User className="w-5 h-5" />
@@ -256,11 +256,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Cart with Live Count */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative px-3.5 py-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-xs flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#D4AF37]/20"
+            className="relative px-2.5 sm:px-3.5 py-2 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-xs flex items-center gap-1.5 sm:gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-[#D4AF37]/20 shrink-0"
             aria-label="Shopping Cart"
           >
             <ShoppingBag className="w-4 h-4 text-black" />
-            <span className="font-bold">Cart</span>
+            <span className="font-bold hidden sm:inline">Cart</span>
             <span className="bg-black text-[#ECC260] px-1.5 py-0.5 rounded-full text-[10px] font-extrabold min-w-[18px] text-center">
               {cartCount}
             </span>
@@ -322,7 +322,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-[110px] bg-black/95 backdrop-blur-xl z-50 p-6 overflow-y-auto border-t border-[#23232E]">
+        <div className="lg:hidden fixed inset-0 top-[96px] bg-black/95 backdrop-blur-xl z-50 p-5 overflow-y-auto border-t border-[#23232E]">
           <div className="flex flex-col gap-1 pb-20">
             <div className="text-[11px] uppercase tracking-widest text-[#D4AF37] font-semibold mb-2 px-3">
               Explore Collections & Services
@@ -347,6 +347,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 </button>
               );
             })}
+
+            <div className="mt-5 pt-5 border-t border-[#D4AF37]/25 space-y-2">
+              <p className="px-3 text-[11px] uppercase tracking-widest text-[#D4AF37] font-semibold">Your Account</p>
+              {currentUser ? (
+                <>
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg bg-white/5 text-white text-sm"><User className="w-4 h-4 text-[#ECC260]" /> Visit My Profile</button>
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-zinc-200 text-sm"><Truck className="w-4 h-4 text-[#ECC260]" /> My Orders</button>
+                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 rounded-lg text-[#FF6B8A] text-sm">Sign Out</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-sm"><User className="w-4 h-4" /> Sign In / Sign Up</button>
+                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full text-left px-3 py-2 rounded-lg text-zinc-300 text-sm">Create a customer account</button>
+                </>
+              )}
+            </div>
 
             <div className="mt-6 pt-6 border-t border-zinc-800/80 space-y-3">
               <div className="text-xs text-zinc-400 flex items-center gap-2">
