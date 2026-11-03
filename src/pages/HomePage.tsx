@@ -24,7 +24,7 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const { products } = useStore();
   const [slideIndex, setSlideIndex] = useState(0);
-  const featuredSlides = products.filter(product => product.images?.[0]).slice(0, 8);
+  const featuredSlides = products.filter((product, index, all) => product.images?.[0] && all.findIndex(item => item.images?.[0] === product.images?.[0]) === index).slice(0, 6);
   useEffect(() => {
     if (featuredSlides.length < 2) return;
     const timer = window.setInterval(() => setSlideIndex(index => (index + 1) % featuredSlides.length), 3200);
