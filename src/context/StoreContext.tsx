@@ -102,7 +102,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // State initialization with localStorage fallback
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('pkess_products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    if (!saved) return INITIAL_PRODUCTS;
+    try {
+      const storedProducts = JSON.parse(saved) as Product[];
+      const refreshed = storedProducts.map(product => {
+        const catalogueProduct = INITIAL_PRODUCTS.find(item => item.id === product.id);
+        return catalogueProduct
+          ? { ...product, images: catalogueProduct.images, category: catalogueProduct.category }
+          : product;
+      });
+      const existingIds = new Set(refreshed.map(product => product.id));
+      return [...refreshed, ...INITIAL_PRODUCTS.filter(product => !existingIds.has(product.id))];
+    } catch {
+      return INITIAL_PRODUCTS;
+    }
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
