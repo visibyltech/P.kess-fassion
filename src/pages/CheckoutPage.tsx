@@ -472,7 +472,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
           </div>
 
           {showPaymentDetails && (
-          {/* STEP 3: PAYMENT METHOD */}
           <div className="rounded-3xl bg-[#111117] border border-[#252536] p-6 sm:p-8 space-y-5 shadow-xl">
             <div className="flex items-center gap-3 border-b border-zinc-800 pb-3">
               <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 text-[#ECC260] flex items-center justify-center font-bold text-xs">
