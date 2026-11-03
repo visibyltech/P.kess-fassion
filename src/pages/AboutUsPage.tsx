@@ -51,7 +51,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </div>
           <h3 className="font-serif-luxury text-xl font-bold text-white">Empowering Retailers</h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Through our wholesale initiative, we partner with boutique owners and fashion vendors across Nigeria, offering discounts of up to 15% - 22% on orders of 10+ units.
+            Through our wholesale initiative, we partner with boutique owners and fashion vendors across Nigeria, offering wholesale discounts of 10% to 15% on eligible orders of 10 or more units.
           </p>
         </div>
 
