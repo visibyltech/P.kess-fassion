@@ -101,6 +101,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Require a customer account before exposing payment instructions.
+    if (!currentUser) {
+      setAwaitingAuthentication(true);
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     if (!fullName || !email || !phone) {
       showToast("Please fill in your name, email and phone number", "error");
       return;
@@ -108,12 +116,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
     if (deliveryMethod === 'home' && !streetAddress) {
       showToast("Please enter your delivery street address", "error");
-      return;
-    }
-
-    if (!currentUser) {
-      setAwaitingAuthentication(true);
-      setIsAuthModalOpen(true);
       return;
     }
 
@@ -304,7 +306,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <div className="relative">
                   <input
                     type="text"
-                    required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Dr. Chioma Okonkwo"
@@ -319,7 +320,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <div className="relative">
                   <input
                     type="email"
-                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. chioma@gmail.com"
@@ -334,7 +334,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <div className="relative">
                   <input
                     type="tel"
-                    required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="e.g. 09012776272"
@@ -437,7 +436,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   <label className="text-zinc-300 block mb-1 font-medium">Street Address / Landmark *</label>
                   <input
                     type="text"
-                    required
                     value={streetAddress}
                     onChange={(e) => setStreetAddress(e.target.value)}
                     placeholder="e.g. Plot 14 Okpanam Road, Near Federal Secretariat"
