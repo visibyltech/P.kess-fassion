@@ -71,7 +71,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
     sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
     colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
-    details: ['Luxury handcrafted tailoring in Asaba atelier'],
+    details: ['Designer-led Nigerian clothing collection'],
     featured: true,
     isNewArrival: true
   });
@@ -114,7 +114,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
       sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
       colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
-      details: ['Handcrafted luxury piece made in Asaba atelier'],
+      details: ['P-Kess designer clothing and fashion collection'],
       featured: true,
       isNewArrival: true,
       rating: 5.0,
