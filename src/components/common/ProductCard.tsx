@@ -21,13 +21,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     : product.retailPrice;
 
   return (
-    <div className="group relative bg-[#111116] rounded-2xl border border-[#22222E] hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col overflow-hidden hover:shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+    <article role="link" tabIndex={0} aria-label={`View ${product.name}`} onClick={() => onNavigate("product-detail", { slug: product.slug })} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onNavigate("product-detail", { slug: product.slug }); } }} className="group relative bg-[#111116] rounded-2xl border border-[#22222E] hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col overflow-hidden hover:shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]">
       {/* Product Image Box */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/60">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#F7F5F0]">
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="w-full h-full object-contain p-3 sm:p-5 object-center group-hover:scale-[1.03] transition-transform duration-500 ease-out"
           loading="lazy"
         />
 
@@ -69,14 +69,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Hover Quick Action Overlay */}
         <div className="absolute inset-x-3 bottom-3 z-10 hidden sm:flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
           <button
-            onClick={() => setQuickViewProduct(product)}
+            onClick={(e) => { e.stopPropagation(); setQuickViewProduct(product); }}
             className="flex-1 py-2 px-3 rounded-xl bg-black/80 backdrop-blur-md text-white text-xs font-semibold hover:bg-black flex items-center justify-center gap-1.5 border border-white/20 transition-colors"
           >
             <Eye className="w-3.5 h-3.5 text-[#D4AF37]" />
             Quick View
           </button>
           <button
-            onClick={() => addToCart(product, 1)}
+            onClick={(e) => { e.stopPropagation(); addToCart(product, 1); }}
             className="p-2 rounded-xl bg-[#D4AF37] text-black hover:brightness-110 flex items-center justify-center transition-all shadow-md"
             title="Add to Cart"
           >
@@ -103,7 +103,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Title */}
           <h3 
-            onClick={() => onNavigate('product-detail', { slug: product.slug })}
+            onClick={(e) => { e.stopPropagation(); onNavigate("product-detail", { slug: product.slug }); }}
             className="font-serif-luxury text-xs sm:text-sm font-semibold text-white hover:text-[#D4AF37] cursor-pointer transition-colors line-clamp-1 mb-1.5"
             title={product.name}
           >
@@ -148,7 +148,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
 
           <button
-            onClick={() => onNavigate('save-to-buy', { productId: product.id })}
+            onClick={(e) => { e.stopPropagation(); onNavigate("save-to-buy", { productId: product.id }); }}
             className="p-1.5 sm:p-2 rounded-lg bg-[#181822] hover:bg-[#E6007A]/20 border border-[#2D2D3E] hover:border-[#E6007A] text-zinc-400 hover:text-[#FF66B2] transition-colors shrink-0"
             title="Save to Buy this item"
           >
@@ -156,6 +156,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
