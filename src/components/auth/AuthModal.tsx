@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { BrandLogo } from '../common/BrandLogo';
-import { X, Mail, Lock, User, Phone, ShieldCheck, ArrowRight } from 'lucide-react';
+import { X, Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, login, register } = useStore();
@@ -19,8 +19,8 @@ export const AuthModal: React.FC = () => {
     e.preventDefault();
     if (mode === 'login') {
       if (!email) return;
-      login(email);
-      setIsAuthModalOpen(false);
+      const authenticated = login(email);
+      if (authenticated) setIsAuthModalOpen(false);
     } else if (mode === 'register') {
       if (!email || !name) return;
       register(name, email, phone || '08000000000');
@@ -30,14 +30,7 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  const handleQuickDemo = (type: 'customer' | 'admin') => {
-    if (type === 'admin') {
-      login('pkessvariety@gmail.com', 'admin');
-    } else {
-      login('chioma.okonkwo@gmail.com', 'customer');
-    }
-    setIsAuthModalOpen(false);
-  };
+
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
@@ -67,30 +60,6 @@ export const AuthModal: React.FC = () => {
             {mode === 'register' && 'Create your account for bespoke couture, retail & wholesale access.'}
             {mode === 'forgot' && 'Enter your email address to receive password reset instructions.'}
           </p>
-        </div>
-
-        {/* Quick Demo Login Buttons */}
-        <div className="mb-6 p-3 rounded-xl bg-[#171722] border border-[#272738] text-xs">
-          <div className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center justify-between">
-            <span>Fast One-Click Demo Access:</span>
-            <span className="text-[#D4AF37]">Instant</span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('customer')}
-              className="py-1.5 px-2 rounded-lg bg-[#222230] hover:bg-[#2C2C3E] text-zinc-200 font-medium text-xs text-center border border-zinc-700/60 transition-colors"
-            >
-              👤 Demo Customer
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('admin')}
-              className="py-1.5 px-2 rounded-lg bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#ECC260] font-medium text-xs text-center border border-[#D4AF37]/40 transition-colors"
-            >
-              👑 Executive Admin
-            </button>
-          </div>
         </div>
 
         {resetSent ? (
