@@ -39,13 +39,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       id: 't-shirts',
       title: 'T-Shirts & Everyday Wear',
       subtitle: 'Graphic tees and relaxed styles with a Nigerian point of view',
-      image: 'https://www.gettyimages.com/gi-resources/images/500px/983794168.jpg',
+      image: 'https://i.etsystatic.com/44159206/r/il/161dd9/4984121832/il_1588xN.4984121832_1ftm.jpg',
       itemCount: 'New Styles'
     },
     {
       id: 'shoes',
       title: 'Shoes & Sandals',
-      subtitle: 'Locally crafted footwear for everyday and special occasions',
+      subtitle: 'Nigerian-made styles for men and women',
       image: 'https://media-assets.grailed.com/prd/listing/33612893/527637d4714540ecaf1da94cf0c96d01?auto=format',
       itemCount: '8+ Styles'
     },
