@@ -330,31 +330,46 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
       </nav>
 
-      {/* MOBILE SIDE DRAWER */}
+      {/* COMPACT MOBILE SIDE DRAWER */}
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-[100]">
-          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 w-full h-full bg-black/75 backdrop-blur-sm" />
-          <aside className="absolute left-0 top-0 bottom-0 w-[min(88vw,360px)] bg-[#0D0D12] border-r border-[#D4AF37]/30 shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-              <div><p className="text-[#ECC260] font-serif text-lg tracking-[0.2em]">P-KESS</p><p className="text-[10px] text-zinc-400 tracking-[0.25em]">FASHION WORLD</p></div>
-              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="p-2 rounded-full bg-white/5 text-white"><X className="w-5 h-5" /></button>
+          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/70" />
+          <aside className="absolute left-0 top-0 bottom-0 w-[min(82vw,310px)] bg-[#101015] border-r border-[#D4AF37]/25 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
+              <div><p className="text-[#ECC260] font-serif text-base tracking-[0.2em]">P-KESS</p><p className="text-[9px] text-zinc-400 tracking-[0.25em]">FASHION WORLD</p></div>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="p-2 text-zinc-300 hover:text-white"><X className="w-5 h-5" /></button>
             </div>
-            <div className="px-5 pt-5 pb-2 text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold shrink-0">Shop & Explore</div>
-            <nav className="flex-1 overflow-y-auto overscroll-contain px-3 pb-4">
+            <div className="px-4 pt-4 pb-1 text-[9px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">Shop & Explore</div>
+            <nav className="flex-1 overflow-y-auto overscroll-contain px-3 pb-2">
               {mainNavItems.map(item => {
                 const Icon = item.icon || ChevronRight;
-                return <button key={item.id} onClick={() => handleNavClick(item)} className="w-full flex items-center justify-between gap-3 px-3 py-3.5 rounded-xl text-left text-[14px] text-zinc-100 hover:bg-white/5 border-b border-white/[0.04]"><span className="flex items-center gap-3"><Icon className="w-[18px] h-[18px] text-[#E6007A] shrink-0" />{item.label}</span><span className="flex items-center gap-2">{item.badge && <span className="px-2 py-0.5 rounded-full bg-[#E6007A] text-white text-[9px] font-bold">{item.badge}</span>}<ChevronRight className="w-4 h-4 text-zinc-600" /></span></button>;
+                return (
+                  <button key={item.id} onClick={() => handleNavClick(item)} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 hover:text-[#ECC260] hover:bg-white/[0.04] border-b border-white/[0.055]">
+                    <Icon className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge && <span className="text-[9px] text-[#FF75B7]">{item.badge}</span>}
+                    <ChevronRight className="w-3 h-3 text-zinc-600" />
+                  </button>
+                );
               })}
-              <button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "wishlist" }); }} className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left text-sm text-zinc-100 border-b border-white/[0.04]"><Heart className="w-[18px] h-[18px] text-[#E6007A]" /> My Wishlist</button>
-              <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left text-sm text-zinc-100 border-b border-white/[0.04]"><ShoppingBag className="w-[18px] h-[18px] text-[#E6007A]" /> My Shopping Bag <span className="ml-auto text-[#ECC260] text-xs">{cartCount} items</span></button>
+              <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><Heart className="w-4 h-4 text-[#D4AF37]" /> My Wishlist</button>
+              <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><ShoppingBag className="w-4 h-4 text-[#D4AF37]" /> My Shopping Bag <span className="ml-auto text-[11px] text-[#ECC260]">{cartCount}</span></button>
             </nav>
-            <div className="shrink-0 p-4 border-t border-[#D4AF37]/25 bg-[#111116] space-y-2">
-              <p className="px-1 pb-1 text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">My Account</p>
-              {currentUser ? <><button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "overview" }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 text-white text-sm"><User className="w-4 h-4 text-[#ECC260]" /> Visit My Profile</button><button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "orders" }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-zinc-200 text-sm"><Truck className="w-4 h-4 text-[#ECC260]" /> My Orders</button>{isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#ECC260] text-sm"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}<button onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-rose-400">Sign Out</button></> : <><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-sm"><LogIn className="w-4 h-4" /> Sign In</button><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl border border-[#D4AF37]/50 text-[#ECC260] font-semibold text-sm"><UserPlus className="w-4 h-4" /> Create Account / Sign Up</button></>}
+            <div className="shrink-0 px-4 py-3 border-t border-[#D4AF37]/20 bg-[#0C0C10]">
+              {currentUser ? (
+                <div className="flex items-center gap-2">
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-white py-2"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-zinc-300 py-2"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
+                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-[11px] text-rose-400 py-2">Sign Out</button>
+                </div>
+              ) : (
+                <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><User className="w-4 h-4" /> Sign In / Create Account</button>
+              )}
             </div>
           </aside>
         </div>
       )}
+
     </header>
   );
 };
