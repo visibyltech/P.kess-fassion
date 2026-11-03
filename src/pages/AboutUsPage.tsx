@@ -28,7 +28,7 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
           </p>
 
           <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed max-w-2xl">
-            Established at our flagship showroom in Asaba, Delta State, <strong>P-Kess Fashion World</strong> has grown into one of Nigeria's premier fashion destinations. We produce and curate high-society Swiss dry lace boubous, sculpted velvet corsets, handcrafted Italian leather shoes, statement handbags, and 24K gold accessories.
+            Established at our flagship showroom in Asaba, Delta State, <strong>P-Kess Fashion World</strong> has grown into one of Nigeria's premier fashion destinations. We produce and curate high-society Nigerian dry lace boubous, sculpted velvet corsets, handcrafted Nigerian leather shoes, statement handbags, and 24K gold accessories.
           </p>
         </div>
       </div>
