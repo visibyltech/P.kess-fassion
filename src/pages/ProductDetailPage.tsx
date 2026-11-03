@@ -241,7 +241,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
           <div className="space-y-2">
             <div className="flex justify-between items-center text-xs">
               <span className="font-semibold text-zinc-300">Select Size:</span>
-              <span className="text-zinc-400 text-[11px]">Nigerian & UK Sizing</span>
+              <span className="text-zinc-400 text-[11px]">Available Sizes</span>
             </div>
             <div className="flex flex-wrap gap-2.5">
               {product.sizes.map(size => (
@@ -451,7 +451,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
           {activeTab === 'wholesale' && (
             <div className="space-y-3">
               <p>
-                Wholesale eligibility begins at a minimum order of <strong>10 units</strong>. Wholesale buyers receive automated discounts ranging from 15% to 22%.
+                Wholesale eligibility begins at a minimum order of <strong>10 units</strong>. Wholesale buyers receive discounts of 10% to 15%, subject to the product and current wholesale settings.
               </p>
               <p>
                 Wholesale orders can be composed of mixed sizes and colors of the same style. Custom tailoring and bulk branding are available on request.
