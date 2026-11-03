@@ -81,3 +81,16 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #D4AF37;
 }
+
+
+/* Responsive storefront guardrails: prevent narrow/mobile layouts from being clipped or offset. */
+html, body, #root {
+  width: 100%;
+  min-width: 320px;
+  max-width: 100%;
+  margin: 0;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { overflow-x: clip; }
+#root { min-height: 100vh; overflow-x: clip; }
+img { max-width: 100%; }

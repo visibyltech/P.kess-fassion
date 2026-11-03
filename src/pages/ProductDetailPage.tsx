@@ -98,11 +98,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* Left Column: Gallery */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-black/50 border border-[#2B2B3C] shadow-2xl">
+          <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-[#F7F5F0] border border-[#2B2B3C] shadow-2xl">
             <img
               src={product.images[activeImage] || product.images[0]}
               alt={product.name}
-              className="w-full h-full object-cover object-center transition-all duration-300"
+              className="w-full h-full object-contain p-4 sm:p-8 object-center transition-all duration-300"
             />
 
             {/* Badges */}
@@ -167,19 +167,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug, onNa
             </h1>
 
             {/* Rating & Reviews */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex text-[#ECC260]">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-[#ECC260]' : 'text-zinc-600'}`} 
-                  />
-                ))}
+            {product.reviewCount > 0 && (
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex text-[#ECC260]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-[#ECC260]' : 'text-zinc-600'}`} />
+                  ))}
+                </div>
+                <span className="text-xs text-zinc-300">{product.rating} ({product.reviewCount} verified client reviews)</span>
               </div>
-              <span className="text-xs text-zinc-300">
-                {product.rating} ({product.reviewCount} verified client reviews)
-              </span>
-            </div>
+            )}
           </div>
 
           {/* DUAL PRICING DISPLAY BOX */}
