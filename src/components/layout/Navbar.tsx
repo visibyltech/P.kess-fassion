@@ -10,6 +10,7 @@ import {
   X, 
   Phone, 
   MapPin, 
+  ShieldCheck,
   Sparkles,
   ChevronDown,
   PiggyBank,
