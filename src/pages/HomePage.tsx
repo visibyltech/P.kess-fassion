@@ -36,6 +36,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       itemCount: '12+ Styles'
     },
     {
+      id: 't-shirts',
+      title: 'T-Shirts & Everyday Wear',
+      subtitle: 'Graphic tees and relaxed styles with a Nigerian point of view',
+      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Tee.JPG?width=900',
+      itemCount: 'New Styles'
+    },
+    {
       id: 'shoes',
       title: 'Shoes & Sandals',
       subtitle: 'Locally crafted footwear for everyday and special occasions',
@@ -80,7 +87,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-[#D4AF37]/40 mb-6 shadow-xl">
             <Sparkles className="w-4 h-4 text-[#E6007A]" />
             <span className="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#FFE898]">
-              P-Kess Fashion World & Wholesale Atelier
+              P-Kess Fashion World · Asaba, Nigeria
             </span>
           </div>
 
@@ -95,7 +102,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </p>
 
           <p className="text-xs sm:text-sm text-zinc-300 max-w-xl mx-auto mb-10 leading-relaxed font-normal">
-            Welcome to Nigeria's premier fashion house. Exceptional bespoke clothing, handcrafted Italian shoes, iconic handbags, and wholesale fashion delivered nationwide from our Asaba showroom.
+            Nigerian style, beautifully made. Discover clothing, native-inspired looks, T-shirts, footwear, bags and accessories from P-Kess Fashion World.
           </p>
 
           {/* CTA Buttons */}
@@ -151,7 +158,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </h2>
           </div>
           <p className="text-xs text-zinc-400 max-w-md mt-2 md:mt-0">
-            Select an atelier collection to explore hand-picked Nigerian luxury couture, footwear, leather craftsmanship, and jewelry.
+            Explore the P-Kess collections: clothing, T-shirts, shoes, bags and fashion accessories.
           </p>
         </div>
 
@@ -236,7 +243,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </h2>
 
               <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-2xl">
-                Are you a boutique owner, fashion retailer, or bridal party coordinator? P-Kess Fashion World offers tier-based wholesale pricing with up to <strong>15% to 22% instant discount</strong> on orders starting from just 10 units. Enjoy priority tailoring, direct showroom pickup in Asaba, or insured nationwide freight.
+                Are you a boutique owner or fashion retailer? Shop in bulk and enjoy up to <strong>15% wholesale savings</strong> on eligible orders of 10 or more units. Contact P-Kess for bulk enquiries and delivery arrangements.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
@@ -250,7 +257,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </div>
                 <div className="p-3.5 rounded-xl bg-black/40 border border-[#E6007A]/40">
                   <div className="text-lg font-bold text-[#FF66B2]">50+ Units</div>
-                  <div className="text-xs text-zinc-400">22% Mega Wholesale</div>
+                  <div className="text-xs text-zinc-400">15% Wholesale Savings</div>
                 </div>
               </div>
             </div>
@@ -320,7 +327,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </h2>
 
               <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
-                Never miss out on your dream gala gown or bespoke handbag because of immediate cash flow. With the official <strong>P-Kess Save to Buy</strong> programme, you lock down your size, reserve stock, and contribute gradually via daily, weekly, biweekly or monthly deposits.
+                Save towards selected P-Kess styles at a pace that works for you. Choose an eligible product, follow your savings schedule and track your progress from your customer account.
               </p>
 
               <div className="space-y-3 pt-2 text-xs text-zinc-300">
@@ -338,7 +345,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 </div>
                 <div className="flex items-center gap-2.5">
                   <div className="w-5 h-5 rounded-full bg-[#E6007A]/20 text-[#FF66B2] flex items-center justify-center font-bold text-xs">4</div>
-                  <span>Once completed, your luxury order is dispatched straight to your doorstep!</span>
+                  <span>Once your savings target is complete, confirm your order and delivery details.</span>
                 </div>
               </div>
 
@@ -362,11 +369,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div className="flex items-center gap-3">
                 <img
                   src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=300&q=80"
-                  alt="Lace Boubou"
+                  alt="Nigerian Ankara fashion editorial"
                   className="w-16 h-20 object-cover rounded-lg border border-[#2F2F40]"
                 />
                 <div>
-                  <h4 className="text-white text-xs font-bold">The Royal Ebere Lace Boubou</h4>
+                  <h4 className="text-white text-xs font-bold">P-Kess Nigerian Fashion Collection</h4>
                   <div className="text-[#ECC260] text-sm font-extrabold mt-0.5">₦85,000</div>
                   <div className="text-[11px] text-zinc-400">Duration: 2 Months (8 Weeks)</div>
                 </div>
@@ -418,7 +425,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </h2>
 
             <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-              We partner with credit underwriting providers including <strong>Credibly</strong> to evaluate flexible financing for Nigerian shoppers. In full transparency with Central Bank and consumer lending regulations, BNPL availability is subject to provider verification and merchant onboarding confirmation.
+              Buy Now Pay Later is planned through Credibly. This option will be activated only after provider eligibility, merchant onboarding and the supported Nigerian payment flow have been confirmed.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
