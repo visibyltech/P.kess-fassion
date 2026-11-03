@@ -54,7 +54,7 @@ export const WholesalePage: React.FC<WholesalePageProps> = ({ onNavigate }) => {
           </h1>
 
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">
-            Welcome fashion entrepreneurs, boutique owners, bridal planners, and corporate clients. P-Kess Fashion World supplies bulk quantities of our signature luxury lace boubous, Italian leather heels, designer handbags, and jewelry with verified discounts up to 15% - 22%.
+            Welcome boutique owners, fashion retailers and bulk buyers. Explore Nigerian clothing, T-shirts, shoes, bags and fashion accessories with wholesale discounts of 10% to 15% on eligible orders of 10 or more units.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-2 text-xs text-zinc-300">
