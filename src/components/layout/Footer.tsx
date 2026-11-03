@@ -262,12 +262,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </div>
 
+      {/* Editorial image attribution: all editorial reference photographs are sourced from Wikimedia Commons and remain subject to their individual CC BY-SA 4.0 / CC0 licences. They are not represented as P-Kess-owned product photography. */}
+      <div className="border-t border-[#1A1A22] px-4 sm:px-6 lg:px-8 py-3 text-[10px] text-zinc-500 text-center">
+        Editorial reference photography: Wikimedia Commons contributors · CC BY-SA 4.0 / CC0. These images are illustrative references, not confirmed P-Kess product photographs.
+      </div>
+
       {/* Bottom Copyright & Disclaimer Bar */}
       <div className="border-t border-[#1A1A22] py-6 px-4 sm:px-6 lg:px-8 text-xs text-zinc-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} P-Kess Fashion World Ltd. All rights reserved. RC Regulated in Nigeria.</p>
+          <p>© {new Date().getFullYear()} P-Kess Fashion World. All rights reserved.</p>
           <div className="flex items-center gap-4 text-zinc-400">
-            <span>Asaba • Lagos • Abuja • Nationwide</span>
+            <span>Asaba, Delta State, Nigeria</span>
             <span>•</span>
             <span className="text-[#D4AF37]">Creating Elegance</span>
           </div>
