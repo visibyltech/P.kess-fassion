@@ -47,10 +47,11 @@ export const ShopPage: React.FC<ShopPageProps> = ({
 
   const categories = [
     { id: 'all', label: 'All Creations' },
-    { id: 'clothing', label: 'Clothing & Gowns' },
-    { id: 'shoes', label: 'Shoes & Heels' },
-    { id: 'bags', label: 'Luxury Bags' },
-    { id: 'accessories', label: 'Accessories' }
+    { id: 'clothing', label: 'Clothing & Native Wear' },
+    { id: 't-shirts', label: 'T-Shirts' },
+    { id: 'shoes', label: 'Shoes & Sandals' },
+    { id: 'bags', label: 'Bags' },
+    { id: 'accessories', label: 'Fashion Accessories' }
   ];
 
   const filteredProducts = useMemo(() => {
@@ -104,13 +105,13 @@ export const ShopPage: React.FC<ShopPageProps> = ({
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
             <Sparkles className="w-3.5 h-3.5 text-[#E6007A]" />
-            Official P-Kess Catalogue
+            P-Kess Nigerian Collections
           </div>
           <h1 className="font-brand-display text-3xl sm:text-4xl font-bold text-white uppercase tracking-tight">
             {selectedCategory === 'all' ? 'All Collections' : categories.find(c => c.id === selectedCategory)?.label}
           </h1>
           <p className="text-xs sm:text-sm text-zinc-300 max-w-xl">
-            Discover bespoke Nigerian fashion couture, handcrafted stiletto heels, Italian leather bags and regal gold jewelry.
+            Discover Nigerian-designed styles, ready-to-wear pieces, T-shirts, locally crafted footwear, bags and fashion accessories.
           </p>
         </div>
 
