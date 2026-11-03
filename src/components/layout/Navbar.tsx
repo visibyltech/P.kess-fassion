@@ -260,7 +260,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             aria-label="Shopping Cart"
           >
             <ShoppingBag className="w-4 h-4 text-black" />
-            <span className="hidden sm:inline font-bold">Cart</span>
+            <span className="font-bold">Cart</span>
             <span className="bg-black text-[#ECC260] px-1.5 py-0.5 rounded-full text-[10px] font-extrabold min-w-[18px] text-center">
               {cartCount}
             </span>
