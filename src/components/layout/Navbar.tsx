@@ -10,12 +10,9 @@ import {
   X, 
   Phone, 
   MapPin, 
-  ShieldCheck, 
   Sparkles,
   ChevronDown,
-  Layers,
   PiggyBank,
-  CreditCard,
   Truck
 } from 'lucide-react';
 import { BRAND_CONSTANTS } from '../../data/initialData';
@@ -33,7 +30,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
     currentUser, 
     setIsAuthModalOpen, 
     isAdmin, 
-    login, 
     logout 
   } = useStore();
 
@@ -101,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               {BRAND_CONSTANTS.phoneNumbers[0]}
             </a>
 
-/div>
+          </div>
         </div>
       </div>
 
