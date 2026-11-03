@@ -42,11 +42,11 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 38,
     details: [
-      "Fabric: 100% Premium Swiss Voile Dry Lace with Metallic Embroidery",
-      "Embellishments: Genuine Austrian Crystals & Beadwork",
+      "Fabric: 100% Premium Nigerian-inspired Voile Dry Lace with Metallic Embroidery",
+      "Embellishments: Genuine decorative Crystals & Beadwork",
       "Includes matching raw silk inner slip gown",
       "Dry clean only",
-      "Tailored at P-Kess Haute Couture Atelier in Asaba"
+      "Designed for P-Kess Fashion World in Asaba"
     ]
   },
   {
@@ -70,7 +70,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 29,
     details: [
-      "Fabric: Micro-stretch French Velvet with Silk Lining",
+      "Fabric: Micro-stretch velvet with Silk Lining",
       "Boned internal corset with laced back for perfect fit",
       "Concealed back zip closure",
       "Floor-length sweeping train"
@@ -97,7 +97,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 42,
     details: [
-      "Fabric: Italian Super 140s Wool Blend",
+      "Fabric: locally selected Super 140s Wool Blend",
       "Handcrafted gold piping along chest placket",
       "Trousers with adjustable waistband side tabs"
     ]
@@ -152,7 +152,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     reviewCount: 64,
     details: [
       "Heel height: 105mm / 4.1 inches",
-      "Upper: Genuine Italian Mirror Metallic Calfskin",
+      "Upper: Genuine locally selected Mirror Metallic Calfskin",
       "Insole: Dual-density ergonomic memory foam",
       "Sole: Non-slip natural leather with signature protective rubber tread"
     ]
@@ -204,7 +204,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 5.0,
     reviewCount: 31,
     details: [
-      "Upper: Black Italian silk velvet with calfskin trim",
+      "Upper: Black locally selected silk velvet with calfskin trim",
       "Hardware: Heavy cast gold alloy bit",
       "Goodyear welted leather outsole"
     ]
@@ -313,7 +313,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 33,
     details: [
-      "Supple buttery Italian lambskin leather",
+      "Supple buttery locally selected lambskin leather",
       "Double flap closure for complete security",
       "Convertible strap can be worn shoulder or crossbody"
     ]
@@ -421,7 +421,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 22,
     details: [
-      "100% Mulberry Silk, 16 momme twill weave",
+      "100% soft fabric, 16 momme twill weave",
       "Traditional hand-rolled edges",
       "Wearable as headwrap, neck scarf, or bag accessory"
     ]
