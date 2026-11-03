@@ -14,7 +14,17 @@ import {
   Sparkles,
   ChevronDown,
   PiggyBank,
-  Truck
+  Truck,
+  Home,
+  Package,
+  ClipboardList,
+  Info,
+  MessageCircle,
+  LogIn,
+  UserPlus,
+  ChevronRight,
+  Percent,
+  CreditCard
 } from 'lucide-react';
 import { BRAND_CONSTANTS } from '../../data/initialData';
 
@@ -40,19 +50,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const mainNavItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'shop', label: 'Shop' },
-    { id: 'clothing', label: 'Clothing', filter: 'clothing' },
-    { id: 't-shirts', label: 'T-Shirts', filter: 't-shirts' },
-    { id: 'shoes', label: 'Shoes', filter: 'shoes' },
-    { id: 'bags', label: 'Bags', filter: 'bags' },
-    { id: 'accessories', label: 'Fashion Accessories', filter: 'accessories' },
-    { id: 'wholesale', label: 'Wholesale', badge: '15% Off' },
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'shop', label: 'Shop All Products', icon: ShoppingBag },
+    { id: 'clothing', label: 'Clothing & Native Wear', filter: 'clothing', icon: Package },
+    { id: 't-shirts', label: 'T-Shirts', filter: 't-shirts', icon: Package },
+    { id: 'shoes', label: 'Shoes & Sandals', filter: 'shoes', icon: Package },
+    { id: 'bags', label: 'Bags & Handbags', filter: 'bags', icon: ShoppingBag },
+    { id: 'accessories', label: 'Fashion Accessories', filter: 'accessories', icon: Sparkles },
+    { id: 'wholesale', label: 'Wholesale', badge: '15% Off', icon: Percent },
     { id: 'save-to-buy', label: 'Save to Buy', icon: PiggyBank },
-    { id: 'bnpl', label: 'Buy Now Pay Later' },
-    { id: 'track-order', label: 'Track Order' },
-    { id: 'about', label: 'About Us' },
-    { id: 'contact', label: 'Contact Us' }
+    { id: 'bnpl', label: 'Buy Now Pay Later', icon: CreditCard },
+    { id: 'track-order', label: 'Track My Order', icon: ClipboardList },
+    { id: 'about', label: 'About P-Kess', icon: Info },
+    { id: 'contact', label: 'Contact / WhatsApp', icon: MessageCircle }
   ];
 
   const handleNavClick = (item: typeof mainNavItems[0]) => {
@@ -320,61 +330,29 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
       </nav>
 
-      {/* Mobile Menu Drawer */}
+      {/* MOBILE SIDE DRAWER */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-[96px] bg-black/95 backdrop-blur-xl z-50 p-5 overflow-y-auto border-t border-[#23232E]">
-          <div className="flex flex-col gap-1 pb-20">
-            <div className="text-[11px] uppercase tracking-widest text-[#D4AF37] font-semibold mb-2 px-3">
-              Explore Collections & Services
+        <div className="lg:hidden fixed inset-0 z-[100]">
+          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 w-full h-full bg-black/75 backdrop-blur-sm" />
+          <aside className="absolute left-0 top-0 bottom-0 w-[min(88vw,360px)] bg-[#0D0D12] border-r border-[#D4AF37]/30 shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
+              <div><p className="text-[#ECC260] font-serif text-lg tracking-[0.2em]">P-KESS</p><p className="text-[10px] text-zinc-400 tracking-[0.25em]">FASHION WORLD</p></div>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="p-2 rounded-full bg-white/5 text-white"><X className="w-5 h-5" /></button>
             </div>
-            {mainNavItems.map(item => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item)}
-                  className="flex items-center justify-between text-left py-3 px-3 rounded-lg hover:bg-white/5 text-base font-medium text-zinc-100 hover:text-[#D4AF37] border-b border-zinc-900/60"
-                >
-                  <span className="flex items-center gap-3">
-                    {Icon && <Icon className="w-4 h-4 text-[#E6007A]" />}
-                    {item.label}
-                  </span>
-                  {item.badge && (
-                    <span className="px-2 py-0.5 rounded bg-[#E6007A] text-white text-xs font-semibold">
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-
-            <div className="mt-5 pt-5 border-t border-[#D4AF37]/25 space-y-2">
-              <p className="px-3 text-[11px] uppercase tracking-widest text-[#D4AF37] font-semibold">Your Account</p>
-              {currentUser ? (
-                <>
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg bg-white/5 text-white text-sm"><User className="w-4 h-4 text-[#ECC260]" /> Visit My Profile</button>
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-zinc-200 text-sm"><Truck className="w-4 h-4 text-[#ECC260]" /> My Orders</button>
-                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 rounded-lg text-[#FF6B8A] text-sm">Sign Out</button>
-                </>
-              ) : (
-                <>
-                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-sm"><User className="w-4 h-4" /> Sign In / Sign Up</button>
-                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full text-left px-3 py-2 rounded-lg text-zinc-300 text-sm">Create a customer account</button>
-                </>
-              )}
+            <div className="px-5 pt-5 pb-2 text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold shrink-0">Shop & Explore</div>
+            <nav className="flex-1 overflow-y-auto overscroll-contain px-3 pb-4">
+              {mainNavItems.map(item => {
+                const Icon = item.icon || ChevronRight;
+                return <button key={item.id} onClick={() => handleNavClick(item)} className="w-full flex items-center justify-between gap-3 px-3 py-3.5 rounded-xl text-left text-[14px] text-zinc-100 hover:bg-white/5 border-b border-white/[0.04]"><span className="flex items-center gap-3"><Icon className="w-[18px] h-[18px] text-[#E6007A] shrink-0" />{item.label}</span><span className="flex items-center gap-2">{item.badge && <span className="px-2 py-0.5 rounded-full bg-[#E6007A] text-white text-[9px] font-bold">{item.badge}</span>}<ChevronRight className="w-4 h-4 text-zinc-600" /></span></button>;
+              })}
+              <button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "wishlist" }); }} className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left text-sm text-zinc-100 border-b border-white/[0.04]"><Heart className="w-[18px] h-[18px] text-[#E6007A]" /> My Wishlist</button>
+              <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left text-sm text-zinc-100 border-b border-white/[0.04]"><ShoppingBag className="w-[18px] h-[18px] text-[#E6007A]" /> My Shopping Bag <span className="ml-auto text-[#ECC260] text-xs">{cartCount} items</span></button>
+            </nav>
+            <div className="shrink-0 p-4 border-t border-[#D4AF37]/25 bg-[#111116] space-y-2">
+              <p className="px-1 pb-1 text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">My Account</p>
+              {currentUser ? <><button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "overview" }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 text-white text-sm"><User className="w-4 h-4 text-[#ECC260]" /> Visit My Profile</button><button onClick={() => { setMobileMenuOpen(false); onNavigate("customer", { tab: "orders" }); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-zinc-200 text-sm"><Truck className="w-4 h-4 text-[#ECC260]" /> My Orders</button>{isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-[#ECC260] text-sm"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}<button onClick={() => { logout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 text-sm text-rose-400">Sign Out</button></> : <><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-sm"><LogIn className="w-4 h-4" /> Sign In</button><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl border border-[#D4AF37]/50 text-[#ECC260] font-semibold text-sm"><UserPlus className="w-4 h-4" /> Create Account / Sign Up</button></>}
             </div>
-
-            <div className="mt-6 pt-6 border-t border-zinc-800/80 space-y-3">
-              <div className="text-xs text-zinc-400 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-[#D4AF37]" />
-                No. 12, DLA Road, off Summit Road, Asaba, Delta State
-              </div>
-              <div className="text-xs text-zinc-400 flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#D4AF37]" />
-                09012776272 / 08103575549
-              </div>
-            </div>
-          </div>
+          </aside>
         </div>
       )}
     </header>
