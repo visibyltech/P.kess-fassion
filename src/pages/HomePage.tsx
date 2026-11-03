@@ -73,7 +73,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="space-y-8 sm:space-y-14">
+    <div className="space-y-5 sm:space-y-10">
       {/* SECTION A — COMPACT HERO BANNER */}
       <section className="relative min-h-0 overflow-hidden border-b border-[#252535]">
         <div className="absolute inset-0 z-0">
@@ -108,31 +108,22 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <Percent className="w-4 h-4 text-[#ECC260] shrink-0" /> <span>Wholesale <span className="hidden sm:inline">(15% Off)</span><span className="sm:hidden">15% Off</span></span>
             </button>
           </div>
-          <div className="mt-5 pt-3 border-t border-white/15 grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-2 text-[9px] sm:text-xs text-zinc-200/90">
-            <div className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Authentic Quality</span></div>
-            <div className="flex items-center justify-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#E6007A]" /><span>Nationwide Delivery</span></div>
-            <div className="flex items-center justify-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Secure Payments</span></div>
-            <div className="flex items-center justify-center gap-1.5"><PiggyBank className="w-3.5 h-3.5 text-[#E6007A]" /><span>Save to Buy</span></div>
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURED PRODUCT SLIDESHOW */}
+      {/* PRODUCT SLIDESHOW INSIDE HERO */}
       {featuredSlides.length > 0 && (
-        <section className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <section className="w-full max-w-3xl mx-auto mt-5 px-0">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#E6007A]">Made to Be Seen</span>
-              <h2 className="font-brand-display text-lg sm:text-2xl font-bold uppercase text-white">Featured <span className="gold-gradient-text">Looks</span></h2>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-[#E6007A]">Explore the Collection</span>
+              <h2 className="font-brand-display text-lg sm:text-2xl font-bold uppercase text-white">Shop the <span className="gold-gradient-text">Latest Looks</span></h2>
             </div>
             <button onClick={() => onNavigate('shop')} className="text-[10px] sm:text-xs text-[#ECC260] font-semibold flex items-center gap-1">Shop all <ArrowRight className="w-3.5 h-3.5" /></button>
           </div>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {[0, 1, 2].map(offset => {
               const product = featuredSlides[(slideIndex + offset) % featuredSlides.length];
               return (
                 <button key={product.id} onClick={() => onNavigate('product-detail', { slug: product.slug })} className="group min-w-0 text-left rounded-xl overflow-hidden border border-[#2A2931] bg-[#111116]">
-                  <div className="aspect-[4/5] bg-[#F7F5F0] overflow-hidden">
+                  <div className="aspect-[5/4] bg-[#F7F5F0] overflow-hidden">
                     <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-2">
@@ -151,9 +142,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </section>
       )}
 
+          <div className="mt-5 pt-3 border-t border-white/15 grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-2 text-[9px] sm:text-xs text-zinc-200/90">
+            <div className="flex items-center justify-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Authentic Quality</span></div>
+            <div className="flex items-center justify-center gap-1.5"><Truck className="w-3.5 h-3.5 text-[#E6007A]" /><span>Nationwide Delivery</span></div>
+            <div className="flex items-center justify-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" /><span>Secure Payments</span></div>
+            <div className="flex items-center justify-center gap-1.5"><PiggyBank className="w-3.5 h-3.5 text-[#E6007A]" /><span>Save to Buy</span></div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION B — SHOP BY CATEGORY */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-4 border-b border-[#232330]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-5 sm:mb-8 pb-3 border-b border-[#232330]">
           <div>
             <span className="text-xs uppercase font-bold tracking-widest text-[#E6007A] block mb-1">
               Curated Masterpieces
