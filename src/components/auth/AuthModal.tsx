@@ -56,8 +56,8 @@ export const AuthModal: React.FC = () => {
             {mode === 'forgot' && 'Reset Your Password'}
           </h3>
           <p className="text-xs text-zinc-400 mt-1">
-            {mode === 'login' && 'Sign in to access your orders, wishlist, and Save to Buy plans.'}
-            {mode === 'register' && 'Create your account for bespoke couture, retail & wholesale access.'}
+            {mode === 'login' && 'Sign in to manage your account, orders, wishlist and savings.'}
+            {mode === 'register' && 'Create an account to shop P-Kess collections and manage your orders.'}
             {mode === 'forgot' && 'Enter your email address to receive password reset instructions.'}
           </p>
         </div>
