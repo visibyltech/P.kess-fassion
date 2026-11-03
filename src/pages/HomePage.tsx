@@ -32,35 +32,35 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       id: 'clothing',
       title: 'Nigerian Clothing & Native Wear',
       subtitle: 'Ankara styles, elegant gowns, native sets & occasion wear',
-      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/A_Nigerian_lady_in_Ankara_clothing2.jpg?width=900',
+      image: 'https://afrikanattire.com/cdn/shop/products/10bd8fb91289518e3d25f7ac7f025722.jpg?v=1652830900',
       itemCount: '12+ Styles'
     },
     {
       id: 't-shirts',
       title: 'T-Shirts & Everyday Wear',
       subtitle: 'Graphic tees and relaxed styles with a Nigerian point of view',
-      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/I_Love_Naija_Tee.JPG?width=900',
+      image: 'https://i.etsystatic.com/44159206/r/il/161dd9/4984121832/il_1588xN.4984121832_1ftm.jpg',
       itemCount: 'New Styles'
     },
     {
       id: 'shoes',
       title: 'Shoes & Sandals',
-      subtitle: 'Locally crafted footwear for everyday and special occasions',
-      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Nigerian_Sandal.jpg?width=900',
+      subtitle: 'Nigerian-made styles for men and women',
+      image: 'https://media-assets.grailed.com/prd/listing/33612893/527637d4714540ecaf1da94cf0c96d01?auto=format',
       itemCount: '8+ Styles'
     },
     {
       id: 'bags',
       title: 'Bags & Handbags',
       subtitle: 'Ankara, fabric and statement bags',
-      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_bag.jpg?width=900',
+      image: 'https://www.zeestore.ca/cdn/shop/files/balangi-african-print-handbag-9801401.jpg?v=1769832557',
       itemCount: '10+ Styles'
     },
     {
       id: 'accessories',
       title: 'Fashion Accessories',
       subtitle: 'Beads, headwraps, caps, scarves and finishing touches',
-      image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ankara_cap.jpg?width=900',
+      image: 'https://curiosityafricanboutique.com/cdn/shop/files/CuriosityAfricanBoutique_AfricanCurioShopinSouthAfricaonZuluNyalaHeritageSafariLodge_ArtisinalandHandcraftedAfricanProducts_Decor_CraftsandArt--794copy.png?v=1702631348&width=2000',
       itemCount: '14+ Styles'
     }
   ];
@@ -162,34 +162,34 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-5">
           {categories.map((cat) => (
             <div
               key={cat.id}
               onClick={() => onNavigate('shop', { category: cat.id })}
-              className="group relative h-[260px] sm:h-[380px] rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
+              className="group relative aspect-[4/5] min-w-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
             >
               <img
                 src={cat.image}
                 alt={cat.title}
-                className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
+                className="w-full h-full object-contain p-2 sm:p-4 bg-[#F7F5F0] object-center group-hover:scale-105 transition-transform duration-500 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:via-black/50 transition-colors" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent group-hover:from-black/95 transition-colors" />
 
-              <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col justify-end">
-                <span className="text-[10px] font-bold tracking-widest text-[#ECC260] uppercase mb-1">
+              <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 flex flex-col justify-end">
+                <span className="text-[8px] sm:text-[10px] font-bold tracking-wide text-[#ECC260] uppercase mb-1">
                   {cat.itemCount}
                 </span>
-                <h3 className="font-serif-luxury text-xl font-bold text-white mb-1 group-hover:text-[#ECC260] transition-colors">
+                <h3 className="font-serif-luxury text-[11px] leading-tight sm:text-base lg:text-lg font-bold text-white mb-1 group-hover:text-[#ECC260] transition-colors line-clamp-2">
                   {cat.title}
                 </h3>
-                <p className="text-xs text-zinc-300 line-clamp-2 mb-4 opacity-90">
+                <p className="text-[9px] leading-snug sm:text-xs text-zinc-300 line-clamp-2 mb-2 sm:mb-3 opacity-90">
                   {cat.subtitle}
                 </p>
 
-                <div className="inline-flex items-center gap-2 text-xs font-semibold text-white group-hover:text-[#D4AF37] transition-colors">
+                <div className="inline-flex items-center gap-1 text-[9px] sm:text-xs font-semibold text-white group-hover:text-[#D4AF37] transition-colors">
                   <span>Explore Collection</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
                 </div>
               </div>
             </div>
