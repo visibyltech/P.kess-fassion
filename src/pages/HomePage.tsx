@@ -110,11 +110,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
       {/* PRODUCT SLIDESHOW INSIDE HERO */}
       {featuredSlides.length > 0 && (
-        <section className="w-full max-w-3xl mx-auto mt-5 px-0">
+        <section className="w-full max-w-3xl mx-auto mt-4 px-2 sm:px-3 rounded-2xl border border-[#D4AF37]/25 bg-gradient-to-b from-[#17131A]/70 via-[#0D0D12]/45 to-[#08080A]/70 backdrop-blur-[2px] py-3 shadow-[0_10px_35px_rgba(0,0,0,0.28)]">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-[#E6007A]">Explore the Collection</span>
-              <h2 className="font-brand-display text-lg sm:text-2xl font-bold uppercase text-white">Shop the <span className="gold-gradient-text">Latest Looks</span></h2>
+              <span className="text-[10px] uppercase font-extrabold tracking-[0.18em] text-[#FF5CA8]">Explore the Collection</span>
+              <h2 className="font-brand-display text-lg sm:text-2xl font-extrabold uppercase text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">Shop the <span className="gold-gradient-text">Latest Looks</span></h2>
             </div>
             <button onClick={() => onNavigate('shop')} className="text-[10px] sm:text-xs text-[#ECC260] font-semibold flex items-center gap-1">Shop all <ArrowRight className="w-3.5 h-3.5" /></button>
           </div>
@@ -123,12 +123,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               const product = featuredSlides[(slideIndex + offset) % featuredSlides.length];
               return (
                 <button key={product.id} onClick={() => onNavigate('product-detail', { slug: product.slug })} className="group min-w-0 text-left rounded-xl overflow-hidden border border-[#2A2931] bg-[#111116]">
-                  <div className="aspect-[5/4] bg-[#F7F5F0] overflow-hidden">
+                  <div className="aspect-[4/5] bg-[#F7F5F0] overflow-hidden">
                     <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="p-2">
-                    <p className="text-[9px] sm:text-xs text-white font-semibold line-clamp-1">{product.name}</p>
-                    <p className="text-[9px] sm:text-xs text-[#ECC260] mt-1">₦{product.retailPrice.toLocaleString('en-NG')}</p>
+                    <p className="text-[10px] sm:text-xs text-white font-semibold line-clamp-1">{product.name}</p>
+                    <p className="text-[10px] sm:text-xs text-[#ECC260] mt-1">₦{product.retailPrice.toLocaleString('en-NG')}</p>
                   </div>
                 </button>
               );
