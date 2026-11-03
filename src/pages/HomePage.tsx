@@ -155,12 +155,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
           {categories.map((cat) => (
             <div
               key={cat.id}
               onClick={() => onNavigate('shop', { category: cat.id })}
-              className="group relative h-[380px] rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
+              className="group relative h-[260px] sm:h-[380px] rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
             >
               <img
                 src={cat.image}
@@ -210,7 +210,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
           {newArrivals.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}
@@ -297,7 +297,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
           {bestSellers.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}

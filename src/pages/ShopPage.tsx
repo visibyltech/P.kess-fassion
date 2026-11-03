@@ -10,7 +10,9 @@ import {
   X, 
   ArrowUpDown,
   ShoppingBag,
-  Percent
+  Percent,
+  Grid2X2,
+  LayoutGrid
 } from 'lucide-react';
 
 interface ShopPageProps {
@@ -32,6 +34,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
   const [sortBy, setSortBy] = useState<'featured' | 'newest' | 'price-low' | 'price-high' | 'rating'>('newest');
   const [maxPrice, setMaxPrice] = useState<number>(150000);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [gridColumns, setGridColumns] = useState<2 | 4>(2); // Default to 2 grids side by side!
 
   // Sync state if props change
   React.useEffect(() => {
@@ -194,6 +197,32 @@ export const ShopPage: React.FC<ShopPageProps> = ({
             <ArrowUpDown className="w-3 h-3 text-zinc-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
+          {/* Grid Layout Toggle (2 Columns vs 4 Columns) */}
+          <div className="hidden sm:flex items-center bg-[#131318] border border-[#282836] rounded-xl p-1 gap-1">
+            <button
+              type="button"
+              onClick={() => setGridColumns(2)}
+              className={`p-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors ${
+                gridColumns === 2 ? 'bg-[#D4AF37] text-black shadow-sm' : 'text-zinc-400 hover:text-white'
+              }`}
+              title="Two Grids Side by Side (Storefront Look)"
+            >
+              <Grid2X2 className="w-3.5 h-3.5" />
+              <span className="hidden md:inline text-[11px]">2 Grids</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setGridColumns(4)}
+              className={`p-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors ${
+                gridColumns === 4 ? 'bg-[#D4AF37] text-black shadow-sm' : 'text-zinc-400 hover:text-white'
+              }`}
+              title="Compact Grid"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span className="hidden md:inline text-[11px]">4 Grids</span>
+            </button>
+          </div>
+
           {/* Mobile Filter Button */}
           <button
             onClick={() => setIsMobileFilterOpen(prev => !prev)}
@@ -239,7 +268,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
         </div>
       </div>
 
-      {/* Product Grid */}
+      {/* Product Grid — Side by Side */}
       {filteredProducts.length === 0 ? (
         <div className="text-center py-20 bg-[#0F0F14] rounded-2xl border border-[#242432]">
           <ShoppingBag className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
@@ -259,7 +288,11 @@ export const ShopPage: React.FC<ShopPageProps> = ({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className={`grid ${
+          gridColumns === 2 
+            ? 'grid-cols-2 gap-3.5 sm:gap-6' 
+            : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6'
+        }`}>
           {filteredProducts.map(product => (
             <ProductCard 
               key={product.id} 

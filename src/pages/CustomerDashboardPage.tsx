@@ -306,7 +306,7 @@ export const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({
                   Your wishlist is empty. Tap the heart icon on any product to save it for later.
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6">
                   {userWishlistProducts.map(p => (
                     <ProductCard key={p.id} product={p} onNavigate={onNavigate} />
                   ))}

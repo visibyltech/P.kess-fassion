@@ -86,47 +86,49 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* Card Body */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
         <div>
           {/* Category & Rating */}
-          <div className="flex items-center justify-between text-[11px] text-zinc-400 mb-1.5">
-            <span className="uppercase tracking-wider text-[#ECC260] font-medium text-[10px]">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-zinc-400 mb-1">
+            <span className="uppercase tracking-wider text-[#ECC260] font-medium text-[9px] sm:text-[10px] truncate max-w-[90px]">
               {product.category}
             </span>
-            <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 text-[#ECC260] fill-[#ECC260]" />
-              <span>{product.rating}</span>
+            <div className="flex items-center gap-0.5 sm:gap-1 shrink-0">
+              <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#ECC260] fill-[#ECC260]" />
+              <span className="text-[10px] sm:text-[11px]">{product.rating}</span>
             </div>
           </div>
 
           {/* Title */}
           <h3 
             onClick={() => onNavigate('product-detail', { slug: product.slug })}
-            className="font-serif-luxury text-sm sm:text-base font-semibold text-white hover:text-[#D4AF37] cursor-pointer transition-colors line-clamp-1 mb-2"
+            className="font-serif-luxury text-xs sm:text-sm font-semibold text-white hover:text-[#D4AF37] cursor-pointer transition-colors line-clamp-1 mb-1.5"
+            title={product.name}
           >
             {product.name}
           </h3>
 
           {/* Pricing Row: Retail vs Wholesale */}
-          <div className="space-y-1 mb-3">
-            <div className="flex items-baseline gap-2">
-              <span className="text-sm sm:text-base font-bold text-white">
+          <div className="space-y-1 mb-2.5">
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <span className="text-xs sm:text-sm md:text-base font-bold text-white">
                 ₦{discountedRetail.toLocaleString()}
               </span>
               {product.discountPercent && product.discountPercent > 0 && (
-                <span className="text-xs text-zinc-500 line-through">
+                <span className="text-[10px] sm:text-xs text-zinc-500 line-through">
                   ₦{product.retailPrice.toLocaleString()}
                 </span>
               )}
             </div>
 
             {/* Wholesale Callout */}
-            <div className="flex items-center justify-between text-[11px] text-[#ECC260] bg-[#191924] px-2 py-1 rounded-lg border border-[#2E2E40]">
-              <span className="flex items-center gap-1 font-medium">
-                <Sparkles className="w-3 h-3 text-[#E6007A]" />
-                Wholesale (10+):
+            <div className="flex items-center justify-between text-[9px] sm:text-[11px] text-[#ECC260] bg-[#191924] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border border-[#2E2E40]">
+              <span className="flex items-center gap-1 font-medium truncate">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#E6007A] shrink-0" />
+                <span className="hidden sm:inline">Wholesale (10+):</span>
+                <span className="sm:hidden">Wholesale:</span>
               </span>
-              <span className="font-bold">
+              <span className="font-bold shrink-0">
                 ₦{product.wholesalePrice.toLocaleString()}
               </span>
             </div>
@@ -134,21 +136,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Mobile / Direct Action Buttons */}
-        <div className="pt-2 border-t border-[#1C1C28] flex items-center gap-2">
+        <div className="pt-2 border-t border-[#1C1C28] flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => addToCart(product, 1)}
-            className="flex-1 py-2 px-3 rounded-lg bg-[#181822] hover:bg-[#D4AF37] hover:text-black border border-[#2D2D3E] hover:border-[#D4AF37] text-zinc-200 text-xs font-semibold transition-all flex items-center justify-center gap-1.5"
+            className="flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg bg-[#181822] hover:bg-[#D4AF37] hover:text-black border border-[#2D2D3E] hover:border-[#D4AF37] text-zinc-200 text-[11px] sm:text-xs font-semibold transition-all flex items-center justify-center gap-1 sm:gap-1.5 truncate"
           >
-            <ShoppingBag className="w-3.5 h-3.5 text-[#D4AF37] group-hover:text-black" />
-            Add to Bag
+            <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#D4AF37] group-hover:text-black shrink-0" />
+            <span className="truncate">Add to Bag</span>
           </button>
 
           <button
             onClick={() => onNavigate('save-to-buy', { productId: product.id })}
-            className="p-2 rounded-lg bg-[#181822] hover:bg-[#E6007A]/20 border border-[#2D2D3E] hover:border-[#E6007A] text-zinc-400 hover:text-[#FF66B2] transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg bg-[#181822] hover:bg-[#E6007A]/20 border border-[#2D2D3E] hover:border-[#E6007A] text-zinc-400 hover:text-[#FF66B2] transition-colors shrink-0"
             title="Save to Buy this item"
           >
-            <PiggyBank className="w-4 h-4" />
+            <PiggyBank className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>
