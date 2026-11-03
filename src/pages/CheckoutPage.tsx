@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { NIGERIAN_STATES } from '../data/nigeriaLocations';
 import { BRAND_CONSTANTS } from '../data/initialData';
@@ -6,7 +6,6 @@ import {
   ShieldCheck, 
   Truck, 
   MapPin, 
-  CreditCard, 
   Building2, 
   Copy, 
   Check, 
@@ -33,6 +32,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     cartWholesaleSavings, 
     createOrder, 
     currentUser, 
+    setIsAuthModalOpen,
     paymentSettings,
     showToast 
   } = useStore();
@@ -48,17 +48,26 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   const [deliveryInstructions, setDeliveryInstructions] = useState<string>('');
 
   // Payment Selection
-  const [paymentMethod, setPaymentMethod] = useState<'paystack' | 'bank_transfer' | 'bnpl_credibly'>('paystack');
+  const [paymentMethod, setPaymentMethod] = useState<'bank_transfer' | 'save_to_buy' | 'bnpl_credibly'>('bank_transfer');
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [awaitingAuthentication, setAwaitingAuthentication] = useState(false);
   const [copiedBank, setCopiedBank] = useState(false);
   const [uploadedProofUrl, setUploadedProofUrl] = useState<string>('');
   const [bankReference, setBankReference] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<any>(null);
 
-  // Paystack mock modal
-  const [showPaystackModal, setShowPaystackModal] = useState(false);
-  const [paystackCardNumber, setPaystackCardNumber] = useState('5399 •••• •••• 9012');
-  const [paystackPin, setPaystackPin] = useState('1234');
+
+  useEffect(() => {
+    if (awaitingAuthentication && currentUser) {
+      setFullName(currentUser.name || '');
+      setEmail(currentUser.email || '');
+      setPhone(currentUser.phone || '');
+      setAwaitingAuthentication(false);
+      setShowPaymentDetails(true);
+      showToast('You are signed in. You can now continue with payment.');
+    }
+  }, [awaitingAuthentication, currentUser]);
 
   const currentStateData = NIGERIAN_STATES[selectedState] || NIGERIAN_STATES['Delta'];
   const deliveryFee = deliveryMethod === 'pickup' ? 0 : currentStateData.deliveryFee;
@@ -102,8 +111,28 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       return;
     }
 
-    if (paymentMethod === 'paystack') {
-      setShowPaystackModal(true);
+    if (!currentUser) {
+      setAwaitingAuthentication(true);
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    if (!showPaymentDetails) {
+      setShowPaymentDetails(true);
+      showToast('Choose your payment option below to continue.');
+      return;
+    }
+
+    if (paymentMethod === 'save_to_buy') {
+      const firstItem = cart[0];
+      onNavigate('save-to-buy', {
+        ...(firstItem ? {
+          productId: firstItem.product.id,
+          selectedSize: firstItem.selectedSize,
+          selectedColor: firstItem.selectedColor,
+          quantity: firstItem.quantity
+        } : {})
+      });
       return;
     }
 
@@ -142,36 +171,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       setIsProcessing(false);
       setConfirmedOrder(newOrder);
     }, 1200);
-  };
-
-  const handlePaystackSuccess = () => {
-    setShowPaystackModal(false);
-    setIsProcessing(true);
-    setTimeout(() => {
-      const newOrder = createOrder({
-        customerId: currentUser?.id || 'guest-' + Date.now(),
-        customerName: fullName,
-        customerEmail: email,
-        customerPhone: phone,
-        deliveryMethod,
-        state: selectedState,
-        lga: deliveryMethod === 'pickup' ? 'Asaba Showroom' : selectedLga,
-        address: deliveryMethod === 'pickup' ? BRAND_CONSTANTS.address : streetAddress,
-        deliveryInstructions,
-        items: cart,
-        subtotal: cartSubtotal,
-        wholesaleSavings: cartWholesaleSavings,
-        deliveryFee,
-        total: finalPayableTotal,
-        paymentMethod: 'paystack',
-        paymentStatus: 'verified',
-        orderStatus: 'processing',
-        courier: 'GIG Logistics'
-      });
-      setIsProcessing(false);
-      setConfirmedOrder(newOrder);
-      showToast("Payment verified via Paystack! Order confirmed.", "success");
-    }, 1000);
   };
 
   if (confirmedOrder) {
@@ -468,6 +467,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             )}
           </div>
 
+          {showPaymentDetails && (
           {/* STEP 3: PAYMENT METHOD */}
           <div className="rounded-3xl bg-[#111117] border border-[#252536] p-6 sm:p-8 space-y-5 shadow-xl">
             <div className="flex items-center gap-3 border-b border-zinc-800 pb-3">
@@ -482,18 +482,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <button
                 type="button"
-                onClick={() => setPaymentMethod('paystack')}
+                onClick={() => setPaymentMethod('save_to_buy')}
                 className={`p-4 rounded-2xl border text-left transition-all ${
-                  paymentMethod === 'paystack'
+                  paymentMethod === 'save_to_buy'
                     ? 'border-[#D4AF37] bg-[#D4AF37]/15'
                     : 'border-[#262638] bg-[#151520]'
                 }`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <CreditCard className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="font-bold text-white text-xs">Paystack</span>
+                  <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                  <span className="font-bold text-white text-xs">Save to Buy (Installment Payments)</span>
                 </div>
-                <p className="text-[11px] text-zinc-400">Debit card, USSD, Apple Pay & Bank</p>
+                <p className="text-[11px] text-zinc-400">Pay gradually with a scheduled installment plan</p>
               </button>
 
               <button
@@ -523,7 +523,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <Sparkles className="w-4 h-4 text-[#ECC260]" />
-                  <span className="font-bold text-white text-xs">BNPL (Credibly)</span>
+                  <span className="font-bold text-white text-xs">Buy Now Pay Later (Credibly)</span>
                 </div>
                 <p className="text-[11px] text-zinc-400">Installment evaluation status</p>
               </button>
@@ -594,6 +594,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               </div>
             )}
           </div>
+          )}
         </div>
 
         {/* Right Column: Order Review & Final Submit */}
@@ -657,82 +658,20 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
               disabled={isProcessing}
               className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#D4AF37]/25 disabled:opacity-50"
             >
-              {isProcessing ? 'Processing Transaction...' : `Place Order (₦${finalPayableTotal.toLocaleString()})`}
+              {isProcessing ? 'Processing Transaction...' : !currentUser ? 'Sign In / Sign Up to Continue' : !showPaymentDetails ? 'Continue to Payment' : paymentMethod === 'save_to_buy' ? 'Continue to Save to Buy' : paymentMethod === 'bnpl_credibly' ? 'Continue to Credibly' : `Submit Order (₦${finalPayableTotal.toLocaleString()})`}
               <ArrowRight className="w-4 h-4" />
             </button>
 
             <div className="text-center text-[10px] text-zinc-400 space-y-1">
               <div className="flex items-center justify-center gap-1.5 text-zinc-300">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Protected by Paystack & Central Bank Of Nigeria standards</span>
+                <span>Your order and payment details are protected</span>
               </div>
             </div>
           </div>
         </div>
       </form>
 
-      {/* PAYSTACK MODAL SIMULATOR */}
-      {showPaystackModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/85 backdrop-blur-md" onClick={() => setShowPaystackModal(false)} />
-          <div className="relative bg-[#12121A] border border-[#2D2D42] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 text-zinc-300 space-y-5">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded bg-[#0BA4DB] flex items-center justify-center text-white font-black text-xs">
-                  P
-                </div>
-                <span className="font-bold text-white text-sm">Paystack Checkout</span>
-              </div>
-              <span className="text-[11px] text-[#0BA4DB] font-semibold">Test / Live Mode</span>
-            </div>
-
-            <div className="text-center py-2">
-              <span className="text-xs text-zinc-400 block">Paying to P-Kess Fashion World</span>
-              <span className="text-2xl font-black text-white">₦{finalPayableTotal.toLocaleString()}</span>
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div>
-                <label className="text-zinc-400 block mb-1">Card Number</label>
-                <input
-                  type="text"
-                  value={paystackCardNumber}
-                  onChange={(e) => setPaystackCardNumber(e.target.value)}
-                  className="w-full bg-[#181824] border border-[#2E2E44] rounded-xl p-2.5 text-white font-mono"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-zinc-400 block mb-1">Valid Thru</label>
-                  <input
-                    type="text"
-                    defaultValue="12/28"
-                    className="w-full bg-[#181824] border border-[#2E2E44] rounded-xl p-2.5 text-white font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="text-zinc-400 block mb-1">CVV</label>
-                  <input
-                    type="password"
-                    defaultValue="409"
-                    maxLength={3}
-                    className="w-full bg-[#181824] border border-[#2E2E44] rounded-xl p-2.5 text-white font-mono"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handlePaystackSuccess}
-              className="w-full py-3.5 px-4 rounded-xl bg-[#0BA4DB] hover:bg-[#0BA4DB]/90 text-white font-bold text-xs uppercase tracking-wider transition-all"
-            >
-              Pay ₦{finalPayableTotal.toLocaleString()}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
