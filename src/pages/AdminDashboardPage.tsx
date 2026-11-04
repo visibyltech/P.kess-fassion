@@ -49,6 +49,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     paymentSettings,
     updatePaymentSettings,
     currentUser,
+    isAdmin,
+    setIsAuthModalOpen,
     showToast 
   } = useStore();
 
@@ -252,6 +254,24 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       paystackLiveMode: paystackLive
     });
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center bg-[#09090F] px-5">
+        <div className="max-w-md w-full rounded-2xl border border-[#2A2A3C] bg-[#121218] p-7 text-center space-y-4">
+          <ShieldCheck className="w-10 h-10 text-[#D4AF37] mx-auto" />
+          <h1 className="text-xl font-bold text-white">Administrator Sign-In Required</h1>
+          <p className="text-sm text-zinc-400">Sign in with the authorised P-Kess administrator account to access store management.</p>
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="rounded-xl bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+          >
+            Sign In as Administrator
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
