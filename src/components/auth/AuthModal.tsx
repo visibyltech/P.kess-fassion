@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { BrandLogo } from '../common/BrandLogo';
-import { X, Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
+import { X, Mail, Lock, User, Phone, ArrowRight, LoaderCircle } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, login, register, resetPassword } = useStore();
@@ -12,25 +12,31 @@ export const AuthModal: React.FC = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isAuthModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode === 'login') {
-      if (!email) return;
-      const authenticated = await login(email, password);
-      if (authenticated) setIsAuthModalOpen(false);
-    } else if (mode === 'register') {
-      if (!email || !name) return;
-      const created = await register(name, email, phone || '08000000000', password);
-      if (created) setIsAuthModalOpen(false);
-    } else if (mode === 'forgot') {
-      const sent = await resetPassword(email);
-      if (sent) setResetSent(true);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      if (mode === 'login') {
+        if (!email) return;
+        const authenticated = await login(email, password);
+        if (authenticated) setIsAuthModalOpen(false);
+      } else if (mode === 'register') {
+        if (!email || !name) return;
+        const created = await register(name, email, phone || '08000000000', password);
+        if (created) setIsAuthModalOpen(false);
+      } else if (mode === 'forgot') {
+        const sent = await resetPassword(email);
+        if (sent) setResetSent(true);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
 
 
   return (
@@ -162,12 +168,10 @@ export const AuthModal: React.FC = () => {
 
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#D4AF37]/20 mt-2"
             >
-              {mode === 'login' && 'Sign In to Account'}
-              {mode === 'register' && 'Create Account'}
-              {mode === 'forgot' && 'Send Reset Link'}
-              <ArrowRight className="w-4 h-4" />
+              {isSubmitting ? <><LoaderCircle className="w-4 h-4 animate-spin" /> Please wait…</> : <>{mode === 'login' && 'Sign In to Account'}{mode === 'register' && 'Create Account'}{mode === 'forgot' && 'Send Reset Link'}<ArrowRight className="w-4 h-4" /></>}
             </button>
           </form>
         )}
