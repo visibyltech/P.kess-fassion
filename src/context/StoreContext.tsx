@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { firestore } from '../lib/firebase';
 import { 
   Product, 
   CartItem, 
@@ -29,9 +31,9 @@ interface Toast {
 interface StoreContextType {
   // Products
   products: Product[];
-  addProduct: (product: Omit<Product, 'id'>) => void;
-  updateProduct: (id: string, updates: Partial<Product>) => void;
-  deleteProduct: (id: string) => void;
+  addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
+  updateProduct: (id: string, updates: Partial<Product>) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
 
   // Cart
   cart: CartItem[];
@@ -99,24 +101,16 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // State initialization with localStorage fallback
+  // Firestore is the source of truth for the shared product catalogue.
   const [products, setProducts] = useState<Product[]>(() => {
     const saved = localStorage.getItem('pkess_products');
-    if (!saved) return INITIAL_PRODUCTS;
-    try {
-      const storedProducts = JSON.parse(saved) as Product[];
-      const refreshed = storedProducts.map(product => {
-        const catalogueProduct = INITIAL_PRODUCTS.find(item => item.id === product.id);
-        return catalogueProduct
-          ? { ...product, images: catalogueProduct.images, category: catalogueProduct.category }
-          : product;
-      });
-      const existingIds = new Set(refreshed.map(product => product.id));
-      return [...refreshed, ...INITIAL_PRODUCTS.filter(product => !existingIds.has(product.id))];
-    } catch {
-      return INITIAL_PRODUCTS;
+    if (saved) {
+      try { return JSON.parse(saved) as Product[]; } catch { /* use starter catalogue */ }
     }
+    return INITIAL_PRODUCTS;
   });
+  const [productsLoaded, setProductsLoaded] = useState(false);
+
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     const saved = localStorage.getItem('pkess_cart');
@@ -164,10 +158,27 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Local storage persistence
+  // Subscribe to the shared Firestore catalogue. If it is empty, retain the
+  // starter display catalogue until the owner begins adding real products.
   useEffect(() => {
-    localStorage.setItem('pkess_products', JSON.stringify(products));
-  }, [products]);
+    const unsubscribe = onSnapshot(
+      collection(firestore, 'products'),
+      snapshot => {
+        const remoteProducts = snapshot.docs.map(item => ({ ...(item.data() as Omit<Product, 'id'>), id: item.id }));
+        setProducts(remoteProducts.length ? remoteProducts : INITIAL_PRODUCTS);
+        setProductsLoaded(true);
+      },
+      error => {
+        console.error('Firestore product catalogue listener failed:', error);
+        setProductsLoaded(true);
+      }
+    );
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (productsLoaded) localStorage.setItem('pkess_products', JSON.stringify(products));
+  }, [products, productsLoaded]);
 
   useEffect(() => {
     localStorage.setItem('pkess_cart', JSON.stringify(cart));
@@ -367,24 +378,49 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     showToast("Profile details updated successfully");
   };
 
-  // Products CRUD
-  const addProduct = (productData: Omit<Product, 'id'>) => {
-    const newProduct: Product = {
-      ...productData,
-      id: 'prod-' + Date.now()
-    };
-    setProducts(prev => [newProduct, ...prev]);
-    showToast(`Product "${newProduct.name}" created successfully`);
+  // Products CRUD — records and Cloudinary image URLs are stored in Firestore.
+  const addProduct = async (productData: Omit<Product, 'id'>): Promise<void> => {
+    try {
+      const result = await addDoc(collection(firestore, 'products'), {
+        ...productData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      const newProduct: Product = { ...productData, id: result.id };
+      setProducts(prev => [newProduct, ...prev.filter(item => item.id !== result.id)]);
+      showToast(`Product "${newProduct.name}" saved to the online catalogue`);
+    } catch (error) {
+      console.error('Could not save product to Firestore:', error);
+      showToast('Could not save product. Check your admin access and Firestore rules.', 'error');
+      throw error;
+    }
   };
 
-  const updateProduct = (id: string, updates: Partial<Product>) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
-    showToast("Product updated");
+  const updateProduct = async (id: string, updates: Partial<Product>): Promise<void> => {
+    try {
+      await updateDoc(doc(firestore, 'products', id), {
+        ...updates,
+        updatedAt: serverTimestamp()
+      });
+      setProducts(prev => prev.map(product => product.id === id ? { ...product, ...updates } : product));
+      showToast('Product updated in the online catalogue');
+    } catch (error) {
+      console.error('Could not update Firestore product:', error);
+      showToast('Could not update product. Check your admin access and Firestore rules.', 'error');
+      throw error;
+    }
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(prev => prev.filter(p => p.id !== id));
-    showToast("Product deleted from catalogue", "info");
+  const deleteProduct = async (id: string): Promise<void> => {
+    try {
+      await deleteDoc(doc(firestore, 'products', id));
+      setProducts(prev => prev.filter(product => product.id !== id));
+      showToast('Product deleted from the online catalogue', 'info');
+    } catch (error) {
+      console.error('Could not delete Firestore product:', error);
+      showToast('Could not delete product. Check your admin access and Firestore rules.', 'error');
+      throw error;
+    }
   };
 
   // Orders
