@@ -62,7 +62,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
       {/* Hero Banner */}
-      <div className="rounded-3xl bg-gradient-to-r from-[#14141B] via-[#1B1422] to-[#14141B] border border-[#2B2B3E] p-8 sm:p-12 shadow-2xl">
+      <div className="bnpl-hero rounded-3xl bg-gradient-to-r from-[#14141B] via-[#1B1422] to-[#14141B] border border-[#2B2B3E] p-8 sm:p-12 shadow-2xl">
         <div className="max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#ECC260] text-xs font-bold uppercase tracking-wider">
             <CreditCard className="w-4 h-4 text-[#ECC260]" />
