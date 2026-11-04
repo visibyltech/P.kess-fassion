@@ -24,7 +24,11 @@ import {
   AlertTriangle,
   ExternalLink,
   Save,
-  Search
+  Search,
+  Menu,
+  Home,
+  Tags,
+  LayoutDashboard
 } from 'lucide-react';
 
 interface AdminDashboardPageProps {
@@ -54,6 +58,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     showToast 
   } = useStore();
 
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<
     'overview' | 'products' | 'orders' | 'savings' | 'bnpl' | 'wholesale' | 'payments' | 'business'
   >('overview');
@@ -273,24 +278,37 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     );
   }
 
+  const adminNavItems = [
+    { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'products', label: 'Products', icon: Package, count: products.length },
+    { id: 'categories', label: 'Categories', icon: Tags },
+    { id: 'orders', label: 'Orders', icon: Truck, count: orders.length },
+    { id: 'savings', label: 'Save to Buy', icon: PiggyBank },
+    { id: 'bnpl', label: 'BNPL Applications', icon: CreditCard },
+    { id: 'wholesale', label: 'Wholesale', icon: Percent },
+    { id: 'payments', label: 'Payments & Bank', icon: Building2 },
+    { id: 'business', label: 'Showroom & Delivery', icon: Settings }
+  ];
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-7 py-5 sm:py-7">
       {/* Admin Top Header */}
-      <div className="rounded-3xl bg-gradient-to-r from-[#171410] via-[#1E1712] to-[#121217] border border-[#D4AF37]/50 p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-2xl">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-[#D4AF37] flex items-center justify-center text-black font-black text-xl shadow-lg">
+      <div className="rounded-2xl bg-gradient-to-r from-[#171410] via-[#1E1712] to-[#121217] border border-[#D4AF37]/50 p-4 sm:p-5 flex items-center justify-between gap-3 shadow-xl">
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={() => setAdminMenuOpen(true)} aria-label="Open admin navigation" className="shrink-0 rounded-lg border border-[#D4AF37]/40 bg-white/5 p-2.5 text-[#ECC260] hover:bg-white/10"><Menu className="w-5 h-5" /></button>
+          <div className="w-10 h-10 rounded-xl bg-[#D4AF37] flex items-center justify-center text-black font-black text-xl shadow-lg">
             👑
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-brand-display text-xl sm:text-2xl font-bold text-white uppercase">
+              <h1 className="font-brand-display text-base sm:text-xl font-bold text-white uppercase">
                 P-Kess Executive Control Panel
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37] text-black uppercase">
                 Super Admin
               </span>
             </div>
-            <p className="text-xs text-zinc-400 mt-0.5">
+            <p className="hidden sm:block text-xs text-zinc-400 mt-0.5">
               Enterprise management for products, orders, Paystack, manual transfers, wholesale tiers, and Save to Buy.
             </p>
           </div>
@@ -307,50 +325,41 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#242432] scrollbar-none text-xs font-semibold">
-        {[
-          { id: 'overview', label: 'Executive KPIs', icon: ShieldCheck },
-          { id: 'products', label: `Products (${products.length})`, icon: Package },
-          { id: 'orders', label: `Orders (${orders.length})`, icon: Truck, badge: pendingPayments > 0 ? `${pendingPayments} Pending` : undefined },
-          { id: 'savings', label: `Save to Buy (${savingsPlans.length})`, icon: PiggyBank },
-          { id: 'bnpl', label: `BNPL Credibly (${bnplApplications.length})`, icon: CreditCard },
-          { id: 'wholesale', label: 'Wholesale Settings', icon: Percent },
-          { id: 'payments', label: 'Payment Gateways & Bank', icon: Building2 },
-          { id: 'business', label: 'Showroom & Delivery', icon: Settings }
-        ].map(t => {
-          const Icon = t.icon;
-          const isActive = activeTab === t.id;
-          return (
-            <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id as any)}
-              className={`px-4 py-2.5 rounded-xl whitespace-nowrap flex items-center gap-2 transition-all ${
-                isActive
-                  ? 'bg-[#D4AF37] text-black font-bold shadow-md'
-                  : 'bg-[#121217] text-zinc-400 hover:text-white border border-[#242432]'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{t.label}</span>
-              {t.badge && (
-                <span className="px-1.5 py-0.2 rounded-full bg-[#E6007A] text-white text-[9px] font-bold">
-                  {t.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+
+      {adminMenuOpen && (
+        <div className="fixed inset-0 z-[120]">
+          <button aria-label="Close admin menu" onClick={() => setAdminMenuOpen(false)} className="absolute inset-0 bg-black/70" />
+          <aside className="absolute inset-y-0 left-0 flex w-[min(84vw,300px)] flex-col border-r border-[#D4AF37]/30 bg-[#111117] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+              <div><p className="text-sm font-bold tracking-[0.16em] text-[#ECC260]">P-KESS ADMIN</p><p className="mt-0.5 text-[10px] text-zinc-400">Store management</p></div>
+              <button onClick={() => setAdminMenuOpen(false)} aria-label="Close menu" className="rounded-lg p-2 text-zinc-300 hover:bg-white/10"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">Management</div>
+            <nav className="flex-1 overflow-y-auto px-2 pb-3">
+              {adminNavItems.map(item => {
+                const Icon = item.icon;
+                const active = activeTab === item.id;
+                return <button key={item.id} onClick={() => { setActiveTab(item.id as any); setAdminMenuOpen(false); }} className={"mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition-colors " + (active ? "bg-[#D4AF37] font-bold text-black" : "text-zinc-200 hover:bg-white/[0.07]")}>
+                  <Icon className="h-4 w-4 shrink-0" /><span className="flex-1">{item.label}</span>{item.count !== undefined && <span className={"text-xs " + (active ? "text-black/70" : "text-zinc-500")}>{item.count}</span>}
+                </button>;
+              })}
+              <div className="my-3 border-t border-white/10" />
+              <button onClick={() => { setAdminMenuOpen(false); handleOpenAddProduct(); }} className="flex w-full items-center gap-3 rounded-xl bg-[#D4AF37]/15 px-3 py-3 text-left text-sm font-semibold text-[#FFE08A] hover:bg-[#D4AF37]/25"><Plus className="h-4 w-4" /> Add Product</button>
+              <button onClick={() => { setAdminMenuOpen(false); onNavigate('shop'); }} className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-zinc-300 hover:bg-white/[0.07]"><Home className="h-4 w-4" /> View Storefront</button>
+            </nav>
+            <div className="border-t border-white/10 px-4 py-3 text-[11px] text-zinc-500">{currentUser?.email}</div>
+          </aside>
+        </div>
+      )}
 
       {/* TAB 1: EXECUTIVE KPIS OVERVIEW */}
       {activeTab === 'overview' && (
         <div className="space-y-8">
           {/* Main KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Revenue</span>
-              <div className="text-2xl font-black text-[#ECC260]">₦{totalRevenue.toLocaleString()}</div>
+              <div className="text-lg sm:text-2xl font-black text-[#ECC260]">₦{totalRevenue.toLocaleString()}</div>
               <span className="text-[11px] text-emerald-400 flex items-center gap-1">
                 Payment settings
               </span>
@@ -358,7 +367,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Orders</span>
-              <div className="text-2xl font-black text-white">{orders.length}</div>
+              <div className="text-lg sm:text-2xl font-black text-white">{orders.length}</div>
               <span className="text-[11px] text-[#FF66B2]">
                 {wholesaleOrders.length} Wholesale bulk orders
               </span>
@@ -366,7 +375,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Pending Bank Approvals</span>
-              <div className="text-2xl font-black text-amber-400">{pendingPayments}</div>
+              <div className="text-lg sm:text-2xl font-black text-amber-400">{pendingPayments}</div>
               <span className="text-[11px] text-zinc-400">
                 Awaiting transfer receipt verification
               </span>
@@ -374,7 +383,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Active Save to Buy Plans</span>
-              <div className="text-2xl font-black text-[#FF66B2]">{savingsPlans.length}</div>
+              <div className="text-lg sm:text-2xl font-black text-[#FF66B2]">{savingsPlans.length}</div>
               <span className="text-[11px] text-zinc-400">
                 Cumulative installments running
               </span>
@@ -382,7 +391,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
           </div>
 
           {/* Quick Action Alerts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Pending Payments Alert */}
             <div className="rounded-2xl bg-[#14141D] border border-[#2A2A3E] p-6 space-y-4">
               <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
