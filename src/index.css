@@ -505,8 +505,31 @@ body:has(.light-storefront) {
 .light-storefront .site-navbar .account-dropdown button:hover { background:rgba(255,255,255,.08)!important; color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
 .light-storefront .site-navbar .account-dropdown .text-white { color:#fff!important; -webkit-text-fill-color:#fff!important; }
 .light-storefront .site-navbar .account-dropdown .text-zinc-400 { color:#c5bfcc!important; -webkit-text-fill-color:#c5bfcc!important; }
-.light-storefront .site-navbar .mobile-side-drawer { background:#101015!important; color:#f4f1f7!important; }
-.light-storefront .site-navbar .mobile-side-drawer button { color:#f4f1f7!important; -webkit-text-fill-color:#f4f1f7!important; }
-.light-storefront .site-navbar .mobile-side-drawer .text-zinc-300,.light-storefront .site-navbar .mobile-side-drawer .text-zinc-400 { color:#d1cbd7!important; -webkit-text-fill-color:#d1cbd7!important; }
-.light-storefront .site-navbar .mobile-side-drawer .text-[#FFE08A],.light-storefront .site-navbar .mobile-side-drawer .text-[#ECC260] { color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
-.light-storefront .site-navbar .mobile-side-drawer .bg-gradient-to-r { color:#17130a!important; -webkit-text-fill-color:#17130a!important; }
+/* White, reference-matched storefront drawer. Keep contrast explicit and local. */
+.light-storefront .site-navbar .store-navigation-drawer {
+  background: #ffffff !important;
+  color: #302b31 !important;
+}
+.light-storefront .site-navbar .store-navigation-drawer button {
+  -webkit-text-fill-color: currentColor;
+}
+.light-storefront .site-navbar .store-navigation-drawer nav button {
+  color: #302b31;
+}
+.light-storefront .site-navbar .store-navigation-drawer nav button.bg-\\[\\#f8f1f4\\] {
+  color: #d94f86 !important;
+  -webkit-text-fill-color: #d94f86 !important;
+}
+.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#777078\\] {
+  color: #777078 !important;
+  -webkit-text-fill-color: #777078 !important;
+}
+.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#302b31\\] {
+  color: #302b31 !important;
+  -webkit-text-fill-color: #302b31 !important;
+}
+.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#a83d69\\],
+.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#c64177\\] {
+  color: #a83d69 !important;
+  -webkit-text-fill-color: #a83d69 !important;
+}
