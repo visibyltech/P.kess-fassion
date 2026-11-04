@@ -144,12 +144,8 @@ body:has(.light-storefront) {
 .light-storefront [class*="border-[#1F1F28]"] {
   border-color: #e8e3d9 !important;
 }
-.light-storefront .text-white { color: #24212a !important; }
-.light-storefront .text-zinc-100,
-.light-storefront .text-zinc-200,
-.light-storefront .text-zinc-300 { color: #393640 !important; }
-.light-storefront .text-zinc-400,
-.light-storefront .text-zinc-500 { color: #706c76 !important; }
+/* Do not globally recolour text-white/zinc utilities: many intentionally sit on dark feature panels.
+   White-surface components receive explicit dark text via their component classes below. */
 .light-storefront .hero-contrast .text-white,
 .light-storefront .hero-contrast .text-zinc-100,
 .light-storefront .hero-contrast .text-zinc-200,
@@ -249,3 +245,99 @@ body:has(.light-storefront) {
 .light-storefront .product-card .product-action-save svg {
   color: #775b13 !important;
 }
+
+
+/* Site-wide contrast audit: white canvas, intentional dark panels retain light text. */
+.light-storefront .category-card {
+  background: #fff !important;
+  border-color: #e8e1d5 !important;
+  box-shadow: 0 5px 16px rgba(35, 25, 15, .08);
+}
+.light-storefront .category-card .category-overlay {
+  background: linear-gradient(to top, rgba(20,16,22,.88) 0%, rgba(20,16,22,.48) 44%, rgba(20,16,22,.02) 100%) !important;
+}
+.light-storefront .category-card h3,
+.light-storefront .category-card p,
+.light-storefront .category-card .text-white,
+.light-storefront .category-card .text-zinc-300 {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,.6);
+}
+.light-storefront .category-card span,
+.light-storefront .category-card .text-[#ECC260] {
+  color: #ffe08a !important;
+  -webkit-text-fill-color: #ffe08a !important;
+}
+.light-storefront .product-card .product-wishlist {
+  background: rgba(255,255,255,.96) !important;
+  color: #29242d !important;
+  border: 1px solid #d8d1c4 !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.16);
+}
+.light-storefront .product-card .product-wishlist svg {
+  color: #29242d !important;
+  stroke: #29242d !important;
+}
+.light-storefront .product-card .product-wishlist[aria-pressed="true"],
+.light-storefront .product-card .product-wishlist:hover {
+  color: #c21868 !important;
+}
+.light-storefront .product-card .product-wishlist[aria-pressed="true"] svg,
+.light-storefront .product-card .product-wishlist:hover svg {
+  color: #c21868 !important;
+  stroke: #c21868 !important;
+}
+.light-storefront .site-navbar {
+  background: rgba(255,255,255,.97) !important;
+  border-color: #e8e3d9 !important;
+}
+.light-storefront .site-navbar button {
+  color: #302b35;
+}
+.light-storefront .bnpl-hero h1,
+.light-storefront .bnpl-hero h2,
+.light-storefront .bnpl-hero h3,
+.light-storefront .bnpl-hero p,
+.light-storefront .bnpl-hero strong,
+.light-storefront .bnpl-hero li,
+.light-storefront .bnpl-hero span,
+.light-storefront .wholesale-hero h1,
+.light-storefront .wholesale-hero h2,
+.light-storefront .wholesale-hero h3,
+.light-storefront .wholesale-hero p,
+.light-storefront .wholesale-hero strong,
+.light-storefront .wholesale-hero li,
+.light-storefront .wholesale-hero span {
+  color: #f8f6fb !important;
+  -webkit-text-fill-color: #f8f6fb !important;
+}
+.light-storefront .bnpl-hero h1 .gold-gradient-text,
+.light-storefront .bnpl-hero h2 .gold-gradient-text,
+.light-storefront .wholesale-hero h1 .gold-gradient-text {
+  background-image: linear-gradient(120deg, #fff0a6 0%, #f1cb55 50%, #d5a52c 100%) !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.light-storefront .bnpl-hero .text-amber-200,
+.light-storefront .bnpl-hero .text-amber-300,
+.light-storefront .wholesale-hero .text-[#ECC260] {
+  color: #ffe28a !important;
+  -webkit-text-fill-color: #ffe28a !important;
+}
+.light-storefront .bnpl-hero input,
+.light-storefront .bnpl-hero select,
+.light-storefront .bnpl-hero textarea {
+  background: #292532 !important;
+  color: #fff !important;
+  border-color: #51485c !important;
+}
+.light-storefront .bnpl-hero input::placeholder { color: #c5bdcc !important; }
+.light-storefront .bnpl-hero .text-zinc-400,
+.light-storefront .bnpl-hero .text-zinc-500,
+.light-storefront .wholesale-hero .text-zinc-400,
+.light-storefront .wholesale-hero .text-zinc-500 {
+  color: #d0cbd5 !important;
+  -webkit-text-fill-color: #d0cbd5 !important;
+}
+.light-storefront .product-card .product-price { color: #25232a !important; }
+.light-storefront .product-card .text-zinc-500 { color: #77717b !important; }
