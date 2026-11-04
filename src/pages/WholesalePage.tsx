@@ -42,7 +42,7 @@ export const WholesalePage: React.FC<WholesalePageProps> = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
       {/* Hero Wholesale Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#14141A] via-[#201524] to-[#14141A] border border-[#D4AF37]/50 p-8 sm:p-14 lg:p-16 shadow-2xl">
+      <div className="wholesale-hero relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#14141A] via-[#201524] to-[#14141A] border border-[#D4AF37]/50 p-8 sm:p-14 lg:p-16 shadow-2xl">
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#ECC260] text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-4 h-4 text-[#E6007A]" />
