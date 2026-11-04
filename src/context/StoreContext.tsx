@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
-import { firestore } from '../lib/firebase';
+import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, setDoc } from 'firebase/firestore';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
+import { firebaseAuth, firestore } from '../lib/firebase';
 import { 
   Product, 
   CartItem, 
@@ -56,9 +57,10 @@ interface StoreContextType {
   // User & Auth
   currentUser: CustomerUser | null;
   isAdmin: boolean;
-  login: (email: string, role?: 'customer' | 'admin') => boolean;
-  register: (name: string, email: string, phone: string) => boolean;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, phone: string, password: string) => Promise<boolean>;
+  resetPassword: (email: string) => Promise<boolean>;
+  logout: () => Promise<void>;
   updateUserProfile: (updates: Partial<CustomerUser>) => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
@@ -121,10 +123,53 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
-  const [currentUser, setCurrentUser] = useState<CustomerUser | null>(() => {
-    const saved = localStorage.getItem('pkess_current_user');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [currentUser, setCurrentUser] = useState<CustomerUser | null>(null);
+  const ADMIN_EMAIL = 'pkessvariety@gmail.com';
+
+  // Firebase Authentication is the sole source of signed-in identity.
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
+      if (!firebaseUser) {
+        setCurrentUser(null);
+        return;
+      }
+
+      const email = (firebaseUser.email || '').trim().toLowerCase();
+      if (email === ADMIN_EMAIL) {
+        setCurrentUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || 'P-Kess Administrator',
+          email,
+          phone: firebaseUser.phoneNumber || '',
+          role: 'admin',
+          wishlist: [],
+          createdAt: firebaseUser.metadata.creationTime || new Date().toISOString()
+        });
+        return;
+      }
+
+      try {
+        const profileRef = doc(firestore, 'users', firebaseUser.uid);
+        const profileSnapshot = await getDoc(profileRef);
+        const profile = profileSnapshot.exists() ? profileSnapshot.data() : {};
+        setCurrentUser({
+          id: firebaseUser.uid,
+          name: profile.name || firebaseUser.displayName || email.split('@')[0],
+          email,
+          phone: profile.phone || firebaseUser.phoneNumber || '',
+          avatarUrl: profile.avatarUrl || undefined,
+          role: 'customer',
+          savedAddress: profile.savedAddress,
+          wishlist: Array.isArray(profile.wishlist) ? profile.wishlist : [],
+          createdAt: profile.createdAt || firebaseUser.metadata.creationTime || new Date().toISOString()
+        });
+      } catch (error) {
+        console.error('Could not load customer profile:', error);
+        setCurrentUser({ id: firebaseUser.uid, name: email.split('@')[0], email, phone: '', role: 'customer', wishlist: [], createdAt: new Date().toISOString() });
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
     const saved = localStorage.getItem('pkess_wishlist');
@@ -183,10 +228,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem('pkess_cart', JSON.stringify(cart));
   }, [cart]);
-
-  useEffect(() => {
-    localStorage.setItem('pkess_current_user', JSON.stringify(currentUser));
-  }, [currentUser]);
 
   useEffect(() => {
     localStorage.setItem('pkess_wishlist', JSON.stringify(wishlist));
@@ -335,41 +376,78 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  // Auth
-  const login = (email: string, _role: 'customer' | 'admin' = 'customer'): boolean => {
-    const normalizedEmail = email.trim().toLowerCase();
-    if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      showToast("Enter a valid email address.", "error");
+  // Firebase email/password authentication. Admin access is tied to the exact owner email.
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const credential = await signInWithEmailAndPassword(firebaseAuth, email.trim(), password);
+      if ((credential.user.email || '').toLowerCase() !== ADMIN_EMAIL) {
+        const profile = await getDoc(doc(firestore, 'users', credential.user.uid));
+        if (!profile.exists()) {
+          await signOut(firebaseAuth);
+          showToast('Your customer profile could not be found. Please register again.', 'error');
+          return false;
+        }
+      }
+      showToast('Signed in successfully.');
+      return true;
+    } catch (error: any) {
+      console.error('Firebase sign-in failed:', error);
+      const message = error?.code === 'auth/invalid-credential' || error?.code === 'auth/wrong-password' || error?.code === 'auth/user-not-found'
+        ? 'Incorrect email or password.'
+        : error?.code === 'auth/too-many-requests'
+          ? 'Too many attempts. Please try again later.'
+          : error?.message || 'Sign-in failed. Please try again.';
+      showToast(message, 'error');
       return false;
     }
-    const found = INITIAL_CUSTOMERS.find(c => c.email.toLowerCase() === normalizedEmail && c.role === 'customer');
-    if (found) {
-      setCurrentUser(found);
-      showToast(`Welcome back, ${found.name}!`);
+  };
+
+  const register = async (name: string, email: string, phone: string, password: string): Promise<boolean> => {
+    try {
+      const credential = await createUserWithEmailAndPassword(firebaseAuth, email.trim(), password);
+      const profile = {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        phone: phone.trim(),
+        role: 'customer',
+        wishlist: [],
+        createdAt: new Date().toISOString()
+      };
+      await setDoc(doc(firestore, 'users', credential.user.uid), profile);
+      showToast(`Account created successfully. Welcome, ${name}!`);
       return true;
+    } catch (error: any) {
+      console.error('Firebase registration failed:', error);
+      const message = error?.code === 'auth/email-already-in-use'
+        ? 'An account already exists with this email. Please sign in.'
+        : error?.code === 'auth/weak-password'
+          ? 'Please use a password with at least 6 characters.'
+          : error?.message || 'Could not create your account. Please try again.';
+      showToast(message, 'error');
+      return false;
     }
-    showToast("Customer authentication must be connected to the approved account service before sign-in can be enabled.", "warning");
-    return false;
   };
 
-  const register = (name: string, email: string, phone: string): boolean => {
-    const newUser: CustomerUser = {
-      id: 'cust-' + Date.now(),
-      name,
-      email,
-      phone,
-      role: 'customer',
-      wishlist: [],
-      createdAt: new Date().toISOString()
-    };
-    setCurrentUser(newUser);
-    showToast(`Account registered successfully. Welcome, ${name}!`);
-    return true;
+  const resetPassword = async (email: string): Promise<boolean> => {
+    try {
+      await sendPasswordResetEmail(firebaseAuth, email.trim());
+      showToast('Password reset email sent. Check your inbox.');
+      return true;
+    } catch (error: any) {
+      console.error('Password reset failed:', error);
+      showToast(error?.message || 'Could not send password reset email.', 'error');
+      return false;
+    }
   };
 
-  const logout = () => {
-    setCurrentUser(null);
-    showToast("You have been logged out", "info");
+  const logout = async () => {
+    try {
+      await signOut(firebaseAuth);
+      showToast('You have been logged out', 'info');
+    } catch (error) {
+      console.error('Firebase sign-out failed:', error);
+      showToast('Could not sign out. Please try again.', 'error');
+    }
   };
 
   const updateUserProfile = (updates: Partial<CustomerUser>) => {
