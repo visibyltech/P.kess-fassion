@@ -159,13 +159,6 @@ body:has(.light-storefront) {
 .light-storefront .hero-contrast .text-white { color: #25232a !important; }
 .light-storefront .hero-contrast h1,
 .light-storefront .hero-contrast > p { color: #ffffff !important; }
-.light-storefront input,
-.light-storefront select,
-.light-storefront textarea {
-  color: #25232a;
-}
-.light-storefront input::placeholder,
-.light-storefront textarea::placeholder { color: #89848d; }
 .light-storefront footer { background-color: #fbfaf8 !important; }
 .light-storefront .whatsapp-float { color: #ffffff !important; }
 
@@ -517,5 +510,3 @@ body:has(.light-storefront) {
 .light-storefront .site-navbar .mobile-side-drawer .text-zinc-300,.light-storefront .site-navbar .mobile-side-drawer .text-zinc-400 { color:#d1cbd7!important; -webkit-text-fill-color:#d1cbd7!important; }
 .light-storefront .site-navbar .mobile-side-drawer .text-[#FFE08A],.light-storefront .site-navbar .mobile-side-drawer .text-[#ECC260] { color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
 .light-storefront .site-navbar .mobile-side-drawer .bg-gradient-to-r { color:#17130a!important; -webkit-text-fill-color:#17130a!important; }
-.light-storefront .site-navbar input { background:#fff!important; color:#25232a!important; -webkit-text-fill-color:#25232a!important; }
-.light-storefront .site-navbar input::placeholder { color:#77717b!important; -webkit-text-fill-color:#77717b!important; opacity:1!important; }
