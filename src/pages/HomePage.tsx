@@ -110,7 +110,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
       {/* PRODUCT SLIDESHOW INSIDE HERO */}
       {featuredSlides.length > 0 && (
-        <section className="w-full max-w-3xl mx-auto mt-4 px-2 sm:px-3 rounded-2xl border border-[#D4AF37]/25 bg-gradient-to-b from-[#17131A]/70 via-[#0D0D12]/45 to-[#08080A]/70 backdrop-blur-[2px] py-3 shadow-[0_10px_35px_rgba(0,0,0,0.28)]">
+        <section className="hero-collection-panel w-full max-w-3xl mx-auto mt-4 px-2 sm:px-3 rounded-2xl border border-[#D4AF37]/25 bg-gradient-to-b from-[#17131A]/70 via-[#0D0D12]/45 to-[#08080A]/70 backdrop-blur-[2px] py-3 shadow-[0_10px_35px_rgba(0,0,0,0.28)]">
           <div className="flex items-center justify-between mb-3">
             <div>
               <span className="text-[10px] uppercase font-extrabold tracking-[0.18em] text-[#FF5CA8]">Explore the Collection</span>
