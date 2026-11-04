@@ -49,6 +49,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     paymentSettings,
     updatePaymentSettings,
     currentUser,
+    isAdmin,
+    setIsAuthModalOpen,
     showToast 
   } = useStore();
 
@@ -68,13 +70,21 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     wholesaleMinQty: 10,
     stock: 20,
     sku: 'PK-CLO-NEW',
-    images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
+    images: [],
     sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
     colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
     details: ['Designer-led Nigerian clothing collection'],
     featured: true,
     isNewArrival: true
   });
+
+  const [isUploadingProductImages, setIsUploadingProductImages] = useState(false);
+  const [productImageUploadError, setProductImageUploadError] = useState('');
+
+  // Cloudinary unsigned browser uploads. These values are public configuration,
+  // not API secrets. Never place the Cloudinary API secret in frontend code.
+  const CLOUDINARY_CLOUD_NAME = 'jmit9wsv';
+  const CLOUDINARY_UPLOAD_PRESET = 'pkess_products';
 
   // Order Details Modal / Proof viewer
   const [inspectingOrder, setInspectingOrder] = useState<Order | null>(null);
@@ -111,7 +121,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       wholesaleMinQty: 10,
       stock: 20,
       sku: 'PK-' + Math.floor(100 + Math.random() * 900),
-      images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
+      images: [],
       sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
       colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
       details: ['P-Kess designer clothing and fashion collection'],
@@ -129,34 +139,100 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     setIsProductModalOpen(true);
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!productForm.name || !productForm.retailPrice) return;
+  const handleProductImageUpload = async (files: FileList | null) => {
+    if (!files?.length) return;
 
-    if (editingProductId) {
-      updateProduct(editingProductId, productForm);
-    } else {
-      addProduct({
-        name: productForm.name || 'New Creation',
-        slug: (productForm.name || 'item').toLowerCase().replace(/\s+/g, '-'),
-        category: productForm.category as ProductCategory || 'clothing',
-        description: productForm.description || '',
-        retailPrice: Number(productForm.retailPrice),
-        wholesalePrice: Number(productForm.wholesalePrice || Math.round(Number(productForm.retailPrice) * 0.85)),
-        wholesaleMinQty: Number(productForm.wholesaleMinQty || 10),
-        images: productForm.images || ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
-        sizes: productForm.sizes || ['Standard'],
-        colors: productForm.colors || ['Gold', 'Black'],
-        stock: Number(productForm.stock || 10),
-        sku: productForm.sku || 'PK-NEW',
-        featured: Boolean(productForm.featured),
-        isNewArrival: Boolean(productForm.isNewArrival),
-        rating: 5.0,
-        reviewCount: 0,
-        details: productForm.details || ['P-Kess Original Edition']
-      });
+    const selectedFiles = Array.from(files);
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
+    const invalidFile = selectedFiles.find(file => !allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024);
+
+    if (invalidFile) {
+      setProductImageUploadError(
+        !allowedTypes.includes(invalidFile.type)
+          ? 'Please select JPG, PNG, WebP or AVIF images.'
+          : 'Each image must be 10 MB or smaller.'
+      );
+      return;
     }
-    setIsProductModalOpen(false);
+
+    setIsUploadingProductImages(true);
+    setProductImageUploadError('');
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (const file of selectedFiles) {
+        const body = new FormData();
+        body.append('file', file);
+        body.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        body.append('asset_folder', 'pkess-products');
+
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+          { method: 'POST', body }
+        );
+        const result = await response.json();
+
+        if (!response.ok || !result.secure_url) {
+          throw new Error(result.error?.message || 'Cloudinary could not upload one of the selected images.');
+        }
+        uploadedUrls.push(result.secure_url);
+      }
+
+      setProductForm(current => ({
+        ...current,
+        images: [...(current.images || []).filter(Boolean), ...uploadedUrls]
+      }));
+    } catch (error) {
+      setProductImageUploadError(
+        error instanceof Error ? error.message : 'Image upload failed. Please try again.'
+      );
+    } finally {
+      setIsUploadingProductImages(false);
+    }
+  };
+
+  const removeProductImage = (imageUrl: string) => {
+    setProductForm(current => ({
+      ...current,
+      images: (current.images || []).filter(image => image !== imageUrl)
+    }));
+  };
+
+  const handleSaveProduct = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!productForm.name || !productForm.retailPrice || !(productForm.images || []).length) {
+      showToast('Add at least one product photo before saving.', 'warning');
+      return;
+    }
+
+    try {
+      if (editingProductId) {
+        await updateProduct(editingProductId, productForm);
+      } else {
+        await addProduct({
+          name: productForm.name || 'New Creation',
+          slug: (productForm.name || 'item').toLowerCase().replace(/\s+/g, '-'),
+          category: productForm.category as ProductCategory || 'clothing',
+          description: productForm.description || '',
+          retailPrice: Number(productForm.retailPrice),
+          wholesalePrice: Number(productForm.wholesalePrice || Math.round(Number(productForm.retailPrice) * 0.85)),
+          wholesaleMinQty: Number(productForm.wholesaleMinQty || 10),
+          images: productForm.images || [],
+          sizes: productForm.sizes || ['Standard'],
+          colors: productForm.colors || ['Gold', 'Black'],
+          stock: Number(productForm.stock || 10),
+          sku: productForm.sku || 'PK-NEW',
+          featured: Boolean(productForm.featured),
+          isNewArrival: Boolean(productForm.isNewArrival),
+          rating: 5.0,
+          reviewCount: 0,
+          details: productForm.details || ['P-Kess Original Edition']
+        });
+      }
+      setIsProductModalOpen(false);
+    } catch {
+      // Keep the form open so the owner can correct permissions or retry.
+    }
   };
 
   const handleSaveWholesaleSettings = (e: React.FormEvent) => {
@@ -178,6 +254,24 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       paystackLiveMode: paystackLive
     });
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center bg-[#09090F] px-5">
+        <div className="max-w-md w-full rounded-2xl border border-[#2A2A3C] bg-[#121218] p-7 text-center space-y-4">
+          <ShieldCheck className="w-10 h-10 text-[#D4AF37] mx-auto" />
+          <h1 className="text-xl font-bold text-white">Administrator Sign-In Required</h1>
+          <p className="text-sm text-zinc-400">Sign in with the authorised P-Kess administrator account to access store management.</p>
+          <button
+            onClick={() => setIsAuthModalOpen(true)}
+            className="rounded-xl bg-[#D4AF37] px-5 py-3 text-sm font-bold text-black"
+          >
+            Sign In as Administrator
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -910,21 +1004,57 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                 />
               </div>
 
-              <div>
-                <label className="text-zinc-300 block mb-1">Primary Image URL</label>
-                <input
-                  type="text"
-                  value={productForm.images?.[0] || ''}
-                  onChange={(e) => setProductForm({ ...productForm, images: [e.target.value] })}
-                  className="w-full bg-[#181824] border border-[#2E2E42] rounded-xl p-2.5 text-white"
-                />
+              <div className="space-y-3 rounded-2xl border border-[#3B3540] bg-[#17151D] p-4">
+                <div>
+                  <label className="text-white block mb-1 font-semibold">Product Photos</label>
+                  <p className="text-zinc-400 text-[11px]">Upload multiple product photos from your phone. JPG, PNG, WebP or AVIF; maximum 10 MB per image.</p>
+                </div>
+                <label className={`flex items-center justify-center gap-2 w-full rounded-xl border border-dashed border-[#D4AF37]/70 bg-[#211D18] px-4 py-4 text-[#F1D27A] font-semibold cursor-pointer ${isUploadingProductImages ? 'opacity-60 pointer-events-none' : 'hover:bg-[#2B251A]'}`}>
+                  <Plus size={17} />
+                  {isUploadingProductImages ? 'Uploading photos to Cloudinary…' : 'Choose photos from phone'}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    multiple
+                    disabled={isUploadingProductImages}
+                    onChange={(e) => {
+                      void handleProductImageUpload(e.target.files);
+                      e.currentTarget.value = '';
+                    }}
+                    className="hidden"
+                  />
+                </label>
+                {productImageUploadError && (
+                  <p role="alert" className="text-rose-400 text-[11px]">{productImageUploadError}</p>
+                )}
+                {(productForm.images || []).length > 0 ? (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {(productForm.images || []).map((image, index) => (
+                      <div key={image + index} className="relative rounded-lg overflow-hidden border border-zinc-700 bg-black">
+                        <img src={image} alt={`Product photo ${index + 1}`} className="w-full h-24 object-contain" />
+                        <button
+                          type="button"
+                          onClick={() => removeProductImage(image)}
+                          aria-label={`Remove product photo ${index + 1}`}
+                          className="absolute top-1 right-1 rounded-full bg-black/80 text-white p-1"
+                        >
+                          <X size={13} />
+                        </button>
+                        {index === 0 && <span className="absolute bottom-0 inset-x-0 bg-[#D4AF37] text-black text-center text-[9px] font-bold py-1">MAIN PHOTO</span>}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-zinc-500 text-[11px]">No photos selected yet. Upload at least one photo before saving.</p>
+                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase"
+                disabled={isUploadingProductImages || !(productForm.images || []).length}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Product
+                {isUploadingProductImages ? 'Please wait for uploads…' : 'Save Product'}
               </button>
             </form>
           </div>

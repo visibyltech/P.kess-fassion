@@ -4,7 +4,7 @@ import { BrandLogo } from '../common/BrandLogo';
 import { X, Mail, Lock, User, Phone, ArrowRight } from 'lucide-react';
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, login, register } = useStore();
+  const { isAuthModalOpen, setIsAuthModalOpen, login, register, resetPassword } = useStore();
   const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login');
 
   const [email, setEmail] = useState('');
@@ -15,18 +15,19 @@ export const AuthModal: React.FC = () => {
 
   if (!isAuthModalOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === 'login') {
       if (!email) return;
-      const authenticated = login(email);
+      const authenticated = await login(email, password);
       if (authenticated) setIsAuthModalOpen(false);
     } else if (mode === 'register') {
       if (!email || !name) return;
-      register(name, email, phone || '08000000000');
-      setIsAuthModalOpen(false);
+      const created = await register(name, email, phone || '08000000000', password);
+      if (created) setIsAuthModalOpen(false);
     } else if (mode === 'forgot') {
-      setResetSent(true);
+      const sent = await resetPassword(email);
+      if (sent) setResetSent(true);
     }
   };
 
