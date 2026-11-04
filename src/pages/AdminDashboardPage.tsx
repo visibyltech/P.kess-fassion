@@ -68,7 +68,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     wholesaleMinQty: 10,
     stock: 20,
     sku: 'PK-CLO-NEW',
-    images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
+    images: [],
     sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
     colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
     details: ['Designer-led Nigerian clothing collection'],
@@ -198,7 +198,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!productForm.name || !productForm.retailPrice) return;
+    if (!productForm.name || !productForm.retailPrice || !(productForm.images || []).length) {\n      showToast('Add at least one product photo before saving.', 'warning');\n      return;\n    }
 
     if (editingProductId) {
       updateProduct(editingProductId, productForm);
@@ -211,7 +211,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         retailPrice: Number(productForm.retailPrice),
         wholesalePrice: Number(productForm.wholesalePrice || Math.round(Number(productForm.retailPrice) * 0.85)),
         wholesaleMinQty: Number(productForm.wholesaleMinQty || 10),
-        images: productForm.images || ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
+        images: productForm.images || [],
         sizes: productForm.sizes || ['Standard'],
         colors: productForm.colors || ['Gold', 'Black'],
         stock: Number(productForm.stock || 10),
@@ -1020,20 +1020,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                 ) : (
                   <p className="text-zinc-500 text-[11px]">No photos selected yet. Upload at least one photo before saving.</p>
                 )}
-                <div>
-                  <label className="text-zinc-400 block mb-1">Or add an image URL</label>
-                  <input
-                    type="url"
-                    placeholder="https://…"
-                    value=""
-                    onChange={(e) => {
-                      const url = e.target.value.trim();
-                      if (url) setProductForm(current => ({ ...current, images: [...(current.images || []), url] }));
-                    }}
-                    className="w-full bg-[#181824] border border-[#2E2E42] rounded-xl p-2.5 text-white"
-                  />
-                  <p className="text-zinc-500 text-[10px] mt-1">Use the upload button above for the recommended Cloudinary workflow.</p>
-                </div>
               </div>
 
               <button
