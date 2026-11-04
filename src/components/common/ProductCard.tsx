@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     : product.retailPrice;
 
   return (
-    <article role="link" tabIndex={0} aria-label={`View ${product.name}`} onClick={() => onNavigate("product-detail", { slug: product.slug })} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onNavigate("product-detail", { slug: product.slug }); } }} className="group relative bg-[#111116] rounded-2xl border border-[#22222E] hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col overflow-hidden hover:shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]">
+    <article role="link" tabIndex={0} aria-label={`View ${product.name}`} onClick={() => onNavigate("product-detail", { slug: product.slug })} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onNavigate("product-detail", { slug: product.slug }); } }} className="product-card group relative bg-white rounded-2xl border border-[#22222E] hover:border-[#D4AF37]/50 transition-all duration-300 flex flex-col overflow-hidden hover:shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]">
       {/* Product Image Box */}
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#F7F5F0]">
         <img
@@ -90,7 +90,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div>
           {/* Category & Rating */}
           <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-zinc-400 mb-1">
-            <span className="uppercase tracking-wider text-[#ECC260] font-medium text-[9px] sm:text-[10px] truncate max-w-[90px]">
+            <span className="product-category uppercase tracking-wider text-[#8B6A13] font-medium text-[9px] sm:text-[10px] truncate max-w-[90px]">
               {product.category}
             </span>
             {product.reviewCount > 0 && (
@@ -104,7 +104,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Title */}
           <h3 
             onClick={(e) => { e.stopPropagation(); onNavigate("product-detail", { slug: product.slug }); }}
-            className="font-serif-luxury text-xs sm:text-sm font-semibold text-white hover:text-[#D4AF37] cursor-pointer transition-colors line-clamp-1 mb-1.5"
+            className="font-serif-luxury text-xs sm:text-sm font-semibold text-[#25232A] hover:text-[#D4AF37] cursor-pointer transition-colors line-clamp-1 mb-1.5"
             title={product.name}
           >
             {product.name}
@@ -113,7 +113,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Pricing Row: Retail vs Wholesale */}
           <div className="space-y-1 mb-2.5">
             <div className="flex items-baseline gap-1.5 flex-wrap">
-              <span className="text-xs sm:text-sm md:text-base font-bold text-white">
+              <span className="product-price text-xs sm:text-sm md:text-base font-bold text-[#25232A]">
                 ₦{discountedRetail.toLocaleString()}
               </span>
               {product.discountPercent && product.discountPercent > 0 && (
@@ -141,7 +141,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="pt-2 border-t border-[#1C1C28] flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={(e) => { e.stopPropagation(); addToCart(product, 1); }}
-            className="flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg bg-[#181822] hover:bg-[#D4AF37] hover:text-black border border-[#2D2D3E] hover:border-[#D4AF37] text-zinc-200 text-[11px] sm:text-xs font-semibold transition-all flex items-center justify-center gap-1 sm:gap-1.5 truncate"
+            className="product-action-add flex-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg bg-[#D4AF37] hover:bg-[#E6C45A] hover:text-black border border-[#BD9628] hover:border-[#D4AF37] text-black text-[11px] sm:text-xs font-semibold transition-all flex items-center justify-center gap-1 sm:gap-1.5 truncate"
           >
             <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#D4AF37] group-hover:text-black shrink-0" />
             <span className="truncate">Add to Bag</span>
@@ -149,7 +149,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <button
             onClick={(e) => { e.stopPropagation(); onNavigate("save-to-buy", { productId: product.id }); }}
-            className="p-1.5 sm:p-2 rounded-lg bg-[#181822] hover:bg-[#E6007A]/20 border border-[#2D2D3E] hover:border-[#E6007A] text-zinc-400 hover:text-[#FF66B2] transition-colors shrink-0"
+            className="product-action-save p-1.5 sm:p-2 rounded-lg bg-[#FFF8E5] hover:bg-[#FCE8F1] border border-[#E5D29A] hover:border-[#E6007A] text-[#775B13] hover:text-[#FF66B2] transition-colors shrink-0"
             title="Save to Buy this item"
           >
             <PiggyBank className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
