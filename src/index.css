@@ -416,3 +416,86 @@ body:has(.light-storefront) {
   color: #ffe08a !important;
   -webkit-text-fill-color: #ffe08a !important;
 }
+
+
+/* Final mobile contrast repair: keep text readable on every white surface and
+   preserve light text only inside deliberately dark feature panels. */
+.light-storefront .hero-collection-panel .featured-product-card {
+  background: #ffffff !important;
+  border-color: #e6dfd2 !important;
+}
+.light-storefront .hero-collection-panel .featured-product-info p:first-child {
+  color: #28242d !important;
+  -webkit-text-fill-color: #28242d !important;
+  text-shadow: none !important;
+}
+.light-storefront .hero-collection-panel .featured-product-info p:last-child {
+  color: #8b6816 !important;
+  -webkit-text-fill-color: #8b6816 !important;
+  text-shadow: none !important;
+}
+.light-storefront .home-save-to-buy-panel {
+  background: linear-gradient(135deg, #17131d 0%, #21111e 55%, #121218 100%) !important;
+  border-color: rgba(212,175,55,.42) !important;
+  color: #f8f6fb !important;
+}
+.light-storefront .home-save-to-buy-panel h2,
+.light-storefront .home-save-to-buy-panel h3,
+.light-storefront .home-save-to-buy-panel h4,
+.light-storefront .home-save-to-buy-panel .text-white,
+.light-storefront .home-save-to-buy-panel span {
+  color: #f8f6fb !important;
+  -webkit-text-fill-color: #f8f6fb !important;
+}
+.light-storefront .home-save-to-buy-panel p,
+.light-storefront .home-save-to-buy-panel .text-zinc-300 {
+  color: #e4dfe8 !important;
+  -webkit-text-fill-color: #e4dfe8 !important;
+}
+.light-storefront .home-save-to-buy-panel .text-zinc-400,
+.light-storefront .home-save-to-buy-panel .text-zinc-500 {
+  color: #c9c2cf !important;
+  -webkit-text-fill-color: #c9c2cf !important;
+}
+.light-storefront .home-save-to-buy-panel .text-[#ECC260],
+.light-storefront .home-save-to-buy-panel [class*="text-[#ECC260]"] {
+  color: #f1d27a !important;
+  -webkit-text-fill-color: #f1d27a !important;
+}
+.light-storefront .home-save-to-buy-panel .text-[#FF2A85],
+.light-storefront .home-save-to-buy-panel [class*="text-[#FF2A85]"] {
+  color: #ff75b7 !important;
+  -webkit-text-fill-color: #ff75b7 !important;
+}
+.light-storefront .home-save-to-buy-panel > div > div:last-child {
+  background-color: #191720;
+}
+.light-storefront .site-footer {
+  background: #fbfaf8 !important;
+  color: #514b56 !important;
+  border-color: #e7e0d5 !important;
+}
+.light-storefront .site-footer > div:first-child {
+  background: #f4f1eb !important;
+  border-color: #e7e0d5 !important;
+}
+.light-storefront .site-footer h3,
+.light-storefront .site-footer h4 {
+  color: #29242e !important;
+  -webkit-text-fill-color: #29242e !important;
+}
+.light-storefront .site-footer p,
+.light-storefront .site-footer li button,
+.light-storefront .site-footer span,
+.light-storefront .site-footer a {
+  color: #5e5862 !important;
+  -webkit-text-fill-color: #5e5862 !important;
+}
+.light-storefront .site-footer button:hover,
+.light-storefront .site-footer a:hover {
+  color: #8b6816 !important;
+  -webkit-text-fill-color: #8b6816 !important;
+}
+.light-storefront .site-footer svg {
+  flex-shrink: 0;
+}
