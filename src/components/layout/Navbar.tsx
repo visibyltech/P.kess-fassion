@@ -357,11 +357,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             </nav>
             <div className="shrink-0 px-4 py-4 border-t border-[#D4AF37]/30 bg-[#0C0C10]">
               {currentUser ? (
-                <div className="grid grid-cols-2 gap-2">
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-white py-2"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-zinc-300 py-2"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
-                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="col-span-2 w-full flex items-center justify-center gap-2 rounded-lg border border-rose-400/30 px-3 py-2.5 text-[12px] font-semibold text-rose-300">Sign Out</button>
-                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
+                <div className="space-y-2">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5"><p className="text-sm font-semibold text-white">{currentUser.name}</p><p className="text-[11px] text-zinc-300 break-all">{currentUser.email}</p></div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('home'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Home className="w-4 h-4 text-[#ECC260]" /> Home</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('save-to-buy'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><PiggyBank className="w-4 h-4 text-[#E6007A]" /> Save to Buy</button>
+                    {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="col-span-2 w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
+                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="col-span-2 w-full flex items-center justify-center gap-2 rounded-lg border border-rose-400/30 px-3 py-2.5 text-[12px] font-semibold text-rose-300">Sign Out</button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-2"><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><LogIn className="w-4 h-4" /> Sign In</button><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[#D4AF37]/60 text-[#FFE08A] font-semibold text-[12px]"><UserPlus className="w-4 h-4" /> Sign Up</button></div>
