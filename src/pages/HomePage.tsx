@@ -152,7 +152,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION B — SHOP BY CATEGORY */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-5 sm:mb-8 pb-3 border-b border-[#232330]">
           <div>
             <span className="text-xs uppercase font-bold tracking-widest text-[#E6007A] block mb-1">
@@ -172,14 +172,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <div
               key={cat.id}
               onClick={() => onNavigate('shop', { category: cat.id })}
-              className="group relative aspect-[4/5] min-w-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
+              className="category-card group relative aspect-[4/5] min-w-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
             >
               <img
                 src={cat.image}
                 alt={cat.title}
                 className="w-full h-full object-contain p-2 sm:p-4 bg-[#F7F5F0] object-center group-hover:scale-105 transition-transform duration-500 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent group-hover:from-black/95 transition-colors" />
+              <div className="category-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent group-hover:from-black/90 transition-colors" />
 
               <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 flex flex-col justify-end">
                 <span className="text-[8px] sm:text-[10px] font-bold tracking-wide text-[#ECC260] uppercase mb-1">
@@ -203,7 +203,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION C — NEW ARRIVALS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#232330]">
           <div>
             <span className="text-xs uppercase font-bold tracking-widest text-[#D4AF37] block mb-1">
@@ -230,7 +230,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION E — WHOLESALE SHOPPING BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-3xl overflow-hidden border border-[#D4AF37]/40 bg-gradient-to-r from-[#121218] via-[#1A131C] to-[#121218] p-8 sm:p-12 lg:p-16 shadow-2xl">
           {/* Subtle gold ambient ring glow */}
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#D4AF37]/15 blur-3xl pointer-events-none" />
@@ -290,7 +290,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION D — BEST SELLERS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#232330]">
           <div>
             <span className="text-xs uppercase font-bold tracking-widest text-[#E6007A] block mb-1">
@@ -317,7 +317,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION F — SAVE TO BUY PROGRAMME */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#2B2B3E] bg-[#0E0E14] overflow-hidden p-8 sm:p-12 lg:p-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7 space-y-5">
@@ -417,7 +417,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* SECTION G — BUY NOW PAY LATER (CREDIBLY) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-[#2B2B3E] bg-gradient-to-b from-[#13131B] to-[#0A0A0E] p-8 sm:p-12 lg:p-16">
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#ECC260] text-xs font-bold uppercase tracking-wider">

@@ -39,13 +39,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
       {showText && (
         <div className="flex flex-col">
-          <span className="font-brand-display tracking-[0.16em] uppercase text-sm sm:text-base font-bold bg-gradient-to-r from-[#FFE898] via-[#F4CF68] to-[#D4AF37] bg-clip-text text-transparent drop-shadow-sm">
+          <span className="font-brand-display tracking-[0.16em] uppercase text-sm sm:text-base font-bold text-[#8A6814] drop-shadow-none">
             P-Kess
           </span>
-          <span className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-white/90 font-medium -mt-0.5">
+          <span className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-[#403B45] font-semibold -mt-0.5">
             Fashion World
           </span>
-          <span className="font-serif-luxury italic text-[9px] sm:text-[10px] text-[#FF2A85] tracking-wider">
+          <span className="font-serif-luxury italic text-[9px] sm:text-[10px] text-[#C21868] tracking-wider">
             Creating Elegance
           </span>
         </div>
