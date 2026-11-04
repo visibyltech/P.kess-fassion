@@ -59,6 +59,8 @@ const AppContent: React.FC = () => {
   // Handle browser back and forward buttons
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
+      setIsPageLoading(true);
+      window.setTimeout(() => setIsPageLoading(false), 350);
       if (event.state && event.state.page) {
         setNavState(event.state);
         window.scrollTo({ top: 0, behavior: 'auto' });
