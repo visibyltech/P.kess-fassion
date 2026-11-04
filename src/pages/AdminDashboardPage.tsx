@@ -196,37 +196,41 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     }));
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!productForm.name || !productForm.retailPrice || !(productForm.images || []).length) {
       showToast('Add at least one product photo before saving.', 'warning');
       return;
     }
 
-    if (editingProductId) {
-      updateProduct(editingProductId, productForm);
-    } else {
-      addProduct({
-        name: productForm.name || 'New Creation',
-        slug: (productForm.name || 'item').toLowerCase().replace(/\s+/g, '-'),
-        category: productForm.category as ProductCategory || 'clothing',
-        description: productForm.description || '',
-        retailPrice: Number(productForm.retailPrice),
-        wholesalePrice: Number(productForm.wholesalePrice || Math.round(Number(productForm.retailPrice) * 0.85)),
-        wholesaleMinQty: Number(productForm.wholesaleMinQty || 10),
-        images: productForm.images || [],
-        sizes: productForm.sizes || ['Standard'],
-        colors: productForm.colors || ['Gold', 'Black'],
-        stock: Number(productForm.stock || 10),
-        sku: productForm.sku || 'PK-NEW',
-        featured: Boolean(productForm.featured),
-        isNewArrival: Boolean(productForm.isNewArrival),
-        rating: 5.0,
-        reviewCount: 0,
-        details: productForm.details || ['P-Kess Original Edition']
-      });
+    try {
+      if (editingProductId) {
+        await updateProduct(editingProductId, productForm);
+      } else {
+        await addProduct({
+          name: productForm.name || 'New Creation',
+          slug: (productForm.name || 'item').toLowerCase().replace(/\s+/g, '-'),
+          category: productForm.category as ProductCategory || 'clothing',
+          description: productForm.description || '',
+          retailPrice: Number(productForm.retailPrice),
+          wholesalePrice: Number(productForm.wholesalePrice || Math.round(Number(productForm.retailPrice) * 0.85)),
+          wholesaleMinQty: Number(productForm.wholesaleMinQty || 10),
+          images: productForm.images || [],
+          sizes: productForm.sizes || ['Standard'],
+          colors: productForm.colors || ['Gold', 'Black'],
+          stock: Number(productForm.stock || 10),
+          sku: productForm.sku || 'PK-NEW',
+          featured: Boolean(productForm.featured),
+          isNewArrival: Boolean(productForm.isNewArrival),
+          rating: 5.0,
+          reviewCount: 0,
+          details: productForm.details || ['P-Kess Original Edition']
+        });
+      }
+      setIsProductModalOpen(false);
+    } catch {
+      // Keep the form open so the owner can correct permissions or retry.
     }
-    setIsProductModalOpen(false);
   };
 
   const handleSaveWholesaleSettings = (e: React.FormEvent) => {
