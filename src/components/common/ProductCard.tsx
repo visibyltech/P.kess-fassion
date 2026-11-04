@@ -56,10 +56,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-colors ${
+          className={`product-wishlist absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-colors ${
             isInWishlist(product.id)
               ? 'bg-[#E6007A] text-white'
-              : 'bg-black/60 text-zinc-300 hover:text-white hover:bg-black/90'
+              : 'bg-white/95 text-[#29242D] border border-[#D8D1C4] shadow-md hover:text-[#E6007A] hover:bg-white'
           }`}
           aria-label="Wishlist"
         >
