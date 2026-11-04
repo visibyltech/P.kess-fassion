@@ -401,3 +401,18 @@ body:has(.light-storefront) {
   background-image: linear-gradient(120deg, #fff0a6 0%, #f1cb55 50%, #d5a52c 100%) !important;
   -webkit-text-fill-color: transparent !important;
 }
+
+
+/* Final specificity guard: category titles must stay white over their dark image overlay. */
+.light-storefront .home-light-section .category-card h3,
+.light-storefront .home-light-section .category-card p,
+.light-storefront .home-light-section .category-card .text-white,
+.light-storefront .home-light-section .category-card .text-zinc-300 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,.65);
+}
+.light-storefront .home-light-section .category-card .text-[#ECC260] {
+  color: #ffe08a !important;
+  -webkit-text-fill-color: #ffe08a !important;
+}
