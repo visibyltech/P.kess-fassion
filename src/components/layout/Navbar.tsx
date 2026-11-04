@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMobileMenuOpen(prev => !prev)}
-          className="lg:hidden p-2 text-zinc-300 hover:text-white hover:bg-white/5 rounded-lg"
+          className="p-2 text-zinc-800 hover:text-[#B88B22] hover:bg-zinc-100 rounded-lg"
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -332,7 +332,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
       {/* COMPACT MOBILE SIDE DRAWER */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-[100]">
+        <div className="fixed inset-0 z-[100]">
           <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/70" />
           <aside className="mobile-side-drawer absolute left-0 top-0 bottom-0 w-[min(86vw,340px)] bg-[#101015] border-r border-[#D4AF37]/25 shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
@@ -355,16 +355,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><Heart className="w-4 h-4 text-[#D4AF37]" /> My Wishlist</button>
               <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><ShoppingBag className="w-4 h-4 text-[#D4AF37]" /> My Shopping Bag <span className="ml-auto text-[11px] text-[#ECC260]">{cartCount}</span></button>
             </nav>
-            <div className="shrink-0 px-4 py-3 border-t border-[#D4AF37]/20 bg-[#0C0C10]">
+            <div className="shrink-0 px-4 py-4 border-t border-[#D4AF37]/30 bg-[#0C0C10]">
               {currentUser ? (
-                <div className="flex items-center gap-2">
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-white py-2"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-zinc-300 py-2"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
-                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-[11px] text-rose-400 py-2">Sign Out</button>
-                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
+                <div className="space-y-2">
+                  <div className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5"><p className="text-sm font-semibold text-white">{currentUser.name}</p><p className="text-[11px] text-zinc-300 break-all">{currentUser.email}</p></div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('home'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Home className="w-4 h-4 text-[#ECC260]" /> Home</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
+                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('save-to-buy'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><PiggyBank className="w-4 h-4 text-[#E6007A]" /> Save to Buy</button>
+                    {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="col-span-2 w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
+                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="col-span-2 w-full flex items-center justify-center gap-2 rounded-lg border border-rose-400/30 px-3 py-2.5 text-[12px] font-semibold text-rose-300">Sign Out</button>
+                  </div>
                 </div>
               ) : (
-                <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><User className="w-4 h-4" /> Sign In / Create Account</button>
+                <div className="grid grid-cols-2 gap-2"><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><LogIn className="w-4 h-4" /> Sign In</button><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[#D4AF37]/60 text-[#FFE08A] font-semibold text-[12px]"><UserPlus className="w-4 h-4" /> Sign Up</button></div>
               )}
             </div>
           </aside>
