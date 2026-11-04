@@ -172,14 +172,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <div
               key={cat.id}
               onClick={() => onNavigate('shop', { category: cat.id })}
-              className="group relative aspect-[4/5] min-w-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
+              className="category-card group relative aspect-[4/5] min-w-0 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border border-[#242432] hover:border-[#D4AF37] transition-all duration-300 shadow-xl"
             >
               <img
                 src={cat.image}
                 alt={cat.title}
                 className="w-full h-full object-contain p-2 sm:p-4 bg-[#F7F5F0] object-center group-hover:scale-105 transition-transform duration-500 ease-out"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-transparent group-hover:from-black/95 transition-colors" />
+              <div className="category-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent group-hover:from-black/90 transition-colors" />
 
               <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 flex flex-col justify-end">
                 <span className="text-[8px] sm:text-[10px] font-bold tracking-wide text-[#ECC260] uppercase mb-1">
