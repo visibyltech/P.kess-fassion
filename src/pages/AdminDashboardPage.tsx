@@ -28,7 +28,8 @@ import {
   Menu,
   Home,
   Tags,
-  LayoutDashboard
+  LayoutDashboard,
+  LoaderCircle
 } from 'lucide-react';
 
 interface AdminDashboardPageProps {
@@ -84,6 +85,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
   });
 
   const [isUploadingProductImages, setIsUploadingProductImages] = useState(false);
+  const [isSavingProduct, setIsSavingProduct] = useState(false);
   const [productImageUploadError, setProductImageUploadError] = useState('');
 
   // Cloudinary unsigned browser uploads. These values are public configuration,
@@ -178,7 +180,12 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         const result = await response.json();
 
         if (!response.ok || !result.secure_url) {
-          throw new Error(result.error?.message || 'Cloudinary could not upload one of the selected images.');
+          const providerMessage = String(result.error?.message || '');
+          console.error('Product image upload configuration error:', providerMessage);
+          if (/upload preset.*not found|preset.*not found/i.test(providerMessage)) {
+            throw new Error('Image upload is not configured correctly yet. Please check the store image-upload settings.');
+          }
+          throw new Error('We could not upload this photo. Please try again with a JPG, PNG, WebP or AVIF image.');
         }
         uploadedUrls.push(result.secure_url);
       }
@@ -210,6 +217,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       return;
     }
 
+    setIsSavingProduct(true);
     try {
       if (editingProductId) {
         await updateProduct(editingProductId, productForm);
@@ -235,8 +243,11 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         });
       }
       setIsProductModalOpen(false);
-    } catch {
-      // Keep the form open so the owner can correct permissions or retry.
+      showToast(editingProductId ? 'Product updated successfully.' : 'Product saved successfully.', 'success');
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Could not save product. Please try again.', 'error');
+    } finally {
+      setIsSavingProduct(false);
     }
   };
 
@@ -356,7 +367,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       {activeTab === 'overview' && (
         <div className="space-y-8">
           {/* Main KPI Cards */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Revenue</span>
               <div className="text-lg sm:text-2xl font-black text-[#ECC260]">₦{totalRevenue.toLocaleString()}</div>
@@ -1048,7 +1059,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                 </div>
                 <label className={`flex items-center justify-center gap-2 w-full rounded-xl border border-dashed border-[#D4AF37]/70 bg-[#211D18] px-4 py-4 text-[#F1D27A] font-semibold cursor-pointer ${isUploadingProductImages ? 'opacity-60 pointer-events-none' : 'hover:bg-[#2B251A]'}`}>
                   <Plus size={17} />
-                  {isUploadingProductImages ? 'Uploading photos to Cloudinary…' : 'Choose photos from phone'}
+                  {isUploadingProductImages ? 'Uploading photos…' : 'Choose photos from phone'}
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp,image/avif"
@@ -1088,10 +1099,10 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
               <button
                 type="submit"
-                disabled={isUploadingProductImages || !(productForm.images || []).length}
+                disabled={isUploadingProductImages || isSavingProduct || !(productForm.images || []).length}
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isUploadingProductImages ? 'Please wait for uploads…' : 'Save Product'}
+                {(isUploadingProductImages || isSavingProduct) && <LoaderCircle className="inline-block mr-2 h-4 w-4 animate-spin" />}\n                {isUploadingProductImages ? 'Uploading photos…' : isSavingProduct ? 'Saving product…' : 'Save Product'}
               </button>
             </form>
           </div>

@@ -27,7 +27,7 @@ import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactUsPage } from './pages/ContactUsPage';
 import { LegalPage } from './pages/LegalPage';
 
-import { X, CheckCircle2, AlertTriangle, Info, MessageCircle } from 'lucide-react';
+import { X, CheckCircle2, AlertTriangle, Info, MessageCircle, LoaderCircle } from 'lucide-react';
 
 interface NavigationState {
   page: string;
@@ -36,6 +36,7 @@ interface NavigationState {
 
 const AppContent: React.FC = () => {
   const { toasts, removeToast } = useStore();
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const [navState, setNavState] = useState<NavigationState>(() => {
     // Read initial hash or default to home
@@ -58,6 +59,8 @@ const AppContent: React.FC = () => {
   // Handle browser back and forward buttons
   useEffect(() => {
     const handlePopState = (event: PopStateEvent) => {
+      setIsPageLoading(true);
+      window.setTimeout(() => setIsPageLoading(false), 350);
       if (event.state && event.state.page) {
         setNavState(event.state);
         window.scrollTo({ top: 0, behavior: 'auto' });
@@ -79,6 +82,9 @@ const AppContent: React.FC = () => {
 
   // Navigate handler that pushes to browser history
   const handleNavigate = (page: string, params: Record<string, any> = {}) => {
+    if (page === navState.page && JSON.stringify(params) === JSON.stringify(navState.params || {})) return;
+    setIsPageLoading(true);
+    window.setTimeout(() => setIsPageLoading(false), 450);
     const newState = { page, params };
     setNavState(newState);
 
@@ -92,7 +98,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="light-storefront min-h-screen flex flex-col bg-white text-zinc-900 selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen flex flex-col bg-[#08080A] text-zinc-100 selection:bg-[#D4AF37] selection:text-black">
       {/* Global Luxury Sticky Navbar */}
       <Navbar currentPage={navState.page} onNavigate={handleNavigate} />
 
@@ -196,6 +202,8 @@ const AppContent: React.FC = () => {
           />
         )}
       </main>
+
+      {isPageLoading && <div role="status" aria-live="polite" className="fixed inset-0 z-[200] flex items-center justify-center bg-[#08080A]/75 backdrop-blur-sm"><div className="flex items-center gap-3 rounded-2xl border border-[#D4AF37]/30 bg-[#121216] px-5 py-4 text-sm font-semibold text-white shadow-2xl"><LoaderCircle className="h-5 w-5 animate-spin text-[#ECC260]" /> Loading page…</div></div>}
 
       {/* Global Grand Footer */}
       <Footer onNavigate={handleNavigate} />
