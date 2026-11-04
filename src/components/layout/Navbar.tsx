@@ -84,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#08080A]/95 backdrop-blur-md border-b border-[#24242F]">
+    <header className="site-navbar sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#E8E3D9]">
       {/* Top Banner Ticker */}
       <div className="bg-gradient-to-r from-[#141418] via-[#1A1218] to-[#141418] border-b border-[#2C262E] text-xs text-white/90 py-1.5 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
