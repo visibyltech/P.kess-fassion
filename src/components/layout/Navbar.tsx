@@ -158,7 +158,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Mobile search toggle */}
           <button
             onClick={() => setSearchOpen(prev => !prev)}
-            className="md:hidden p-2 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full"
+            className="md:hidden p-2 text-zinc-700 hover:text-[#B88B22] hover:bg-zinc-100 rounded-full"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
@@ -167,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Wishlist */}
           <button
             onClick={() => onNavigate('customer', { tab: 'wishlist' })}
-            className="relative p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#FF2A85] hover:bg-white/5 rounded-full transition-colors"
+            className="relative p-1.5 sm:p-2.5 text-zinc-700 hover:text-[#C21868] hover:bg-[#fff1f7] rounded-full transition-colors"
             aria-label="Wishlist"
             title="Wishlist"
           >
@@ -185,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               <div>
                 <button
                   onClick={() => setUserDropdownOpen(prev => !prev)}
-                  className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-[#16161D] border border-[#2D2D3A] hover:border-[#D4AF37] text-zinc-200 text-xs transition-colors"
+                  className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-[#24212a] border border-[#514958] hover:border-[#D4AF37] text-white text-xs transition-colors"
                 >
                   <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#E6007A] flex items-center justify-center text-black font-bold text-xs">
                     {currentUser.name.charAt(0).toUpperCase()}
@@ -254,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full transition-colors flex items-center gap-1.5"
+                className="p-1.5 sm:p-2.5 text-zinc-700 hover:text-[#8b6816] hover:bg-zinc-100 rounded-full transition-colors flex items-center gap-1.5"
                 title="Customer Sign In / Register"
               >
                 <User className="w-5 h-5" />
