@@ -76,6 +76,14 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     isNewArrival: true
   });
 
+  const [isUploadingProductImages, setIsUploadingProductImages] = useState(false);
+  const [productImageUploadError, setProductImageUploadError] = useState('');
+
+  // Cloudinary unsigned browser uploads. These values are public configuration,
+  // not API secrets. Never place the Cloudinary API secret in frontend code.
+  const CLOUDINARY_CLOUD_NAME = 'jmit9wsv';
+  const CLOUDINARY_UPLOAD_PRESET = 'pkess_products';
+
   // Order Details Modal / Proof viewer
   const [inspectingOrder, setInspectingOrder] = useState<Order | null>(null);
   const [courierInput, setCourierInput] = useState('GIG Logistics');
@@ -127,6 +135,65 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     setEditingProductId(prod.id);
     setProductForm({ ...prod });
     setIsProductModalOpen(true);
+  };
+
+  const handleProductImageUpload = async (files: FileList | null) => {
+    if (!files?.length) return;
+
+    const selectedFiles = Array.from(files);
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
+    const invalidFile = selectedFiles.find(file => !allowedTypes.includes(file.type) || file.size > 10 * 1024 * 1024);
+
+    if (invalidFile) {
+      setProductImageUploadError(
+        !allowedTypes.includes(invalidFile.type)
+          ? 'Please select JPG, PNG, WebP or AVIF images.'
+          : 'Each image must be 10 MB or smaller.'
+      );
+      return;
+    }
+
+    setIsUploadingProductImages(true);
+    setProductImageUploadError('');
+    const uploadedUrls: string[] = [];
+
+    try {
+      for (const file of selectedFiles) {
+        const body = new FormData();
+        body.append('file', file);
+        body.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        body.append('folder', 'pkess-products');
+
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+          { method: 'POST', body }
+        );
+        const result = await response.json();
+
+        if (!response.ok || !result.secure_url) {
+          throw new Error(result.error?.message || 'Cloudinary could not upload one of the selected images.');
+        }
+        uploadedUrls.push(result.secure_url);
+      }
+
+      setProductForm(current => ({
+        ...current,
+        images: [...(current.images || []).filter(Boolean), ...uploadedUrls]
+      }));
+    } catch (error) {
+      setProductImageUploadError(
+        error instanceof Error ? error.message : 'Image upload failed. Please try again.'
+      );
+    } finally {
+      setIsUploadingProductImages(false);
+    }
+  };
+
+  const removeProductImage = (imageUrl: string) => {
+    setProductForm(current => ({
+      ...current,
+      images: (current.images || []).filter(image => image !== imageUrl)
+    }));
   };
 
   const handleSaveProduct = (e: React.FormEvent) => {
@@ -910,21 +977,71 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                 />
               </div>
 
-              <div>
-                <label className="text-zinc-300 block mb-1">Primary Image URL</label>
-                <input
-                  type="text"
-                  value={productForm.images?.[0] || ''}
-                  onChange={(e) => setProductForm({ ...productForm, images: [e.target.value] })}
-                  className="w-full bg-[#181824] border border-[#2E2E42] rounded-xl p-2.5 text-white"
-                />
+              <div className="space-y-3 rounded-2xl border border-[#3B3540] bg-[#17151D] p-4">
+                <div>
+                  <label className="text-white block mb-1 font-semibold">Product Photos</label>
+                  <p className="text-zinc-400 text-[11px]">Upload multiple product photos from your phone. JPG, PNG, WebP or AVIF; maximum 10 MB per image.</p>
+                </div>
+                <label className={`flex items-center justify-center gap-2 w-full rounded-xl border border-dashed border-[#D4AF37]/70 bg-[#211D18] px-4 py-4 text-[#F1D27A] font-semibold cursor-pointer ${isUploadingProductImages ? 'opacity-60 pointer-events-none' : 'hover:bg-[#2B251A]'}`}>
+                  <Plus size={17} />
+                  {isUploadingProductImages ? 'Uploading photos to Cloudinary…' : 'Choose photos from phone'}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    multiple
+                    disabled={isUploadingProductImages}
+                    onChange={(e) => {
+                      void handleProductImageUpload(e.target.files);
+                      e.currentTarget.value = '';
+                    }}
+                    className="hidden"
+                  />
+                </label>
+                {productImageUploadError && (
+                  <p role="alert" className="text-rose-400 text-[11px]">{productImageUploadError}</p>
+                )}
+                {(productForm.images || []).length > 0 ? (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {(productForm.images || []).map((image, index) => (
+                      <div key={image + index} className="relative rounded-lg overflow-hidden border border-zinc-700 bg-black">
+                        <img src={image} alt={`Product photo ${index + 1}`} className="w-full h-24 object-contain" />
+                        <button
+                          type="button"
+                          onClick={() => removeProductImage(image)}
+                          aria-label={`Remove product photo ${index + 1}`}
+                          className="absolute top-1 right-1 rounded-full bg-black/80 text-white p-1"
+                        >
+                          <X size={13} />
+                        </button>
+                        {index === 0 && <span className="absolute bottom-0 inset-x-0 bg-[#D4AF37] text-black text-center text-[9px] font-bold py-1">MAIN PHOTO</span>}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-zinc-500 text-[11px]">No photos selected yet. Upload at least one photo before saving.</p>
+                )}
+                <div>
+                  <label className="text-zinc-400 block mb-1">Or add an image URL</label>
+                  <input
+                    type="url"
+                    placeholder="https://…"
+                    value=""
+                    onChange={(e) => {
+                      const url = e.target.value.trim();
+                      if (url) setProductForm(current => ({ ...current, images: [...(current.images || []), url] }));
+                    }}
+                    className="w-full bg-[#181824] border border-[#2E2E42] rounded-xl p-2.5 text-white"
+                  />
+                  <p className="text-zinc-500 text-[10px] mt-1">Use the upload button above for the recommended Cloudinary workflow.</p>
+                </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase"
+                disabled={isUploadingProductImages || !(productForm.images || []).length}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save Product
+                {isUploadingProductImages ? 'Please wait for uploads…' : 'Save Product'}
               </button>
             </form>
           </div>
