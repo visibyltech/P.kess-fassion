@@ -205,7 +205,19 @@ const AppContent: React.FC = () => {
       <AuthModal />
       <QuickViewModal onNavigate={handleNavigate} />
 
-      <a\n        href="https://wa.me/2349012776272?text=Hello%20P-Kess%20Fashion%20World%2C%20I%20would%20like%20to%20make%20an%20enquiry."\n        target="_blank"\n        rel="noopener noreferrer"\n        aria-label="Chat with P-Kess Fashion World on WhatsApp"\n        title="Chat with us on WhatsApp"\n        className="whatsapp-float fixed bottom-6 right-4 sm:right-6 z-[60] w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"\n      >\n        <MessageCircle className="w-7 h-7" strokeWidth={2.4} />\n        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#25D366]" />\n      </a>\n\n      {/* Global Toast Notifications */}
+      <a
+        href="https://wa.me/2349012776272?text=Hello%20P-Kess%20Fashion%20World%2C%20I%20would%20like%20to%20make%20an%20enquiry."
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat with P-Kess Fashion World on WhatsApp"
+        title="Chat with us on WhatsApp"
+        className="whatsapp-float fixed bottom-6 right-4 sm:right-6 z-[60] w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
+      >
+        <MessageCircle className="w-7 h-7" strokeWidth={2.4} />
+        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#25D366]" />
+      </a>
+
+      {/* Global Toast Notifications */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
         {toasts.map(toast => (
           <div
