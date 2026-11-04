@@ -341,3 +341,63 @@ body:has(.light-storefront) {
 }
 .light-storefront .product-card .product-price { color: #25232a !important; }
 .light-storefront .product-card .text-zinc-500 { color: #77717b !important; }
+
+
+/* Home page white-surface typography. Dark hero/product panels are styled separately. */
+.light-storefront .home-light-section > div > h2,
+.light-storefront .home-light-section h2.text-white,
+.light-storefront .home-light-section h3:not(.product-card h3),
+.light-storefront .home-light-section .text-white:not(.category-card *):not(.product-card *) {
+  color: #28242d !important;
+  -webkit-text-fill-color: #28242d !important;
+}
+.light-storefront .home-light-section .text-zinc-400,
+.light-storefront .home-light-section .text-zinc-500 {
+  color: #716b75 !important;
+}
+.light-storefront .product-card .product-wishlist[data-active="true"] {
+  background: #e6007a !important;
+  border-color: #c21868 !important;
+}
+.light-storefront .product-card .product-wishlist[data-active="true"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
+}
+.light-storefront .product-card .product-wishlist:not([data-active="true"]):hover {
+  background: #fff1f7 !important;
+  border-color: #e6007a !important;
+}
+.light-storefront .product-card .product-wishlist:not([data-active="true"]):hover svg {
+  color: #c21868 !important;
+  stroke: #c21868 !important;
+}
+.light-storefront .wholesale-hero,
+.light-storefront .bnpl-hero {
+  color: #f8f6fb !important;
+}
+.light-storefront .wholesale-hero h1,
+.light-storefront .bnpl-hero h1 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.light-storefront .wholesale-hero p,
+.light-storefront .bnpl-hero p,
+.light-storefront .wholesale-hero .text-zinc-300,
+.light-storefront .bnpl-hero .text-zinc-300 {
+  color: #f0edf3 !important;
+  -webkit-text-fill-color: #f0edf3 !important;
+}
+.light-storefront .wholesale-hero .text-zinc-400,
+.light-storefront .bnpl-hero .text-zinc-400,
+.light-storefront .wholesale-hero .text-zinc-500,
+.light-storefront .bnpl-hero .text-zinc-500 {
+  color: #c9c3cf !important;
+  -webkit-text-fill-color: #c9c3cf !important;
+}
+.light-storefront .wholesale-hero .gold-gradient-text,
+.light-storefront .bnpl-hero .gold-gradient-text {
+  background-image: linear-gradient(120deg, #fff0a6 0%, #f1cb55 50%, #d5a52c 100%) !important;
+  -webkit-text-fill-color: transparent !important;
+}
