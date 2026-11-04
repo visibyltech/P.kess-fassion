@@ -513,27 +513,6 @@ body:has(.light-storefront) {
 .light-storefront .site-navbar .store-navigation-drawer button {
   -webkit-text-fill-color: currentColor;
 }
-.light-storefront .site-navbar .store-navigation-drawer nav button {
-  color: #302b31;
-}
-.light-storefront .site-navbar .store-navigation-drawer nav button.bg-\\[\\#f8f1f4\\] {
-  color: #d94f86 !important;
-  -webkit-text-fill-color: #d94f86 !important;
-}
-.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#777078\\] {
-  color: #777078 !important;
-  -webkit-text-fill-color: #777078 !important;
-}
-.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#302b31\\] {
-  color: #302b31 !important;
-  -webkit-text-fill-color: #302b31 !important;
-}
-.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#a83d69\\],
-.light-storefront .site-navbar .store-navigation-drawer .text-\\[\\#c64177\\] {
-  color: #a83d69 !important;
-  -webkit-text-fill-color: #a83d69 !important;
-}
-
 
 /* Dashboard contrast pass: muted copy remains readable on the dark dashboard panels. */
 .light-storefront .admin-dashboard-root .text-zinc-500,
