@@ -361,6 +361,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                   <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-white py-2"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
                   <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex-1 flex items-center gap-2 text-left text-[12px] text-zinc-300 py-2"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
                   <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-[11px] text-rose-400 py-2">Sign Out</button>
+                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
                 </div>
               ) : (
                 <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><User className="w-4 h-4" /> Sign In / Create Account</button>
