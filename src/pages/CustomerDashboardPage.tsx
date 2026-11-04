@@ -94,7 +94,7 @@ export const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="customer-dashboard-root max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6 sm:space-y-8">
       {/* Dashboard Top Header */}
       <div className="rounded-3xl bg-gradient-to-r from-[#14141B] via-[#1E1422] to-[#121218] border border-[#2B2B3E] p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-xl">
         <div className="flex items-center gap-4">
@@ -172,8 +172,8 @@ export const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Stat Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-5 rounded-2xl bg-[#121218] border border-[#252536] space-y-1">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="p-3 sm:p-5 rounded-xl sm:rounded-2xl bg-[#121218] border border-[#353544] space-y-1">
                   <span className="text-zinc-500 text-xs uppercase font-bold">Total Orders</span>
                   <div className="text-2xl font-black text-white">{userOrders.length}</div>
                   <span className="text-[11px] text-[#ECC260]">All deliveries tracked</span>
