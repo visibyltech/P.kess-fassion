@@ -27,7 +27,7 @@ import { AboutUsPage } from './pages/AboutUsPage';
 import { ContactUsPage } from './pages/ContactUsPage';
 import { LegalPage } from './pages/LegalPage';
 
-import { X, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
+import { X, CheckCircle2, AlertTriangle, Info, MessageCircle } from 'lucide-react';
 
 interface NavigationState {
   page: string;
@@ -92,7 +92,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#08080A] text-zinc-100 selection:bg-[#D4AF37] selection:text-black">
+    <div className="light-storefront min-h-screen flex flex-col bg-white text-zinc-900 selection:bg-[#D4AF37] selection:text-black">
       {/* Global Luxury Sticky Navbar */}
       <Navbar currentPage={navState.page} onNavigate={handleNavigate} />
 
@@ -205,7 +205,7 @@ const AppContent: React.FC = () => {
       <AuthModal />
       <QuickViewModal onNavigate={handleNavigate} />
 
-      {/* Global Toast Notifications */}
+      <a\n        href="https://wa.me/2349012776272?text=Hello%20P-Kess%20Fashion%20World%2C%20I%20would%20like%20to%20make%20an%20enquiry."\n        target="_blank"\n        rel="noopener noreferrer"\n        aria-label="Chat with P-Kess Fashion World on WhatsApp"\n        title="Chat with us on WhatsApp"\n        className="whatsapp-float fixed bottom-6 right-4 sm:right-6 z-[60] w-14 h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.4)] flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"\n      >\n        <MessageCircle className="w-7 h-7" strokeWidth={2.4} />\n        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-white border-2 border-[#25D366]" />\n      </a>\n\n      {/* Global Toast Notifications */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none">
         {toasts.map(toast => (
           <div

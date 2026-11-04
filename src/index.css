@@ -94,3 +94,81 @@ html, body, #root {
 body { overflow-x: clip; }
 #root { min-height: 100vh; overflow-x: clip; }
 img { max-width: 100%; }
+
+
+/* P-Kess light storefront theme: clean white canvas with the existing gold and magenta identity. */
+.light-storefront {
+  background: #ffffff !important;
+  color: #25232a !important;
+}
+.light-storefront body,
+body:has(.light-storefront) {
+  background: #ffffff !important;
+  color: #25232a !important;
+}
+.light-storefront main {
+  background-color: #ffffff;
+}
+.light-storefront [class*="bg-[#08080A]"],
+.light-storefront [class*="bg-[#050507]"],
+.light-storefront [class*="bg-[#0A0A0E]"],
+.light-storefront [class*="bg-[#0D0D11]"],
+.light-storefront [class*="bg-[#0E0E14]"],
+.light-storefront [class*="bg-[#101510]"],
+.light-storefront [class*="bg-[#111116]"],
+.light-storefront [class*="bg-[#121218]"],
+.light-storefront [class*="bg-[#13131B]"],
+.light-storefront [class*="bg-[#14141B]"],
+.light-storefront [class*="bg-[#141418]"],
+.light-storefront [class*="bg-[#151520]"],
+.light-storefront [class*="bg-[#161622]"],
+.light-storefront [class*="bg-[#181820]"],
+.light-storefront [class*="bg-[#181824]"],
+.light-storefront [class*="bg-[#1A1218]"],
+.light-storefront [class*="bg-[#1A131C]"],
+.light-storefront [class*="bg-[#222230]"],
+.light-storefront [class*="bg-[#222232]"] {
+  background-color: #ffffff !important;
+}
+.light-storefront [class*="border-[#24242F]"],
+.light-storefront [class*="border-[#252535]"],
+.light-storefront [class*="border-[#242432]"],
+.light-storefront [class*="border-[#22222E]"],
+.light-storefront [class*="border-[#232330]"],
+.light-storefront [class*="border-[#2B2B3E]"],
+.light-storefront [class*="border-[#2A2A36]"],
+.light-storefront [class*="border-[#2D2D42]"],
+.light-storefront [class*="border-[#252536]"],
+.light-storefront [class*="border-[#2F2F40]"],
+.light-storefront [class*="border-[#2A2931]"],
+.light-storefront [class*="border-[#1F1F28]"] {
+  border-color: #e8e3d9 !important;
+}
+.light-storefront .text-white { color: #24212a !important; }
+.light-storefront .text-zinc-100,
+.light-storefront .text-zinc-200,
+.light-storefront .text-zinc-300 { color: #393640 !important; }
+.light-storefront .text-zinc-400,
+.light-storefront .text-zinc-500 { color: #706c76 !important; }
+.light-storefront .hero-contrast .text-white,
+.light-storefront .hero-contrast .text-zinc-100,
+.light-storefront .hero-contrast .text-zinc-200,
+.light-storefront .hero-contrast .text-zinc-300 {
+  color: #ffffff !important;
+}
+.light-storefront .hero-contrast .text-zinc-400 { color: #e5e1e8 !important; }
+.light-storefront .hero-contrast [class*="bg-[#111116]"] {
+  background-color: rgba(255,255,255,0.96) !important;
+}
+.light-storefront .hero-contrast .text-white { color: #25232a !important; }
+.light-storefront .hero-contrast h1,
+.light-storefront .hero-contrast > p { color: #ffffff !important; }
+.light-storefront input,
+.light-storefront select,
+.light-storefront textarea {
+  color: #25232a;
+}
+.light-storefront input::placeholder,
+.light-storefront textarea::placeholder { color: #89848d; }
+.light-storefront footer { background-color: #fbfaf8 !important; }
+.light-storefront .whatsapp-float { color: #ffffff !important; }

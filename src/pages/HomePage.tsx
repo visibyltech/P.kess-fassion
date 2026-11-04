@@ -86,7 +86,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="absolute inset-0 bg-gradient-to-r from-[#08080A]/75 via-[#08080A]/35 to-[#08080A]/65" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#08080A]/75 via-transparent to-[#08080A]/35" />
         </div>
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-12 text-center">
+        <div className="hero-contrast relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-7 sm:py-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/35 backdrop-blur-sm border border-[#D4AF37]/40 mb-3">
             <Sparkles className="w-4 h-4 text-[#E6007A]" />
             <span className="text-[10px] sm:text-sm font-semibold tracking-widest uppercase text-[#FFE898]">P-Kess Fashion World · Asaba, Nigeria</span>
