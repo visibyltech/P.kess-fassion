@@ -20,7 +20,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
-    <footer className="bg-[#050507] border-t border-[#1F1F28] text-zinc-400 text-sm mt-24">
+    <footer className="site-footer bg-[#050507] border-t border-[#1F1F28] text-zinc-400 text-sm mt-24">
       {/* Value Proposition Bar */}
       <div className="border-b border-[#1A1A22] bg-[#0A0A0E] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
