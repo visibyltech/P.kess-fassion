@@ -461,6 +461,34 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
         </div>
       )}
 
+
+      {activeTab === 'categories' && (
+        <section className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#242432] pb-4">
+            <div><h2 className="text-lg font-bold text-white">Product Categories</h2><p className="mt-1 text-xs text-zinc-400">Manage the categories used to organise the storefront catalogue.</p></div>
+            <button onClick={handleOpenAddProduct} className="inline-flex items-center gap-2 rounded-xl bg-[#D4AF37] px-4 py-2.5 text-xs font-bold text-black"><Plus className="h-4 w-4" /> Add Product</button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
+            {[
+              { id: 'clothing', label: 'Clothing & Native Wear' },
+              { id: 't-shirts', label: 'T-Shirts' },
+              { id: 'shoes', label: 'Shoes & Sandals' },
+              { id: 'bags', label: 'Bags & Handbags' },
+              { id: 'accessories', label: 'Fashion Accessories' }
+            ].map(category => {
+              const count = products.filter(product => product.category === category.id).length;
+              return <div key={category.id} className="rounded-xl border border-[#302B38] bg-[#15151D] p-3 sm:p-4">
+                <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-[#D4AF37]/15 text-[#ECC260]"><Tags className="h-4 w-4" /></div>
+                <h3 className="text-sm font-semibold text-white">{category.label}</h3>
+                <p className="mt-1 text-xs text-zinc-400">{count} products</p>
+                <button onClick={() => setActiveTab('products')} className="mt-3 text-xs font-semibold text-[#ECC260] hover:underline">View products</button>
+              </div>;
+            })}
+          </div>
+          <p className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-3 text-xs text-amber-200">The storefront currently supports these five category types. Adding a brand-new category requires updating the shared catalogue category model so it appears consistently in product uploads and storefront filters.</p>
+        </section>
+      )}
+
       {/* TAB 2: PRODUCT INVENTORY MANAGEMENT */}
       {activeTab === 'products' && (
         <div className="space-y-6">
