@@ -198,7 +198,10 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
   const handleSaveProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!productForm.name || !productForm.retailPrice || !(productForm.images || []).length) {\n      showToast('Add at least one product photo before saving.', 'warning');\n      return;\n    }
+    if (!productForm.name || !productForm.retailPrice || !(productForm.images || []).length) {
+      showToast('Add at least one product photo before saving.', 'warning');
+      return;
+    }
 
     if (editingProductId) {
       updateProduct(editingProductId, productForm);
