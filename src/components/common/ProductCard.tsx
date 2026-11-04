@@ -61,7 +61,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               ? 'bg-[#E6007A] text-white'
               : 'bg-white/95 text-[#29242D] border border-[#D8D1C4] shadow-md hover:text-[#E6007A] hover:bg-white'
           }`}
-          aria-label="Wishlist"\n          aria-pressed={isInWishlist(product.id)}\n          data-active={isInWishlist(product.id) ? "true" : "false"}
+          aria-label="Wishlist"
+          aria-pressed={isInWishlist(product.id)}
+          data-active={isInWishlist(product.id) ? "true" : "false"}
         >
           <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-white' : ''}`} />
         </button>
