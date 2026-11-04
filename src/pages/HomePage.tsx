@@ -122,7 +122,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             {[0, 1, 2].map(offset => {
               const product = featuredSlides[(slideIndex + offset) % featuredSlides.length];
               return (
-                <button key={product.id} onClick={() => onNavigate('product-detail', { slug: product.slug })} className="group min-w-0 text-left rounded-xl overflow-hidden border border-[#2A2931] bg-[#111116]">
+                <button key={product.id} onClick={() => onNavigate('product-detail', { slug: product.slug })} className="featured-product-card group min-w-0 text-left rounded-xl overflow-hidden border border-[#2A2931] bg-[#111116]">
                   <div className="aspect-[4/5] bg-[#F7F5F0] overflow-hidden">
                     <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
                   </div>
@@ -318,7 +318,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* SECTION F — SAVE TO BUY PROGRAMME */}
       <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-[#2B2B3E] bg-[#0E0E14] overflow-hidden p-8 sm:p-12 lg:p-16">
+        <div className="home-save-to-buy-panel rounded-3xl border border-[#2B2B3E] bg-[#0E0E14] overflow-hidden p-8 sm:p-12 lg:p-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7 space-y-5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6007A]/15 border border-[#E6007A]/40 text-[#FF66B2] text-xs font-bold uppercase tracking-wider">
