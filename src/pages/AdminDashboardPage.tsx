@@ -60,7 +60,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'products' | 'orders' | 'savings' | 'bnpl' | 'wholesale' | 'payments' | 'business'
+    'overview' | 'categories' | 'products' | 'orders' | 'savings' | 'bnpl' | 'wholesale' | 'payments' | 'business'
   >('overview');
 
   // Product modal state
@@ -291,7 +291,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-7 py-5 sm:py-7">
+    <div className="admin-dashboard-root max-w-7xl mx-auto px-3 sm:px-5 lg:px-7 py-5 sm:py-7">
       {/* Admin Top Header */}
       <div className="rounded-2xl bg-gradient-to-r from-[#171410] via-[#1E1712] to-[#121217] border border-[#D4AF37]/50 p-4 sm:p-5 flex items-center justify-between gap-3 shadow-xl">
         <div className="flex items-center gap-3 min-w-0">
@@ -365,7 +365,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
+            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Orders</span>
               <div className="text-lg sm:text-2xl font-black text-white">{orders.length}</div>
               <span className="text-[11px] text-[#FF66B2]">

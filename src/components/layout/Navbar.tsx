@@ -158,7 +158,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Mobile search toggle */}
           <button
             onClick={() => setSearchOpen(prev => !prev)}
-            className="md:hidden p-2 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full"
+            className="md:hidden p-2 text-zinc-700 hover:text-[#B88B22] hover:bg-zinc-100 rounded-full"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
@@ -167,7 +167,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           {/* Wishlist */}
           <button
             onClick={() => onNavigate('customer', { tab: 'wishlist' })}
-            className="relative p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#FF2A85] hover:bg-white/5 rounded-full transition-colors"
+            className="relative p-1.5 sm:p-2.5 text-zinc-700 hover:text-[#C21868] hover:bg-[#fff1f7] rounded-full transition-colors"
             aria-label="Wishlist"
             title="Wishlist"
           >
@@ -185,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
               <div>
                 <button
                   onClick={() => setUserDropdownOpen(prev => !prev)}
-                  className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-[#16161D] border border-[#2D2D3A] hover:border-[#D4AF37] text-zinc-200 text-xs transition-colors"
+                  className="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-[#24212a] border border-[#514958] hover:border-[#D4AF37] text-white text-xs transition-colors"
                 >
                   <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#D4AF37] to-[#E6007A] flex items-center justify-center text-black font-bold text-xs">
                     {currentUser.name.charAt(0).toUpperCase()}
@@ -254,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             ) : (
               <button
                 onClick={() => setIsAuthModalOpen(true)}
-                className="p-1.5 sm:p-2.5 text-zinc-300 hover:text-[#D4AF37] hover:bg-white/5 rounded-full transition-colors flex items-center gap-1.5"
+                className="p-1.5 sm:p-2.5 text-zinc-700 hover:text-[#8b6816] hover:bg-zinc-100 rounded-full transition-colors flex items-center gap-1.5"
                 title="Customer Sign In / Register"
               >
                 <User className="w-5 h-5" />
@@ -330,46 +330,47 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
       </nav>
 
-      {/* COMPACT MOBILE SIDE DRAWER */}
+      {/* FULL-HEIGHT STORE NAVIGATION DRAWER */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[100]">
-          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/70" />
-          <aside className="mobile-side-drawer absolute left-0 top-0 bottom-0 w-[min(86vw,340px)] bg-[#101015] border-r border-[#D4AF37]/25 shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
-              <div><p className="text-[#ECC260] font-serif text-base tracking-[0.2em]">P-KESS</p><p className="text-[9px] text-zinc-400 tracking-[0.25em]">FASHION WORLD</p></div>
-              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="p-2 text-zinc-300 hover:text-white"><X className="w-5 h-5" /></button>
+          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/65 backdrop-blur-[2px]" />
+          <aside className="store-navigation-drawer absolute inset-y-0 left-0 flex w-[min(82vw,500px)] flex-col bg-white text-[#28242d] shadow-2xl">
+            <div className="flex h-[88px] shrink-0 items-center justify-between border-b border-[#eee8ec] px-6 sm:px-8">
+              <button onClick={() => { setMobileMenuOpen(false); onNavigate('home'); }} className="text-left" aria-label="P-Kess Fashion World home">
+                <span className="block font-serif-luxury text-xl font-bold tracking-[0.08em] text-[#4a3440]">P-KESS</span>
+                <span className="mt-0.5 block text-[9px] font-semibold tracking-[0.28em] text-[#9a7b89]">FASHION WORLD</span>
+              </button>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="rounded-full bg-[#f7f3f5] p-3 text-[#29242a] hover:bg-[#fce8ef]"><X className="h-5 w-5" /></button>
             </div>
-            <div className="px-4 pt-4 pb-1 text-[9px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">Shop & Explore</div>
-            <nav className="flex-1 overflow-y-auto overscroll-contain px-3 pb-2">
-              {mainNavItems.map(item => {
-                const Icon = item.icon || ChevronRight;
-                return (
-                  <button key={item.id} onClick={() => handleNavClick(item)} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 hover:text-[#ECC260] hover:bg-white/[0.04] border-b border-white/[0.055]">
-                    <Icon className="w-4 h-4 text-[#D4AF37] shrink-0" />
+            <nav className="flex-1 overflow-y-auto overscroll-contain px-5 py-6 sm:px-7">
+              <div className="space-y-2">
+                {mainNavItems.map(item => {
+                  const active = (item.filter && currentPage === 'shop') || currentPage === item.id;
+                  return <button key={item.id} onClick={() => handleNavClick(item)} className={"flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium transition-colors " + (active ? "bg-[#f8f1f4] text-[#d94f86] font-semibold" : "text-[#302b31] hover:bg-[#faf6f8] hover:text-[#c94c7d]")}>
                     <span className="flex-1">{item.label}</span>
-                    {item.badge && <span className="text-[9px] text-[#FF75B7]">{item.badge}</span>}
-                    <ChevronRight className="w-3 h-3 text-zinc-600" />
-                  </button>
-                );
-              })}
-              <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><Heart className="w-4 h-4 text-[#D4AF37]" /> My Wishlist</button>
-              <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="w-full flex items-center gap-3 px-2.5 py-2.5 text-left text-[13px] text-zinc-200 border-b border-white/[0.055]"><ShoppingBag className="w-4 h-4 text-[#D4AF37]" /> My Shopping Bag <span className="ml-auto text-[11px] text-[#ECC260]">{cartCount}</span></button>
+                    {item.badge && <span className="rounded-full bg-[#fce8ef] px-2.5 py-1 text-[10px] font-bold text-[#c94c7d]">{item.badge}</span>}
+                  </button>;
+                })}
+                <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className={"flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium " + (currentPage === 'customer' ? "bg-[#f8f1f4] text-[#d94f86]" : "text-[#302b31] hover:bg-[#faf6f8]")}><span className="flex-1">My Wishlist</span></button>
+                <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium text-[#302b31] hover:bg-[#faf6f8]"><span className="flex-1">Shopping Bag</span><span className="text-sm text-[#c94c7d]">{cartCount}</span></button>
+              </div>
             </nav>
-            <div className="shrink-0 px-4 py-4 border-t border-[#D4AF37]/30 bg-[#0C0C10]">
+            <div className="shrink-0 border-t border-[#eee8ec] bg-white px-5 pb-6 pt-5 sm:px-7">
               {currentUser ? (
-                <div className="space-y-2">
-                  <div className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5"><p className="text-sm font-semibold text-white">{currentUser.name}</p><p className="text-[11px] text-zinc-300 break-all">{currentUser.email}</p></div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('home'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Home className="w-4 h-4 text-[#ECC260]" /> Home</button>
-                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><User className="w-4 h-4 text-[#ECC260]" /> Profile</button>
-                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'orders' }); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><Truck className="w-4 h-4 text-[#ECC260]" /> Orders</button>
-                    <button onClick={() => { setMobileMenuOpen(false); onNavigate('save-to-buy'); }} className="flex items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-white bg-white/[0.04]"><PiggyBank className="w-4 h-4 text-[#E6007A]" /> Save to Buy</button>
-                    {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate("admin"); }} className="col-span-2 w-full flex items-center gap-2 rounded-lg bg-[#D4AF37]/10 px-3 py-2.5 text-left text-[12px] font-semibold text-[#FFE08A]"><ShieldCheck className="w-4 h-4" /> Admin Dashboard</button>}
-                    <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="col-span-2 w-full flex items-center justify-center gap-2 rounded-lg border border-rose-400/30 px-3 py-2.5 text-[12px] font-semibold text-rose-300">Sign Out</button>
+                <div className="space-y-3">
+                  <div className="rounded-2xl border border-[#eee8ec] px-4 py-3">
+                    <p className="truncate text-sm font-semibold text-[#302b31]">{currentUser.name}</p>
+                    <p className="truncate text-xs text-[#777078]">{currentUser.email}</p>
                   </div>
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl border border-[#e8e1e5] bg-white text-[16px] font-semibold text-[#302b31] hover:bg-[#faf6f8]"><User className="h-5 w-5 text-[#2878c7]" /> Customer Dashboard / Profile</button>
+                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate('admin'); }} className="flex min-h-[54px] w-full items-center justify-center gap-2 rounded-2xl border border-[#ead7df] bg-[#fff7fa] text-[15px] font-semibold text-[#a83d69]"><ShieldCheck className="h-5 w-5" /> Admin Dashboard</button>}
+                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl bg-[#fbe9ec] text-[16px] font-semibold text-[#b53c49] hover:bg-[#f8dfe4]"><LogIn className="h-5 w-5 rotate-180" /> Logout</button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2"><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-semibold text-[12px]"><LogIn className="w-4 h-4" /> Sign In</button><button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[#D4AF37]/60 text-[#FFE08A] font-semibold text-[12px]"><UserPlus className="w-4 h-4" /> Sign Up</button></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[56px] rounded-2xl bg-[#d94f86] px-3 text-sm font-semibold text-white hover:bg-[#c64177]">Sign In</button>
+                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[56px] rounded-2xl border border-[#d94f86] px-3 text-sm font-semibold text-[#c64177] hover:bg-[#fff4f8]">Sign Up</button>
+                </div>
               )}
             </div>
           </aside>

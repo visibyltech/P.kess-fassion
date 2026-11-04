@@ -505,8 +505,48 @@ body:has(.light-storefront) {
 .light-storefront .site-navbar .account-dropdown button:hover { background:rgba(255,255,255,.08)!important; color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
 .light-storefront .site-navbar .account-dropdown .text-white { color:#fff!important; -webkit-text-fill-color:#fff!important; }
 .light-storefront .site-navbar .account-dropdown .text-zinc-400 { color:#c5bfcc!important; -webkit-text-fill-color:#c5bfcc!important; }
-.light-storefront .site-navbar .mobile-side-drawer { background:#101015!important; color:#f4f1f7!important; }
-.light-storefront .site-navbar .mobile-side-drawer button { color:#f4f1f7!important; -webkit-text-fill-color:#f4f1f7!important; }
-.light-storefront .site-navbar .mobile-side-drawer .text-zinc-300,.light-storefront .site-navbar .mobile-side-drawer .text-zinc-400 { color:#d1cbd7!important; -webkit-text-fill-color:#d1cbd7!important; }
-.light-storefront .site-navbar .mobile-side-drawer .text-[#FFE08A],.light-storefront .site-navbar .mobile-side-drawer .text-[#ECC260] { color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
-.light-storefront .site-navbar .mobile-side-drawer .bg-gradient-to-r { color:#17130a!important; -webkit-text-fill-color:#17130a!important; }
+/* White, reference-matched storefront drawer. Keep contrast explicit and local. */
+.light-storefront .site-navbar .store-navigation-drawer {
+  background: #ffffff !important;
+  color: #302b31 !important;
+}
+.light-storefront .site-navbar .store-navigation-drawer button {
+  -webkit-text-fill-color: currentColor;
+}
+
+/* Dashboard contrast pass: muted copy remains readable on the dark dashboard panels. */
+.light-storefront .admin-dashboard-root .text-zinc-500,
+.light-storefront .customer-dashboard-root .text-zinc-500 {
+  color: #aaa3b1 !important;
+  -webkit-text-fill-color: #aaa3b1 !important;
+}
+.light-storefront .admin-dashboard-root .text-zinc-400,
+.light-storefront .customer-dashboard-root .text-zinc-400 {
+  color: #c9c3cf !important;
+  -webkit-text-fill-color: #c9c3cf !important;
+}
+.light-storefront .admin-dashboard-root .text-zinc-300,
+.light-storefront .customer-dashboard-root .text-zinc-300 {
+  color: #e1dce5 !important;
+  -webkit-text-fill-color: #e1dce5 !important;
+}
+.light-storefront .admin-dashboard-root input,
+.light-storefront .admin-dashboard-root textarea,
+.light-storefront .admin-dashboard-root select,
+.light-storefront .customer-dashboard-root input,
+.light-storefront .customer-dashboard-root textarea,
+.light-storefront .customer-dashboard-root select {
+  color: #ffffff;
+  caret-color: #ffe08a;
+}
+.light-storefront .admin-dashboard-root input::placeholder,
+.light-storefront .admin-dashboard-root textarea::placeholder,
+.light-storefront .customer-dashboard-root input::placeholder,
+.light-storefront .customer-dashboard-root textarea::placeholder {
+  color: #aaa3b1;
+  opacity: 1;
+}
+.light-storefront .customer-dashboard-root .border-zinc-800,
+.light-storefront .admin-dashboard-root .border-zinc-800 {
+  border-color: #46414d !important;
+}
