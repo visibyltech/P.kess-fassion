@@ -40,7 +40,7 @@ export const AuthModal: React.FC = () => {
         onClick={() => setIsAuthModalOpen(false)} 
       />
 
-      <div className="relative bg-[#101016] border border-[#2D2D3E] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 text-zinc-300">
+      <div className="auth-modal relative bg-[#101016] border border-[#2D2D3E] rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10 text-zinc-300">
         <button
           onClick={() => setIsAuthModalOpen(false)}
           className="absolute top-5 right-5 p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"

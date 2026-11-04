@@ -159,13 +159,6 @@ body:has(.light-storefront) {
 .light-storefront .hero-contrast .text-white { color: #25232a !important; }
 .light-storefront .hero-contrast h1,
 .light-storefront .hero-contrast > p { color: #ffffff !important; }
-.light-storefront input,
-.light-storefront select,
-.light-storefront textarea {
-  color: #25232a;
-}
-.light-storefront input::placeholder,
-.light-storefront textarea::placeholder { color: #89848d; }
 .light-storefront footer { background-color: #fbfaf8 !important; }
 .light-storefront .whatsapp-float { color: #ffffff !important; }
 
@@ -499,3 +492,21 @@ body:has(.light-storefront) {
 .light-storefront .site-footer svg {
   flex-shrink: 0;
 }
+
+/* Contrast and navigation repairs: keep dark overlays readable on the white storefront. */
+.light-storefront .auth-modal { background:#101016!important; color:#f4f1f7!important; }
+.light-storefront .auth-modal label,.light-storefront .auth-modal p,.light-storefront .auth-modal h3,.light-storefront .auth-modal h4,.light-storefront .auth-modal strong { color:#f4f1f7!important; -webkit-text-fill-color:#f4f1f7!important; }
+.light-storefront .auth-modal .text-zinc-400,.light-storefront .auth-modal .text-zinc-500 { color:#c5bfcc!important; -webkit-text-fill-color:#c5bfcc!important; }
+.light-storefront .auth-modal input,.light-storefront .auth-modal textarea,.light-storefront .auth-modal select { background:#1b1b25!important; color:#fff!important; caret-color:#ffe08a!important; -webkit-text-fill-color:#fff!important; border-color:#77717f!important; }
+.light-storefront .auth-modal input::placeholder { color:#aaa3b2!important; -webkit-text-fill-color:#aaa3b2!important; opacity:1!important; }
+.light-storefront .auth-modal input:focus { outline:2px solid #d4af37!important; outline-offset:1px; }
+.light-storefront .site-navbar .account-dropdown { background:#141419!important; color:#f4f1f7!important; border-color:#3a3542!important; }
+.light-storefront .site-navbar .account-dropdown button { color:#e9e4ee!important; -webkit-text-fill-color:#e9e4ee!important; }
+.light-storefront .site-navbar .account-dropdown button:hover { background:rgba(255,255,255,.08)!important; color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
+.light-storefront .site-navbar .account-dropdown .text-white { color:#fff!important; -webkit-text-fill-color:#fff!important; }
+.light-storefront .site-navbar .account-dropdown .text-zinc-400 { color:#c5bfcc!important; -webkit-text-fill-color:#c5bfcc!important; }
+.light-storefront .site-navbar .mobile-side-drawer { background:#101015!important; color:#f4f1f7!important; }
+.light-storefront .site-navbar .mobile-side-drawer button { color:#f4f1f7!important; -webkit-text-fill-color:#f4f1f7!important; }
+.light-storefront .site-navbar .mobile-side-drawer .text-zinc-300,.light-storefront .site-navbar .mobile-side-drawer .text-zinc-400 { color:#d1cbd7!important; -webkit-text-fill-color:#d1cbd7!important; }
+.light-storefront .site-navbar .mobile-side-drawer .text-[#FFE08A],.light-storefront .site-navbar .mobile-side-drawer .text-[#ECC260] { color:#ffe08a!important; -webkit-text-fill-color:#ffe08a!important; }
+.light-storefront .site-navbar .mobile-side-drawer .bg-gradient-to-r { color:#17130a!important; -webkit-text-fill-color:#17130a!important; }
