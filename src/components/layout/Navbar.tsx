@@ -198,7 +198,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
                 {userDropdownOpen && (
                   <div 
-                    className="absolute right-0 mt-2 w-56 rounded-xl bg-[#141419] border border-[#2F2F3D] shadow-2xl py-2 z-50 text-xs"
+                    className="account-dropdown absolute right-0 mt-2 w-56 rounded-xl bg-[#141419] border border-[#2F2F3D] shadow-2xl py-2 z-50 text-xs"
                     onClick={() => setUserDropdownOpen(false)}
                   >
                     <div className="px-4 py-2 border-b border-zinc-800">
@@ -334,7 +334,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
       {mobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-[100]">
           <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/70" />
-          <aside className="absolute left-0 top-0 bottom-0 w-[min(82vw,310px)] bg-[#101015] border-r border-[#D4AF37]/25 shadow-2xl flex flex-col">
+          <aside className="mobile-side-drawer absolute left-0 top-0 bottom-0 w-[min(86vw,340px)] bg-[#101015] border-r border-[#D4AF37]/25 shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0">
               <div><p className="text-[#ECC260] font-serif text-base tracking-[0.2em]">P-KESS</p><p className="text-[9px] text-zinc-400 tracking-[0.25em]">FASHION WORLD</p></div>
               <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="p-2 text-zinc-300 hover:text-white"><X className="w-5 h-5" /></button>
