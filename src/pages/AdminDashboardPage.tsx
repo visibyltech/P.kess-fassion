@@ -119,7 +119,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       wholesaleMinQty: 10,
       stock: 20,
       sku: 'PK-' + Math.floor(100 + Math.random() * 900),
-      images: ['https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=80'],
+      images: [],
       sizes: ['UK 8', 'UK 10', 'UK 12', 'UK 14'],
       colors: ['Metallic Gold', 'Deep Magenta', 'Midnight Black'],
       details: ['P-Kess designer clothing and fashion collection'],
