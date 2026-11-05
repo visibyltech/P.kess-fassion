@@ -330,46 +330,57 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
         </div>
       </nav>
 
-      {/* FULL-HEIGHT STORE NAVIGATION DRAWER */}
+      {/* Jumia-inspired category and account drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-[100]">
-          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/65 backdrop-blur-[2px]" />
-          <aside className="store-navigation-drawer absolute inset-y-0 left-0 flex w-[min(82vw,500px)] flex-col bg-white text-[#28242d] shadow-2xl">
-            <div className="flex h-[88px] shrink-0 items-center justify-between border-b border-[#eee8ec] px-6 sm:px-8">
+          <button aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)} className="absolute inset-0 bg-black/55" />
+          <aside className="absolute inset-y-0 left-0 flex w-[min(86vw,390px)] flex-col border-r border-[#E8E8E8] bg-white text-[#282828] shadow-2xl">
+            <div className="flex h-[76px] shrink-0 items-center justify-between border-b border-[#EEEEEE] px-5">
               <button onClick={() => { setMobileMenuOpen(false); onNavigate('home'); }} className="text-left" aria-label="P-Kess Fashion World home">
-                <span className="block font-serif-luxury text-xl font-bold tracking-[0.08em] text-[#4a3440]">P-KESS</span>
-                <span className="mt-0.5 block text-[9px] font-semibold tracking-[0.28em] text-[#9a7b89]">FASHION WORLD</span>
+                <span className="block font-serif-luxury text-xl font-bold tracking-[0.08em] text-[#3A3035]">P-KESS</span>
+                <span className="mt-0.5 block text-[9px] font-semibold tracking-[0.25em] text-[#987D89]">FASHION WORLD</span>
               </button>
-              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="rounded-full bg-[#f7f3f5] p-3 text-[#29242a] hover:bg-[#fce8ef]"><X className="h-5 w-5" /></button>
+              <button onClick={() => setMobileMenuOpen(false)} aria-label="Close menu" className="rounded-full bg-[#F4F4F4] p-2.5 text-[#333333] hover:bg-[#ECECEC]"><X className="h-5 w-5" /></button>
             </div>
-            <nav className="flex-1 overflow-y-auto overscroll-contain px-5 py-6 sm:px-7">
-              <div className="space-y-2">
+            <div className="border-b border-[#EEEEEE] bg-[#F7F7F7] px-5 py-3">
+              <p className="text-xs font-semibold text-[#333333]">Welcome to P-Kess Fashion World</p>
+              <p className="mt-0.5 text-[11px] text-[#777777]">Shop fashion, accessories and more</p>
+            </div>
+            <nav className="flex-1 overflow-y-auto overscroll-contain px-3 py-3">
+              <p className="px-3 pb-2 pt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#8A8A8A]">Explore the store</p>
+              <div className="space-y-0.5">
                 {mainNavItems.map(item => {
                   const active = (item.filter && currentPage === 'shop') || currentPage === item.id;
-                  return <button key={item.id} onClick={() => handleNavClick(item)} className={"flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium transition-colors " + (active ? "bg-[#f8f1f4] text-[#d94f86] font-semibold" : "text-[#302b31] hover:bg-[#faf6f8] hover:text-[#c94c7d]")}>
+                  const Icon = item.icon || Package;
+                  return <button key={item.id} onClick={() => handleNavClick(item)} className={"flex min-h-[48px] w-full items-center gap-3 rounded-lg px-3 text-left text-[14px] transition-colors " + (active ? "bg-[#FFF5DF] font-semibold text-[#76550B]" : "text-[#333333] hover:bg-[#F5F5F5]")}>
+                    <Icon className={"h-[17px] w-[17px] shrink-0 " + (active ? "text-[#A77912]" : "text-[#777777]")} />
                     <span className="flex-1">{item.label}</span>
-                    {item.badge && <span className="rounded-full bg-[#fce8ef] px-2.5 py-1 text-[10px] font-bold text-[#c94c7d]">{item.badge}</span>}
+                    {item.badge && <span className="rounded bg-[#FCE8EF] px-2 py-1 text-[9px] font-bold text-[#B43D72]">{item.badge}</span>}
+                    <ChevronRight className="h-4 w-4 text-[#B0B0B0]" />
                   </button>;
                 })}
-                <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className={"flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium " + (currentPage === 'customer' ? "bg-[#f8f1f4] text-[#d94f86]" : "text-[#302b31] hover:bg-[#faf6f8]")}><span className="flex-1">My Wishlist</span></button>
-                <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="flex min-h-[66px] w-full items-center rounded-2xl px-5 text-left text-[17px] font-medium text-[#302b31] hover:bg-[#faf6f8]"><span className="flex-1">Shopping Bag</span><span className="text-sm text-[#c94c7d]">{cartCount}</span></button>
+                <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'wishlist' }); }} className="flex min-h-[48px] w-full items-center gap-3 rounded-lg px-3 text-left text-[14px] text-[#333333] hover:bg-[#F5F5F5]"><Heart className="h-[17px] w-[17px] text-[#777777]" /><span className="flex-1">My Wishlist</span><ChevronRight className="h-4 w-4 text-[#B0B0B0]" /></button>
+                <button onClick={() => { setMobileMenuOpen(false); setIsCartOpen(true); }} className="flex min-h-[48px] w-full items-center gap-3 rounded-lg px-3 text-left text-[14px] text-[#333333] hover:bg-[#F5F5F5]"><ShoppingBag className="h-[17px] w-[17px] text-[#777777]" /><span className="flex-1">Shopping Bag</span><span className="rounded-full bg-[#F2F2F2] px-2 py-0.5 text-xs font-semibold">{cartCount}</span></button>
               </div>
             </nav>
-            <div className="shrink-0 border-t border-[#eee8ec] bg-white px-5 pb-6 pt-5 sm:px-7">
+            <div className="shrink-0 border-t border-[#EAEAEA] bg-white px-4 pb-5 pt-4">
               {currentUser ? (
-                <div className="space-y-3">
-                  <div className="rounded-2xl border border-[#eee8ec] px-4 py-3">
-                    <p className="truncate text-sm font-semibold text-[#302b31]">{currentUser.name}</p>
-                    <p className="truncate text-xs text-[#777078]">{currentUser.email}</p>
+                <div className="space-y-2">
+                  <div className="mb-3 flex items-center gap-3 rounded-lg bg-[#F6F6F6] px-3 py-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E8D7A7] text-sm font-bold text-[#5C4714]">{currentUser.name?.charAt(0)?.toUpperCase() || 'U'}</div>
+                    <div className="min-w-0"><p className="truncate text-sm font-semibold text-[#333333]">{currentUser.name}</p><p className="truncate text-[11px] text-[#777777]">{currentUser.email}</p></div>
                   </div>
-                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl border border-[#e8e1e5] bg-white text-[16px] font-semibold text-[#302b31] hover:bg-[#faf6f8]"><User className="h-5 w-5 text-[#2878c7]" /> Customer Dashboard / Profile</button>
-                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate('admin'); }} className="flex min-h-[54px] w-full items-center justify-center gap-2 rounded-2xl border border-[#ead7df] bg-[#fff7fa] text-[15px] font-semibold text-[#a83d69]"><ShieldCheck className="h-5 w-5" /> Admin Dashboard</button>}
-                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl bg-[#fbe9ec] text-[16px] font-semibold text-[#b53c49] hover:bg-[#f8dfe4]"><LogIn className="h-5 w-5 rotate-180" /> Logout</button>
+                  <button onClick={() => { setMobileMenuOpen(false); onNavigate('customer', { tab: 'overview' }); }} className="flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 text-left text-[14px] font-medium text-[#333333] hover:bg-[#F5F5F5]"><User className="h-4 w-4 text-[#777777]" /> My account / Profile</button>
+                  {isAdmin && <button onClick={() => { setMobileMenuOpen(false); onNavigate('admin'); }} className="flex min-h-[44px] w-full items-center gap-3 rounded-lg bg-[#FFF5DF] px-3 text-left text-[14px] font-semibold text-[#76550B]"><ShieldCheck className="h-4 w-4" /> Admin dashboard</button>}
+                  <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 text-left text-[14px] font-semibold text-[#B33E46] hover:bg-[#FFF0F0]"><LogIn className="h-4 w-4 rotate-180" /> Sign out</button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[56px] rounded-2xl bg-[#d94f86] px-3 text-sm font-semibold text-white hover:bg-[#c64177]">Sign In</button>
-                  <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[56px] rounded-2xl border border-[#d94f86] px-3 text-sm font-semibold text-[#c64177] hover:bg-[#fff4f8]">Sign Up</button>
+                <div className="space-y-2">
+                  <p className="px-1 pb-1 text-[11px] text-[#777777]">Sign in to manage your orders and account.</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[44px] rounded-lg bg-[#D4A62C] px-3 text-sm font-semibold text-[#211B0D] hover:bg-[#C69619]">Sign in</button>
+                    <button onClick={() => { setMobileMenuOpen(false); setIsAuthModalOpen(true); }} className="min-h-[44px] rounded-lg border border-[#D4A62C] px-3 text-sm font-semibold text-[#76550B] hover:bg-[#FFF8E8]">Create account</button>
+                  </div>
                 </div>
               )}
             </div>
