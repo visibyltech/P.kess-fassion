@@ -203,6 +203,13 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     }
   };
 
+  const setMainProductImage = (imageUrl: string) => {
+    setProductForm(current => {
+      const images = current.images || [];
+      return { ...current, images: [imageUrl, ...images.filter(image => image !== imageUrl)] };
+    });
+  };
+
   const removeProductImage = (imageUrl: string) => {
     setProductForm(current => ({
       ...current,
@@ -384,7 +391,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
+            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Pending Bank Approvals</span>
               <div className="text-lg sm:text-2xl font-black text-amber-400">{pendingPayments}</div>
               <span className="text-[11px] text-zinc-400">
@@ -392,7 +399,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
+            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Active Save to Buy Plans</span>
               <div className="text-lg sm:text-2xl font-black text-[#FF66B2]">{savingsPlans.length}</div>
               <span className="text-[11px] text-zinc-400">
@@ -1088,7 +1095,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                         >
                           <X size={13} />
                         </button>
-                        {index === 0 && <span className="absolute bottom-0 inset-x-0 bg-[#D4AF37] text-black text-center text-[9px] font-bold py-1">MAIN PHOTO</span>}
+                        {index === 0 ? <span className="absolute bottom-0 inset-x-0 bg-[#D4AF37] text-black text-center text-[9px] font-bold py-1">MAIN PHOTO</span> : <button type="button" onClick={() => setMainProductImage(image)} className="absolute bottom-0 inset-x-0 bg-black/85 text-[#FFE08A] text-center text-[9px] font-semibold py-1.5">Set as main photo</button>}
                       </div>
                     ))}
                   </div>
@@ -1102,7 +1109,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                 disabled={isUploadingProductImages || isSavingProduct || !(productForm.images || []).length}
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {(isUploadingProductImages || isSavingProduct) && <LoaderCircle className="inline-block mr-2 h-4 w-4 animate-spin" />}\n                {isUploadingProductImages ? 'Uploading photos…' : isSavingProduct ? 'Saving product…' : 'Save Product'}
+                {(isUploadingProductImages || isSavingProduct) && <LoaderCircle className="inline-block mr-2 h-4 w-4 animate-spin" />}
+                {isUploadingProductImages ? 'Uploading photos…' : isSavingProduct ? 'Saving product…' : 'Save Product'}
               </button>
             </form>
           </div>

@@ -56,6 +56,7 @@ interface StoreContextType {
 
   // User & Auth
   currentUser: CustomerUser | null;
+  isAuthInitializing: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, phone: string, password: string) => Promise<boolean>;
@@ -124,48 +125,54 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   const [currentUser, setCurrentUser] = useState<CustomerUser | null>(null);
+  const [isAuthInitializing, setIsAuthInitializing] = useState(true);
   const ADMIN_EMAIL = 'pkessvariety@gmail.com';
 
   // Firebase Authentication is the sole source of signed-in identity.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
-      if (!firebaseUser) {
-        setCurrentUser(null);
-        return;
-      }
-
-      const email = (firebaseUser.email || '').trim().toLowerCase();
-      if (email === ADMIN_EMAIL) {
-        setCurrentUser({
-          id: firebaseUser.uid,
-          name: firebaseUser.displayName || 'P-Kess Administrator',
-          email,
-          phone: firebaseUser.phoneNumber || '',
-          role: 'admin',
-          wishlist: [],
-          createdAt: firebaseUser.metadata.creationTime || new Date().toISOString()
-        });
-        return;
-      }
-
+      setIsAuthInitializing(true);
       try {
-        const profileRef = doc(firestore, 'users', firebaseUser.uid);
-        const profileSnapshot = await getDoc(profileRef);
-        const profile = profileSnapshot.exists() ? profileSnapshot.data() : {};
-        setCurrentUser({
-          id: firebaseUser.uid,
-          name: profile.name || firebaseUser.displayName || email.split('@')[0],
-          email,
-          phone: profile.phone || firebaseUser.phoneNumber || '',
-          avatarUrl: profile.avatarUrl || undefined,
-          role: 'customer',
-          savedAddress: profile.savedAddress,
-          wishlist: Array.isArray(profile.wishlist) ? profile.wishlist : [],
-          createdAt: profile.createdAt || firebaseUser.metadata.creationTime || new Date().toISOString()
-        });
-      } catch (error) {
-        console.error('Could not load customer profile:', error);
-        setCurrentUser({ id: firebaseUser.uid, name: email.split('@')[0], email, phone: '', role: 'customer', wishlist: [], createdAt: new Date().toISOString() });
+        if (!firebaseUser) {
+          setCurrentUser(null);
+          return;
+        }
+
+        const email = (firebaseUser.email || '').trim().toLowerCase();
+        if (email === ADMIN_EMAIL) {
+          setCurrentUser({
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName || 'P-Kess Administrator',
+            email,
+            phone: firebaseUser.phoneNumber || '',
+            role: 'admin',
+            wishlist: [],
+            createdAt: firebaseUser.metadata.creationTime || new Date().toISOString()
+          });
+          return;
+        }
+
+        try {
+          const profileRef = doc(firestore, 'users', firebaseUser.uid);
+          const profileSnapshot = await getDoc(profileRef);
+          const profile = profileSnapshot.exists() ? profileSnapshot.data() : {};
+          setCurrentUser({
+            id: firebaseUser.uid,
+            name: profile.name || firebaseUser.displayName || email.split('@')[0],
+            email,
+            phone: profile.phone || firebaseUser.phoneNumber || '',
+            avatarUrl: profile.avatarUrl || undefined,
+            role: 'customer',
+            savedAddress: profile.savedAddress,
+            wishlist: Array.isArray(profile.wishlist) ? profile.wishlist : [],
+            createdAt: profile.createdAt || firebaseUser.metadata.creationTime || new Date().toISOString()
+          });
+        } catch (error) {
+          console.error('Could not load customer profile:', error);
+          setCurrentUser({ id: firebaseUser.uid, name: email.split('@')[0], email, phone: '', role: 'customer', wishlist: [], createdAt: new Date().toISOString() });
+        }
+      } finally {
+        setIsAuthInitializing(false);
       }
     });
     return unsubscribe;
@@ -719,6 +726,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       toggleWishlist,
       isInWishlist,
       currentUser,
+      isAuthInitializing,
       isAdmin: currentUser?.role === 'admin',
       login,
       register,
