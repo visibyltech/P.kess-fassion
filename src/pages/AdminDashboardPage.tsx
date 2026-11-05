@@ -91,7 +91,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
   // Cloudinary unsigned browser uploads. These values are public configuration,
   // not API secrets. Never place the Cloudinary API secret in frontend code.
   const CLOUDINARY_CLOUD_NAME = 'jmit9wsv';
-  const CLOUDINARY_UPLOAD_PRESET = 'pkess_products';
+  const CLOUDINARY_UPLOAD_PRESET = 'pkess-products';
 
   // Order Details Modal / Proof viewer
   const [inspectingOrder, setInspectingOrder] = useState<Order | null>(null);
