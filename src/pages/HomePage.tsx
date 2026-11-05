@@ -38,37 +38,32 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     {
       id: 'clothing',
       title: 'Nigerian Clothing & Native Wear',
-      subtitle: 'Ankara styles, elegant gowns, native sets & occasion wear',
-      image: 'https://afrikanattire.com/cdn/shop/products/10bd8fb91289518e3d25f7ac7f025722.jpg?v=1652830900',
-      itemCount: '12+ Styles'
+            image: 'https://afrikanattire.com/cdn/shop/products/10bd8fb91289518e3d25f7ac7f025722.jpg?v=1652830900',
+      itemCount: 'clothing'
     },
     {
       id: 't-shirts',
       title: 'T-Shirts & Everyday Wear',
-      subtitle: 'Graphic tees and relaxed styles with a Nigerian point of view',
-      image: 'https://i.etsystatic.com/44159206/r/il/161dd9/4984121832/il_1588xN.4984121832_1ftm.jpg',
-      itemCount: 'New Styles'
+            image: 'https://i.etsystatic.com/44159206/r/il/161dd9/4984121832/il_1588xN.4984121832_1ftm.jpg',
+      itemCount: 't-shirts'
     },
     {
       id: 'shoes',
       title: 'Shoes & Sandals',
-      subtitle: 'Nigerian-made styles for men and women',
-      image: 'https://media-assets.grailed.com/prd/listing/33612893/527637d4714540ecaf1da94cf0c96d01?auto=format',
-      itemCount: '8+ Styles'
+            image: 'https://media-assets.grailed.com/prd/listing/33612893/527637d4714540ecaf1da94cf0c96d01?auto=format',
+      itemCount: 'shoes'
     },
     {
       id: 'bags',
       title: 'Bags & Handbags',
-      subtitle: 'Ankara, fabric and statement bags',
-      image: 'https://www.zeestore.ca/cdn/shop/files/balangi-african-print-handbag-9801401.jpg?v=1769832557',
-      itemCount: '10+ Styles'
+            image: 'https://www.zeestore.ca/cdn/shop/files/balangi-african-print-handbag-9801401.jpg?v=1769832557',
+      itemCount: 'bags'
     },
     {
       id: 'accessories',
       title: 'Fashion Accessories',
-      subtitle: 'Beads, headwraps, caps, scarves and finishing touches',
-      image: 'https://curiosityafricanboutique.com/cdn/shop/files/CuriosityAfricanBoutique_AfricanCurioShopinSouthAfricaonZuluNyalaHeritageSafariLodge_ArtisinalandHandcraftedAfricanProducts_Decor_CraftsandArt--794copy.png?v=1702631348&width=2000',
-      itemCount: '14+ Styles'
+            image: 'https://curiosityafricanboutique.com/cdn/shop/files/CuriosityAfricanBoutique_AfricanCurioShopinSouthAfricaonZuluNyalaHeritageSafariLodge_ArtisinalandHandcraftedAfricanProducts_Decor_CraftsandArt--794copy.png?v=1702631348&width=2000',
+      itemCount: 'accessories'
     }
   ];
 
@@ -163,7 +158,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </h2>
           </div>
           <p className="text-xs text-zinc-400 max-w-md mt-2 md:mt-0">
-            Explore the P-Kess collections: clothing, T-shirts, shoes, bags and fashion accessories.
+            
           </p>
         </div>
 
@@ -179,23 +174,15 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 alt={cat.title}
                 className="w-full h-full object-contain p-2 sm:p-4 bg-[#F7F5F0] object-center group-hover:scale-105 transition-transform duration-500 ease-out"
               />
-              <div className="category-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent group-hover:from-black/90 transition-colors" />
+              <div className="category-overlay absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent group-hover:from-black/85 transition-colors" />
 
               <div className="absolute inset-x-0 bottom-0 p-2 sm:p-4 flex flex-col justify-end">
-                <span className="text-[8px] sm:text-[10px] font-bold tracking-wide text-[#ECC260] uppercase mb-1">
-                  {cat.itemCount}
-                </span>
-                <h3 className="font-serif-luxury text-[11px] leading-tight sm:text-base lg:text-lg font-bold text-white mb-1 group-hover:text-[#ECC260] transition-colors line-clamp-2">
+                <h3 className="font-serif-luxury text-[11px] leading-tight sm:text-base lg:text-lg font-bold text-white drop-shadow-md group-hover:text-[#ECC260] transition-colors line-clamp-1">
                   {cat.title}
                 </h3>
-                <p className="text-[9px] leading-snug sm:text-xs text-zinc-300 line-clamp-2 mb-2 sm:mb-3 opacity-90">
-                  {cat.subtitle}
-                </p>
-
-                <div className="inline-flex items-center gap-1 text-[9px] sm:text-xs font-semibold text-white group-hover:text-[#D4AF37] transition-colors">
-                  <span>Explore Collection</span>
-                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1.5 transition-transform" />
-                </div>
+                <span className="mt-1 text-[9px] sm:text-[10px] font-medium text-white/90 drop-shadow">
+                  {products.filter(product => product.category === cat.itemCount).length} {products.filter(product => product.category === cat.itemCount).length === 1 ? 'item' : 'items'}
+                </span>
               </div>
             </div>
           ))}
