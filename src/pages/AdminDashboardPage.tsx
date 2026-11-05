@@ -116,6 +116,15 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
   const pendingDeliveries = orders.filter(o => o.orderStatus === 'processing' || o.orderStatus === 'dispatched').length;
   const wholesaleOrders = orders.filter(o => o.items.some(i => i.isWholesale));
   const lowStockProducts = products.filter(p => p.stock < 15);
+  const productsInStock = products.filter(product => Number(product.stock) > 0).length;
+  const totalAvailableUnits = products.reduce((sum, product) => sum + Math.max(0, Number(product.stock) || 0), 0);
+  const categorySummaries = [
+    { id: 'clothing', label: 'Clothing & Native Wear' },
+    { id: 't-shirts', label: 'T-Shirts' },
+    { id: 'shoes', label: 'Shoes & Sandals' },
+    { id: 'bags', label: 'Bags & Handbags' },
+    { id: 'accessories', label: 'Fashion Accessories' }
+  ].map(category => ({ ...category, count: products.filter(product => product.category === category.id).length }));
 
   const handleOpenAddProduct = () => {
     setEditingProductId(null);
@@ -381,7 +390,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       {activeTab === 'overview' && (
         <div className="space-y-5">
           {/* Main KPI Cards */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-3 sm:gap-4">
             <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
               <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Total Revenue</span>
               <div className="text-xl sm:text-2xl font-bold text-[#936A0A]">₦{totalRevenue.toLocaleString()}</div>
@@ -390,30 +399,53 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </span>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
-              <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Orders</span>
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Total Orders</span>
               <div className="text-xl sm:text-2xl font-bold text-[#252A32]">{orders.length}</div>
-              <span className="text-[11px] text-[#FF66B2]">
-                {wholesaleOrders.length} Wholesale bulk orders
-              </span>
+              <span className="text-[11px] text-[#B33B73]">{wholesaleOrders.length} wholesale orders</span>
+            </div>
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Total Products</span>
+              <div className="text-xl sm:text-2xl font-bold text-[#252A32]">{products.length}</div>
+              <span className="text-[11px] text-[#737B86]">Products uploaded</span>
+            </div>
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Products In Stock</span>
+              <div className="text-xl sm:text-2xl font-bold text-emerald-700">{productsInStock}</div>
+              <span className="text-[11px] text-[#737B86]">{totalAvailableUnits.toLocaleString()} available units</span>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
-              <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Pending Bank Approvals</span>
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Pending Bank Approvals</span>
               <div className="text-xl sm:text-2xl font-bold text-[#B7791F]">{pendingPayments}</div>
-              <span className="text-[11px] text-zinc-400">
-                Awaiting transfer receipt verification
-              </span>
+              <span className="text-[11px] text-[#737B86]">Awaiting verification</span>
             </div>
 
-            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
-              <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Active Save to Buy Plans</span>
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Active Save to Buy Plans</span>
               <div className="text-xl sm:text-2xl font-bold text-[#B33B73]">{savingsPlans.length}</div>
-              <span className="text-[11px] text-zinc-400">
-                Cumulative installments running
-              </span>
+              <span className="text-[11px] text-[#737B86]">Running plans</span>
             </div>
           </div>
+
+          <section className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm sm:p-5">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-semibold text-[#252A32]">Products by category</h3>
+                <p className="mt-1 text-xs text-[#737B86]">Live count of uploaded products in each category</p>
+              </div>
+              <button onClick={() => setActiveTab('categories')} className="shrink-0 text-xs font-semibold text-[#946B12] hover:underline">Manage categories</button>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+              {categorySummaries.map(category => (
+                <button key={category.id} onClick={() => setActiveTab('products')} className="rounded-lg border border-[#E8E9ED] bg-[#F8F9FB] p-3 text-left transition-colors hover:border-[#D4A62C] hover:bg-[#FFF9EA]">
+                  <span className="block text-[11px] font-medium leading-snug text-[#626A75]">{category.label}</span>
+                  <span className="mt-2 block text-xl font-bold tabular-nums text-[#252A32]">{category.count}</span>
+                  <span className="text-[10px] text-[#858B95]">{category.count === 1 ? 'product' : 'products'}</span>
+                </button>
+              ))}
+            </div>
+          </section>
 
           {/* Quick Action Alerts */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
