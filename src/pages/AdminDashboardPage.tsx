@@ -309,75 +309,82 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
   ];
 
   return (
-    <div className="admin-dashboard-root max-w-7xl mx-auto px-3 sm:px-5 lg:px-7 py-5 sm:py-7">
-      {/* Admin Top Header */}
-      <div className="rounded-2xl bg-gradient-to-r from-[#171410] via-[#1E1712] to-[#121217] border border-[#D4AF37]/50 p-4 sm:p-5 flex items-center justify-between gap-3 shadow-xl">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={() => setAdminMenuOpen(true)} aria-label="Open admin navigation" className="shrink-0 rounded-lg border border-[#D4AF37]/40 bg-white/5 p-2.5 text-[#ECC260] hover:bg-white/10"><Menu className="w-5 h-5" /></button>
-          <div className="w-10 h-10 rounded-xl bg-[#D4AF37] flex items-center justify-center text-black font-black text-xl shadow-lg">
-            👑
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-brand-display text-base sm:text-xl font-bold text-white uppercase">
-                P-Kess Executive Control Panel
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37] text-black uppercase">
-                Super Admin
-              </span>
-            </div>
-            <p className="hidden sm:block text-xs text-zinc-400 mt-0.5">
-              Enterprise management for products, orders, Paystack, manual transfers, wholesale tiers, and Save to Buy.
-            </p>
-          </div>
+    <div className="admin-dashboard-root min-h-screen bg-[#F4F5F7] text-[#25252B]">
+      {/* Desktop management navigation */}
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-40 w-[248px] flex-col border-r border-[#E6E8EC] bg-white shadow-sm">
+        <div className="border-b border-[#ECEEF1] px-6 py-6">
+          <div className="text-lg font-black tracking-[0.12em] text-[#24242A]">P-KESS</div>
+          <div className="mt-1 text-[10px] font-bold tracking-[0.22em] text-[#9A7B89]">FASHION WORLD</div>
+          <div className="mt-4 rounded-lg bg-[#FFF7E5] px-3 py-2 text-xs font-semibold text-[#88610B]">Store administration</div>
         </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => onNavigate('shop')}
-            className="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            View Storefront
-          </button>
+        <div className="px-5 pb-2 pt-5 text-[10px] font-bold uppercase tracking-[0.16em] text-[#9298A2]">Workspace</div>
+        <nav className="flex-1 overflow-y-auto px-3 pb-4">
+          {adminNavItems.map(item => {
+            const Icon = item.icon;
+            const active = activeTab === item.id;
+            return <button key={item.id} onClick={() => setActiveTab(item.id as any)} className={"mb-1 flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 text-left text-[13px] transition-colors " + (active ? "bg-[#FFF4D6] font-semibold text-[#815C0A] border-l-[3px] border-[#D4A62C]" : "text-[#515761] hover:bg-[#F4F5F7]")}>
+              <Icon className="h-[17px] w-[17px] shrink-0" /><span className="flex-1">{item.label}</span>{item.count !== undefined && <span className={"rounded-full px-2 py-0.5 text-[10px] " + (active ? "bg-[#F3E2B4] text-[#815C0A]" : "bg-[#F0F1F3] text-[#777E89]")}>{item.count}</span>}
+            </button>;
+          })}
+          <div className="my-4 border-t border-[#ECEEF1]" />
+          <button onClick={handleOpenAddProduct} className="flex min-h-[44px] w-full items-center gap-3 rounded-lg bg-[#D4A62C] px-3 text-left text-[13px] font-bold text-[#241D0C] hover:bg-[#C69619]"><Plus className="h-4 w-4" /> Add new product</button>
+          <button onClick={() => onNavigate('shop')} className="mt-2 flex min-h-[44px] w-full items-center gap-3 rounded-lg px-3 text-left text-[13px] text-[#515761] hover:bg-[#F4F5F7]"><ExternalLink className="h-4 w-4" /> View storefront</button>
+        </nav>
+        <div className="border-t border-[#ECEEF1] px-4 py-4">
+          <p className="truncate text-xs font-semibold text-[#353A43]">{currentUser?.name || 'Administrator'}</p>
+          <p className="mt-1 truncate text-[10px] text-[#858B95]">{currentUser?.email}</p>
         </div>
-      </div>
+      </aside>
 
-
+      {/* Mobile admin navigation drawer */}
       {adminMenuOpen && (
-        <div className="fixed inset-0 z-[120]">
-          <button aria-label="Close admin menu" onClick={() => setAdminMenuOpen(false)} className="absolute inset-0 bg-black/70" />
-          <aside className="absolute inset-y-0 left-0 flex w-[min(84vw,300px)] flex-col border-r border-[#D4AF37]/30 bg-[#111117] shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
-              <div><p className="text-sm font-bold tracking-[0.16em] text-[#ECC260]">P-KESS ADMIN</p><p className="mt-0.5 text-[10px] text-zinc-400">Store management</p></div>
-              <button onClick={() => setAdminMenuOpen(false)} aria-label="Close menu" className="rounded-lg p-2 text-zinc-300 hover:bg-white/10"><X className="h-5 w-5" /></button>
+        <div className="fixed inset-0 z-[120] lg:hidden">
+          <button aria-label="Close admin menu" onClick={() => setAdminMenuOpen(false)} className="absolute inset-0 bg-black/60" />
+          <aside className="absolute inset-y-0 left-0 flex w-[min(84vw,300px)] flex-col border-r border-[#E6E8EC] bg-white text-[#25252B] shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#ECEEF1] px-5 py-5">
+              <div><p className="text-sm font-black tracking-[0.14em]">P-KESS ADMIN</p><p className="mt-1 text-[10px] text-[#858B95]">Store management</p></div>
+              <button onClick={() => setAdminMenuOpen(false)} aria-label="Close menu" className="rounded-lg p-2 text-[#59606A] hover:bg-[#F2F3F5]"><X className="h-5 w-5" /></button>
             </div>
-            <div className="px-4 py-3 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">Management</div>
-            <nav className="flex-1 overflow-y-auto px-2 pb-3">
+            <nav className="flex-1 overflow-y-auto px-3 py-4">
               {adminNavItems.map(item => {
                 const Icon = item.icon;
                 const active = activeTab === item.id;
-                return <button key={item.id} onClick={() => { setActiveTab(item.id as any); setAdminMenuOpen(false); }} className={"mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition-colors " + (active ? "bg-[#D4AF37] font-bold text-black" : "text-zinc-200 hover:bg-white/[0.07]")}>
-                  <Icon className="h-4 w-4 shrink-0" /><span className="flex-1">{item.label}</span>{item.count !== undefined && <span className={"text-xs " + (active ? "text-black/70" : "text-zinc-500")}>{item.count}</span>}
+                return <button key={item.id} onClick={() => { setActiveTab(item.id as any); setAdminMenuOpen(false); }} className={"mb-1 flex min-h-[46px] w-full items-center gap-3 rounded-lg px-3 text-left text-sm " + (active ? "bg-[#FFF4D6] font-semibold text-[#815C0A]" : "text-[#424852] hover:bg-[#F4F5F7]")}>
+                  <Icon className="h-4 w-4" /><span className="flex-1">{item.label}</span>{item.count !== undefined && <span className="text-xs text-[#858B95]">{item.count}</span>}
                 </button>;
               })}
-              <div className="my-3 border-t border-white/10" />
-              <button onClick={() => { setAdminMenuOpen(false); handleOpenAddProduct(); }} className="flex w-full items-center gap-3 rounded-xl bg-[#D4AF37]/15 px-3 py-3 text-left text-sm font-semibold text-[#FFE08A] hover:bg-[#D4AF37]/25"><Plus className="h-4 w-4" /> Add Product</button>
-              <button onClick={() => { setAdminMenuOpen(false); onNavigate('shop'); }} className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-zinc-300 hover:bg-white/[0.07]"><Home className="h-4 w-4" /> View Storefront</button>
+              <div className="my-3 border-t border-[#ECEEF1]" />
+              <button onClick={() => { setAdminMenuOpen(false); handleOpenAddProduct(); }} className="flex min-h-[46px] w-full items-center gap-3 rounded-lg bg-[#FFF4D6] px-3 text-left text-sm font-semibold text-[#815C0A]"><Plus className="h-4 w-4" /> Add product</button>
+              <button onClick={() => { setAdminMenuOpen(false); onNavigate('shop'); }} className="mt-1 flex min-h-[46px] w-full items-center gap-3 rounded-lg px-3 text-left text-sm text-[#424852] hover:bg-[#F4F5F7]"><Home className="h-4 w-4" /> Storefront</button>
             </nav>
-            <div className="border-t border-white/10 px-4 py-3 text-[11px] text-zinc-500">{currentUser?.email}</div>
           </aside>
         </div>
       )}
 
+      <div className="lg:ml-[248px]">
+        {/* Compact responsive admin header */}
+        <header className="sticky top-0 z-30 flex min-h-[68px] items-center justify-between gap-3 border-b border-[#E6E8EC] bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <button onClick={() => setAdminMenuOpen(true)} aria-label="Open admin navigation" className="rounded-lg border border-[#E2E5E9] p-2 text-[#414852] hover:bg-[#F4F5F7] lg:hidden"><Menu className="h-5 w-5" /></button>
+            <div className="min-w-0">
+              <h1 className="truncate text-[15px] font-bold text-[#252A32] sm:text-lg">{activeTab === 'overview' ? 'Dashboard overview' : adminNavItems.find(item => item.id === activeTab)?.label || 'Store management'}</h1>
+              <p className="hidden text-[11px] text-[#858B95] sm:block">P-Kess Fashion World <span className="mx-1">/</span> Administration</p>
+            </div>
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="hidden rounded-full bg-[#FFF4D6] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#815C0A] sm:inline-flex">Administrator</span>
+            <button onClick={() => onNavigate('shop')} className="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-[#E2E5E9] px-3 text-xs font-semibold text-[#424852] hover:bg-[#F4F5F7]"><ExternalLink className="h-3.5 w-3.5" /><span className="hidden sm:inline">View store</span><span className="sm:hidden">Store</span></button>
+          </div>
+        </header>
+        <main className="mx-auto max-w-[1440px] space-y-5 px-3 py-5 sm:px-5 lg:px-7">
       {/* TAB 1: EXECUTIVE KPIS OVERVIEW */}
       {activeTab === 'overview' && (
-        <div className="space-y-8">
+        <div className="space-y-5">
           {/* Main KPI Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
-              <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Revenue</span>
-              <div className="text-lg sm:text-2xl font-black text-[#ECC260]">₦{totalRevenue.toLocaleString()}</div>
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+            <div className="min-h-[112px] rounded-xl border border-[#E5E7EB] bg-white p-3 shadow-sm sm:p-4 space-y-2">
+              <span className="text-[10px] sm:text-[11px] text-[#777E89] uppercase font-semibold tracking-wide">Total Revenue</span>
+              <div className="text-xl sm:text-2xl font-bold text-[#936A0A]">₦{totalRevenue.toLocaleString()}</div>
               <span className="text-[11px] text-emerald-400 flex items-center gap-1">
                 Payment settings
               </span>
@@ -385,7 +392,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Total Orders</span>
-              <div className="text-lg sm:text-2xl font-black text-white">{orders.length}</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#252A32]">{orders.length}</div>
               <span className="text-[11px] text-[#FF66B2]">
                 {wholesaleOrders.length} Wholesale bulk orders
               </span>
@@ -393,7 +400,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Pending Bank Approvals</span>
-              <div className="text-lg sm:text-2xl font-black text-amber-400">{pendingPayments}</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#B7791F]">{pendingPayments}</div>
               <span className="text-[11px] text-zinc-400">
                 Awaiting transfer receipt verification
               </span>
@@ -401,7 +408,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
 
             <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Active Save to Buy Plans</span>
-              <div className="text-lg sm:text-2xl font-black text-[#FF66B2]">{savingsPlans.length}</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#B33B73]">{savingsPlans.length}</div>
               <span className="text-[11px] text-zinc-400">
                 Cumulative installments running
               </span>
@@ -409,21 +416,21 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
           </div>
 
           {/* Quick Action Alerts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {/* Pending Payments Alert */}
-            <div className="rounded-2xl bg-[#14141D] border border-[#2A2A3E] p-6 space-y-4">
+            <div className="rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm sm:p-5 space-y-4">
               <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <div className="flex items-center gap-2 text-amber-400 text-sm font-bold">
+                <div className="flex items-center gap-2 text-[#946B12] text-sm font-semibold">
                   <AlertTriangle className="w-4 h-4" />
                   <span>Orders Requiring Payment Verification</span>
                 </div>
-                <button onClick={() => setActiveTab('orders')} className="text-xs text-[#ECC260] hover:underline">
+                <button onClick={() => setActiveTab('orders')} className="text-xs text-[#946B12] hover:underline">
                   View All Orders
                 </button>
               </div>
 
               {orders.filter(o => o.paymentStatus === 'awaiting_verification').length === 0 ? (
-                <p className="text-xs text-zinc-500 py-3">All bank transfer payments are verified!</p>
+                <p className="text-xs text-[#737B86] py-3">All bank transfer payments are verified!</p>
               ) : (
                 <div className="space-y-3">
                   {orders.filter(o => o.paymentStatus === 'awaiting_verification').map(o => (
@@ -466,7 +473,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
                     <div className="flex items-center gap-3">
                       <img src={p.images[0]} alt="" className="w-10 h-12 object-cover rounded-lg" />
                       <div>
-                        <span className="text-white font-semibold line-clamp-1">{p.name}</span>
+                        <span className="text-[#252A32] font-semibold line-clamp-1">{p.name}</span>
                         <span className="text-zinc-500 text-[10px]">SKU: {p.sku}</span>
                       </div>
                     </div>
@@ -524,9 +531,9 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
             </button>
           </div>
 
-          <div className="rounded-2xl bg-[#111116] border border-[#252536] overflow-x-auto shadow-xl">
+          <div className="rounded-xl bg-white border border-[#E5E7EB] overflow-x-auto shadow-sm">
             <table className="w-full text-left text-xs text-zinc-300">
-              <thead className="bg-[#171722] text-zinc-400 uppercase tracking-wider border-b border-zinc-800 text-[10px]">
+              <thead className="bg-[#F5F6F8] text-[#69717D] uppercase tracking-wider border-b border-[#E5E7EB] text-[10px]">
                 <tr>
                   <th className="p-4">Product</th>
                   <th className="p-4">Category</th>
@@ -538,7 +545,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </thead>
               <tbody className="divide-y divide-zinc-800/60">
                 {products.map(prod => (
-                  <tr key={prod.id} className="hover:bg-white/5 transition-colors">
+                  <tr key={prod.id} className="hover:bg-[#F7F8FA] transition-colors">
                     <td className="p-4 flex items-center gap-3">
                       <img src={prod.images[0]} alt="" className="w-12 h-14 object-cover rounded-lg shrink-0 border border-zinc-800" />
                       <div>
@@ -977,6 +984,9 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
           </div>
         </div>
       )}
+
+        </main>
+      </div>
 
       {/* MODAL: ADD / EDIT PRODUCT */}
       {isProductModalOpen && (
