@@ -399,7 +399,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
               </span>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#13131A] border border-[#252536] space-y-2">
+            <div className="p-3 sm:p-4 rounded-xl bg-[#13131A] border border-[#252536] space-y-1.5">
               <span className="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Active Save to Buy Plans</span>
               <div className="text-lg sm:text-2xl font-black text-[#FF66B2]">{savingsPlans.length}</div>
               <span className="text-[11px] text-zinc-400">
