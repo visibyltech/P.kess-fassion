@@ -35,7 +35,7 @@ interface NavigationState {
 }
 
 const AppContent: React.FC = () => {
-  const { toasts, removeToast } = useStore();
+  const { toasts, removeToast, isAuthInitializing } = useStore();
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   const [navState, setNavState] = useState<NavigationState>(() => {
@@ -203,7 +203,7 @@ const AppContent: React.FC = () => {
         )}
       </main>
 
-      {isPageLoading && <div role="status" aria-live="polite" className="fixed inset-0 z-[200] flex items-center justify-center bg-[#08080A]/75 backdrop-blur-sm"><div className="flex items-center gap-3 rounded-2xl border border-[#D4AF37]/30 bg-[#121216] px-5 py-4 text-sm font-semibold text-white shadow-2xl"><LoaderCircle className="h-5 w-5 animate-spin text-[#ECC260]" /> Loading page…</div></div>}
+      {(isPageLoading || isAuthInitializing) && <div role="status" aria-live="polite" className="fixed inset-0 z-[200] flex items-center justify-center bg-[#08080A]/75 backdrop-blur-sm"><div className="flex items-center gap-3 rounded-2xl border border-[#D4AF37]/30 bg-[#121216] px-5 py-4 text-sm font-semibold text-white shadow-2xl"><LoaderCircle className="h-5 w-5 animate-spin text-[#ECC260]" /> {isAuthInitializing ? 'Loading account…' : 'Loading page…'}</div></div>}
 
       {/* Global Grand Footer */}
       <Footer onNavigate={handleNavigate} />
