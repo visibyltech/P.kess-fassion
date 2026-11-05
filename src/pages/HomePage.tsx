@@ -218,46 +218,46 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* SECTION E — WHOLESALE SHOPPING BANNER */}
       <section className="home-light-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden border border-[#D4AF37]/40 bg-gradient-to-r from-[#121218] via-[#1A131C] to-[#121218] p-8 sm:p-12 lg:p-16 shadow-2xl">
+        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#D4AF37]/40 bg-gradient-to-r from-[#121218] via-[#1A131C] to-[#121218] p-5 sm:p-12 lg:p-16 shadow-2xl">
           {/* Subtle gold ambient ring glow */}
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#D4AF37]/15 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#E6007A]/15 blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-center">
+            <div className="lg:col-span-8 space-y-3 sm:space-y-4">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#ECC260] text-xs font-bold uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-[#E6007A]" />
                 B2B & Retailer Programme
               </div>
 
-              <h2 className="font-brand-display text-3xl sm:text-5xl font-extrabold text-white uppercase">
+              <h2 className="font-brand-display text-2xl sm:text-5xl font-extrabold text-white uppercase">
                 More Style. <span className="gold-gradient-text">More Savings.</span>
               </h2>
 
-              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+              <p className="text-zinc-300 text-xs sm:text-base leading-relaxed max-w-2xl">
                 Are you a boutique owner or fashion retailer? Shop in bulk and enjoy up to <strong>15% wholesale savings</strong> on eligible orders of 10 or more units. Contact P-Kess for bulk enquiries and delivery arrangements.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
-                  <div className="text-lg font-bold text-[#ECC260]">10 - 24 Units</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-1 sm:pt-2">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-black/40 border border-white/10">
+                  <div className="text-base sm:text-lg font-bold text-[#ECC260]">10 - 24 Units</div>
                   <div className="text-xs text-zinc-400">15% Bulk Discount</div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
                   <div className="text-lg font-bold text-[#ECC260]">25 - 49 Units</div>
                   <div className="text-xs text-zinc-400">18% Bulk Discount</div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-[#E6007A]/40">
-                  <div className="text-lg font-bold text-[#FF66B2]">50+ Units</div>
+                <div className="p-3 sm:p-3.5 rounded-xl bg-black/40 border border-[#E6007A]/40">
+                  <div className="text-base sm:text-lg font-bold text-[#FF66B2]">50+ Units</div>
                   <div className="text-xs text-zinc-400">15% Wholesale Savings</div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-4 flex flex-col gap-3">
+            <div className="lg:col-span-4 flex flex-col gap-2.5 sm:gap-3">
               <button
                 onClick={() => onNavigate('wholesale')}
-                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+                className="w-full py-3 sm:py-4 px-5 sm:px-6 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
               >
                 Shop Wholesale Now
                 <ArrowRight className="w-4 h-4" />
@@ -267,7 +267,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 href={BRAND_CONSTANTS.socials.whatsapp}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3 px-6 rounded-xl bg-[#25D366]/20 border border-[#25D366]/40 hover:bg-[#25D366]/30 text-[#25D366] font-semibold text-xs text-center transition-colors"
+                className="w-full py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl bg-[#25D366]/20 border border-[#25D366]/40 hover:bg-[#25D366]/30 text-[#25D366] font-semibold text-xs text-center transition-colors"
               >
                 Chat Wholesale Desk on WhatsApp
               </a>
