@@ -53,6 +53,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   const [awaitingAuthentication, setAwaitingAuthentication] = useState(false);
   const [copiedBank, setCopiedBank] = useState(false);
   const [uploadedProofUrl, setUploadedProofUrl] = useState<string>('');
+  const [isUploadingProof, setIsUploadingProof] = useState(false);
   const [bankReference, setBankReference] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<any>(null);
@@ -89,13 +90,31 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     setTimeout(() => setCopiedBank(false), 3000);
   };
 
-  const handleSimulateReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSimulateReceiptUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Create local preview blob
-      const url = URL.createObjectURL(file);
-      setUploadedProofUrl(url);
-      showToast("Transfer receipt attached successfully!");
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type) || file.size > 10 * 1024 * 1024) {
+      showToast('Choose a JPG, PNG, WebP or AVIF receipt under 10 MB.', 'error');
+      e.currentTarget.value = '';
+      return;
+    }
+    setIsUploadingProof(true);
+    try {
+      const body = new FormData();
+      body.append('file', file);
+      body.append('upload_preset', 'pkess-products');
+      const response = await fetch('https://api.cloudinary.com/v1_1/jmit9wsv/image/upload', { method: 'POST', body });
+      if (!response.ok) throw new Error('Receipt upload failed. Please try again.');
+      const uploaded = await response.json();
+      if (!uploaded.secure_url) throw new Error('Cloudinary did not return a receipt URL.');
+      setUploadedProofUrl(uploaded.secure_url);
+      showToast('Transfer receipt uploaded successfully!');
+    } catch (error) {
+      console.error('Receipt upload failed:', error);
+      showToast(error instanceof Error ? error.message : 'Could not upload receipt.', 'error');
+    } finally {
+      setIsUploadingProof(false);
+      e.currentTarget.value = '';
     }
   };
 
@@ -144,6 +163,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     }
 
     // Require real transfer evidence before recording a bank-transfer order.
+    if (isUploadingProof) { showToast('Please wait for the receipt upload to finish.', 'warning'); return; }
     if (!uploadedProofUrl) {
       showToast('Please upload your bank transfer receipt before submitting the order.', 'error');
       return;
@@ -662,7 +682,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
             <button
               type="submit"
-              disabled={isProcessing}
+              disabled={isProcessing || isUploadingProof}
               className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#ECC260] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all shadow-lg shadow-[#D4AF37]/25 disabled:opacity-50"
             >
               {isProcessing ? 'Processing Transaction...' : !currentUser ? 'Sign In / Sign Up to Continue' : !showPaymentDetails ? 'Continue to Payment' : paymentMethod === 'save_to_buy' ? 'Continue to Save to Buy' : paymentMethod === 'bnpl_credibly' ? 'Continue to Credibly' : `Submit Order (₦${finalPayableTotal.toLocaleString()})`}
