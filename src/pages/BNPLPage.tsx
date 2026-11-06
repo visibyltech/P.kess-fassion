@@ -36,7 +36,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
   const [itemsSummary, setItemsSummary] = useState('Luxury Haute Couture & Accessories');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
       setIsAuthModalOpen(true);
