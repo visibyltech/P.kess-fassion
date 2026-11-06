@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, setDoc, query, where } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { firebaseAuth, firestore } from '../lib/firebase';
 import { 
@@ -17,9 +17,6 @@ import {
 import { 
   INITIAL_WHOLESALE_SETTINGS, 
   INITIAL_PAYMENT_SETTINGS, 
-  INITIAL_CUSTOMERS, 
-  INITIAL_ORDERS, 
-  INITIAL_SAVINGS_PLANS 
 } from '../data/initialData';
 
 interface Toast {
@@ -67,28 +64,28 @@ interface StoreContextType {
 
   // Orders
   orders: Order[];
-  createOrder: (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Order;
-  updateOrderStatus: (orderId: string, status: OrderStatus, trackingNumber?: string, courier?: string) => void;
-  updatePaymentStatus: (orderId: string, status: PaymentStatus) => void;
-  uploadOrderProof: (orderId: string, proofUrl: string, bankRef: string) => void;
+  createOrder: (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>) => Promise<Order>;
+  updateOrderStatus: (orderId: string, status: OrderStatus, trackingNumber?: string, courier?: string) => Promise<void>;
+  updatePaymentStatus: (orderId: string, status: PaymentStatus) => Promise<void>;
+  uploadOrderProof: (orderId: string, proofUrl: string, bankRef: string) => Promise<void>;
   getOrderById: (orderIdOrNumber: string) => Order | undefined;
 
   // Save to Buy
   savingsPlans: SaveToBuyPlan[];
-  createSavingsPlan: (plan: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>, initialDeposit?: number) => SaveToBuyPlan;
-  addSavingsTransaction: (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => void;
-  verifySavingsTransaction: (planId: string, transactionId: string, approve: boolean) => void;
+  createSavingsPlan: (plan: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>, initialDeposit?: number) => Promise<SaveToBuyPlan>;
+  addSavingsTransaction: (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => Promise<void>;
+  verifySavingsTransaction: (planId: string, transactionId: string, approve: boolean) => Promise<void>;
 
   // BNPL (Credibly)
   bnplApplications: BNPLApplication[];
-  submitBNPLApplication: (app: Omit<BNPLApplication, 'id' | 'createdAt' | 'status' | 'referenceNumber' | 'providerNote'>) => BNPLApplication;
-  updateBNPLStatus: (appId: string, status: BNPLApplication['status'], note?: string) => void;
+  submitBNPLApplication: (app: Omit<BNPLApplication, 'id' | 'createdAt' | 'status' | 'referenceNumber' | 'providerNote'>) => Promise<BNPLApplication>;
+  updateBNPLStatus: (appId: string, status: BNPLApplication['status'], note?: string) => Promise<void>;
 
   // Settings
   wholesaleSettings: WholesaleSettings;
-  updateWholesaleSettings: (settings: Partial<WholesaleSettings>) => void;
+  updateWholesaleSettings: (settings: Partial<WholesaleSettings>) => Promise<void>;
   paymentSettings: PaymentSettings;
-  updatePaymentSettings: (settings: Partial<PaymentSettings>) => void;
+  updatePaymentSettings: (settings: Partial<PaymentSettings>) => Promise<void>;
 
   // Quick View Product
   quickViewProduct: Product | null;
@@ -177,30 +174,15 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [orders, setOrders] = useState<Order[]>(() => {
-    const saved = localStorage.getItem('pkess_orders');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [orders, setOrders] = useState<Order[]>([]);
 
-  const [savingsPlans, setSavingsPlans] = useState<SaveToBuyPlan[]>(() => {
-    const saved = localStorage.getItem('pkess_savings_plans');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [savingsPlans, setSavingsPlans] = useState<SaveToBuyPlan[]>([]);
 
-  const [bnplApplications, setBnplApplications] = useState<BNPLApplication[]>(() => {
-    const saved = localStorage.getItem('pkess_bnpl_apps');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [bnplApplications, setBnplApplications] = useState<BNPLApplication[]>([]);
 
-  const [wholesaleSettings, setWholesaleSettings] = useState<WholesaleSettings>(() => {
-    const saved = localStorage.getItem('pkess_wholesale_settings');
-    return saved ? JSON.parse(saved) : INITIAL_WHOLESALE_SETTINGS;
-  });
+  const [wholesaleSettings, setWholesaleSettings] = useState<WholesaleSettings>(INITIAL_WHOLESALE_SETTINGS);
 
-  const [paymentSettings, setPaymentSettings] = useState<PaymentSettings>(() => {
-    const saved = localStorage.getItem('pkess_payment_settings');
-    return saved ? JSON.parse(saved) : INITIAL_PAYMENT_SETTINGS;
-  });
+  const [paymentSettings, setPaymentSettings] = useState<PaymentSettings>(INITIAL_PAYMENT_SETTINGS);
 
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -216,7 +198,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       error => {
         console.error('Firestore product catalogue listener failed:', error);
         setProducts([]);
-        setProductsLoaded(true);
       }
     );
     return unsubscribe;
@@ -235,25 +216,42 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('pkess_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
+  // Orders and customer finance records are synchronized from Firestore.
   useEffect(() => {
-    localStorage.setItem('pkess_orders', JSON.stringify(orders));
-  }, [orders]);
+    if (!currentUser) {
+      setOrders([]);
+      setSavingsPlans([]);
+      setBnplApplications([]);
+      return;
+    }
+    const orderQuery = currentUser.role === 'admin'
+      ? collection(firestore, 'orders')
+      : query(collection(firestore, 'orders'), where('customerId', '==', currentUser.id));
+    const planQuery = currentUser.role === 'admin'
+      ? collection(firestore, 'savingsPlans')
+      : query(collection(firestore, 'savingsPlans'), where('customerId', '==', currentUser.id));
+    const bnplQuery = currentUser.role === 'admin'
+      ? collection(firestore, 'bnplApplications')
+      : query(collection(firestore, 'bnplApplications'), where('customerId', '==', currentUser.id));
+    const unsubOrders = onSnapshot(orderQuery, snap => setOrders(snap.docs.map(d => ({ ...d.data(), id: d.id } as Order))), err => console.error('Orders listener:', err));
+    const unsubPlans = onSnapshot(planQuery, snap => setSavingsPlans(snap.docs.map(d => ({ ...d.data(), id: d.id } as SaveToBuyPlan))), err => console.error('Savings listener:', err));
+    const unsubBnpl = onSnapshot(bnplQuery, snap => setBnplApplications(snap.docs.map(d => ({ ...d.data(), id: d.id } as BNPLApplication))), err => console.error('BNPL listener:', err));
+    return () => { unsubOrders(); unsubPlans(); unsubBnpl(); };
+  }, [currentUser?.id, currentUser?.role]);
 
   useEffect(() => {
-    localStorage.setItem('pkess_savings_plans', JSON.stringify(savingsPlans));
-  }, [savingsPlans]);
-
-  useEffect(() => {
-    localStorage.setItem('pkess_bnpl_apps', JSON.stringify(bnplApplications));
-  }, [bnplApplications]);
-
-  useEffect(() => {
-    localStorage.setItem('pkess_wholesale_settings', JSON.stringify(wholesaleSettings));
-  }, [wholesaleSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('pkess_payment_settings', JSON.stringify(paymentSettings));
-  }, [paymentSettings]);
+    const unsubWholesale = onSnapshot(doc(firestore, 'storeSettings', 'wholesale'), snap => {
+      if (snap.exists()) setWholesaleSettings({ ...INITIAL_WHOLESALE_SETTINGS, ...(snap.data() as Partial<WholesaleSettings>) });
+    }, error => console.error('Wholesale settings listener:', error));
+    const unsubPayments = onSnapshot(doc(firestore, 'storeSettings', 'payments'), snap => {
+      if (snap.exists()) {
+        const data = snap.data() as Partial<PaymentSettings>;
+        // Never expose or persist a Paystack secret key in the browser.
+        setPaymentSettings({ ...INITIAL_PAYMENT_SETTINGS, ...data, paystackSecretKey: '' });
+      }
+    }, error => console.error('Payment settings listener:', error));
+    return () => { unsubWholesale(); unsubPayments(); };
+  }, []);
 
   // Toast notification helper
   const showToast = (message: string, type: Toast['type'] = 'success') => {
@@ -503,59 +501,56 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // Orders
-  const createOrder = (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Order => {
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const newOrder: Order = {
+  // Orders: persist every transaction to Firestore before confirming it to the customer.
+  const createOrder = async (orderData: Omit<Order, 'id' | 'orderNumber' | 'createdAt'>): Promise<Order> => {
+    if (!firebaseAuth.currentUser || firebaseAuth.currentUser.uid !== orderData.customerId) {
+      throw new Error('Please sign in again before placing this order.');
+    }
+    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+    const orderNumber = `PK-${new Date().getFullYear()}-${randomSuffix}`;
+    const payload = {
       ...orderData,
-      id: 'ord-' + Date.now(),
-      orderNumber: `PK-2026-${randomSuffix}`,
+      orderNumber,
       createdAt: new Date().toISOString(),
-      estimatedDeliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      estimatedDeliveryDate: new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0]
     };
-    setOrders(prev => [newOrder, ...prev]);
+    const result = await addDoc(collection(firestore, 'orders'), payload);
+    const newOrder: Order = { ...payload, id: result.id };
     clearCart();
+    showToast('Your order has been saved successfully.');
     return newOrder;
   };
 
-  const updateOrderStatus = (orderId: string, status: OrderStatus, trackingNumber?: string, courier?: string) => {
-    setOrders(prev => prev.map(o => {
-      if (o.id === orderId || o.orderNumber === orderId) {
-        return {
-          ...o,
-          orderStatus: status,
-          ...(trackingNumber ? { trackingNumber } : {}),
-          ...(courier ? { courier } : {})
-        };
-      }
-      return o;
-    }));
+  const findOrderDocument = async (orderId: string) => {
+    const found = orders.find(o => o.id === orderId || o.orderNumber === orderId);
+    if (!found) throw new Error('Order not found or not accessible.');
+    return found;
+  };
+
+  const updateOrderStatus = async (orderId: string, status: OrderStatus, trackingNumber?: string, courier?: string) => {
+    const order = await findOrderDocument(orderId);
+    await updateDoc(doc(firestore, 'orders', order.id), {
+      orderStatus: status,
+      ...(trackingNumber ? { trackingNumber } : {}),
+      ...(courier ? { courier } : {}),
+      updatedAt: serverTimestamp()
+    });
     showToast(`Order status updated to ${status.toUpperCase()}`);
   };
 
-  const updatePaymentStatus = (orderId: string, status: PaymentStatus) => {
-    setOrders(prev => prev.map(o => {
-      if (o.id === orderId || o.orderNumber === orderId) {
-        return { ...o, paymentStatus: status };
-      }
-      return o;
-    }));
+  const updatePaymentStatus = async (orderId: string, status: PaymentStatus) => {
+    const order = await findOrderDocument(orderId);
+    await updateDoc(doc(firestore, 'orders', order.id), { paymentStatus: status, updatedAt: serverTimestamp() });
     showToast(`Payment status updated to ${status.toUpperCase()}`);
   };
 
-  const uploadOrderProof = (orderId: string, proofUrl: string, bankRef: string) => {
-    setOrders(prev => prev.map(o => {
-      if (o.id === orderId || o.orderNumber === orderId) {
-        return {
-          ...o,
-          proofOfPaymentUrl: proofUrl,
-          bankTransferRef: bankRef,
-          paymentStatus: 'awaiting_verification'
-        };
-      }
-      return o;
-    }));
-    showToast("Payment proof submitted! Awaiting admin verification.");
+  const uploadOrderProof = async (orderId: string, proofUrl: string, bankRef: string) => {
+    const order = await findOrderDocument(orderId);
+    await updateDoc(doc(firestore, 'orders', order.id), {
+      proofOfPaymentUrl: proofUrl, bankTransferRef: bankRef,
+      paymentStatus: 'awaiting_verification', updatedAt: serverTimestamp()
+    });
+    showToast('Payment proof submitted! Awaiting admin verification.');
   };
 
   const getOrderById = (idOrNumber: string) => {
@@ -563,141 +558,88 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return orders.find(o => o.id.toUpperCase() === clean || o.orderNumber.toUpperCase() === clean);
   };
 
-  // Save to Buy
-  const createSavingsPlan = (
+  // Save to Buy plans and deposits are shared Firestore records.
+  const createSavingsPlan = async (
     planData: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>,
     initialDeposit = 0
-  ): SaveToBuyPlan => {
-    const planId = 'stb-' + Date.now();
+  ): Promise<SaveToBuyPlan> => {
+    if (!firebaseAuth.currentUser || firebaseAuth.currentUser.uid !== planData.customerId) throw new Error('Please sign in again.');
+    const planId = `stb-${Date.now()}`;
     const initialTx = initialDeposit > 0 ? [{
-      id: 'tx-' + Date.now(),
-      planId,
-      amount: initialDeposit,
-      date: new Date().toISOString().split('T')[0],
-      paymentMethod: 'paystack' as const,
-      status: 'approved' as const,
-      reference: 'DEP-INIT-' + Math.floor(1000 + Math.random() * 9000)
+      id: `tx-${Date.now()}`, planId, amount: initialDeposit,
+      date: new Date().toISOString().split('T')[0], paymentMethod: 'bank_transfer' as const,
+      status: 'pending' as const, reference: 'DEP-INIT-' + Math.floor(1000 + Math.random() * 9000)
     }] : [];
-
-    const newPlan: SaveToBuyPlan = {
-      ...planData,
-      id: planId,
-      amountSaved: initialDeposit,
-      status: initialDeposit >= planData.totalAmount ? 'completed' : 'active',
-      createdAt: new Date().toISOString().split('T')[0],
-      transactions: initialTx
+    const payload: Omit<SaveToBuyPlan, 'id'> = {
+      ...planData, amountSaved: 0, status: 'active',
+      createdAt: new Date().toISOString().split('T')[0], transactions: initialTx
     };
-
-    setSavingsPlans(prev => [newPlan, ...prev]);
-    showToast(`Save to Buy plan activated for ${planData.product.name}!`);
-    return newPlan;
+    const result = await addDoc(collection(firestore, 'savingsPlans'), payload);
+    const plan = { ...payload, id: result.id };
+    showToast(`Save to Buy plan created for ${planData.product.name}. Initial bank-transfer deposits await verification.`);
+    return plan;
   };
 
-  const addSavingsTransaction = (
-    planId: string, 
-    amount: number, 
-    paymentMethod: 'paystack' | 'bank_transfer',
-    proofUrl?: string,
-    reference?: string
-  ) => {
-    setSavingsPlans(prev => prev.map(p => {
-      if (p.id === planId) {
-        const isApprovedNow = paymentMethod === 'paystack';
-        const newTx = {
-          id: 'tx-' + Date.now(),
-          planId,
-          amount,
-          date: new Date().toISOString().split('T')[0],
-          paymentMethod,
-          status: isApprovedNow ? 'approved' as const : 'pending' as const,
-          reference: reference || 'STB-DEP-' + Math.floor(1000 + Math.random() * 9000),
-          proofUrl
-        };
-        const newTotalSaved = isApprovedNow ? p.amountSaved + amount : p.amountSaved;
-        const newStatus = newTotalSaved >= p.totalAmount ? 'completed' : p.status;
-        return {
-          ...p,
-          amountSaved: newTotalSaved,
-          status: newStatus,
-          transactions: [newTx, ...p.transactions]
-        };
-      }
-      return p;
-    }));
-
-    if (paymentMethod === 'bank_transfer') {
-      showToast("Deposit receipt uploaded! Pending admin confirmation.", "info");
-    } else {
-      showToast(`₦${amount.toLocaleString()} deposited successfully!`);
-    }
+  const addSavingsTransaction = async (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => {
+    const plan = savingsPlans.find(p => p.id === planId);
+    if (!plan) throw new Error('Savings plan not found.');
+    const tx = {
+      id: `tx-${Date.now()}`, planId, amount,
+      date: new Date().toISOString().split('T')[0], paymentMethod,
+      status: 'pending' as const, reference: reference || 'STB-DEP-' + Math.floor(1000 + Math.random() * 9000), proofUrl
+    };
+    await updateDoc(doc(firestore, 'savingsPlans', planId), {
+      transactions: [tx, ...plan.transactions], updatedAt: serverTimestamp()
+    });
+    showToast('Deposit submitted and awaiting payment verification.', 'info');
   };
 
-  const verifySavingsTransaction = (planId: string, transactionId: string, approve: boolean) => {
-    setSavingsPlans(prev => prev.map(p => {
-      if (p.id === planId) {
-        const tx = p.transactions.find(t => t.id === transactionId);
-        if (!tx || tx.status !== 'pending') return p;
-
-        const updatedTxList = p.transactions.map(t => {
-          if (t.id === transactionId) {
-            return { ...t, status: approve ? 'approved' as const : 'rejected' as const };
-          }
-          return t;
-        });
-
-        const newSaved = approve ? p.amountSaved + tx.amount : p.amountSaved;
-        const newStatus = newSaved >= p.totalAmount ? 'completed' : p.status;
-
-        return {
-          ...p,
-          amountSaved: newSaved,
-          status: newStatus,
-          transactions: updatedTxList
-        };
-      }
-      return p;
-    }));
-    showToast(approve ? "Deposit approved!" : "Deposit rejected", approve ? "success" : "warning");
+  const verifySavingsTransaction = async (planId: string, transactionId: string, approve: boolean) => {
+    const plan = savingsPlans.find(p => p.id === planId);
+    if (!plan) throw new Error('Savings plan not found.');
+    const tx = plan.transactions.find(t => t.id === transactionId);
+    if (!tx || tx.status !== 'pending') throw new Error('This deposit has already been reviewed.');
+    const transactions = plan.transactions.map(t => t.id === transactionId ? { ...t, status: approve ? 'approved' as const : 'rejected' as const } : t);
+    const amountSaved = approve ? plan.amountSaved + tx.amount : plan.amountSaved;
+    await updateDoc(doc(firestore, 'savingsPlans', planId), {
+      transactions, amountSaved,
+      status: amountSaved >= plan.totalAmount ? 'completed' : plan.status,
+      updatedAt: serverTimestamp()
+    });
+    showToast(approve ? 'Deposit approved!' : 'Deposit rejected', approve ? 'success' : 'warning');
   };
 
-  // BNPL
-  const submitBNPLApplication = (appData: Omit<BNPLApplication, 'id' | 'createdAt' | 'status' | 'referenceNumber' | 'providerNote'>): BNPLApplication => {
-    const newApp: BNPLApplication = {
-      ...appData,
-      id: 'bnpl-' + Date.now(),
-      status: 'under_review',
+  const submitBNPLApplication = async (appData: Omit<BNPLApplication, 'id' | 'createdAt' | 'status' | 'referenceNumber' | 'providerNote'>): Promise<BNPLApplication> => {
+    if (!firebaseAuth.currentUser || firebaseAuth.currentUser.uid !== appData.customerId) throw new Error('Please sign in again.');
+    const payload = {
+      ...appData, status: 'under_review' as const,
       referenceNumber: 'CRD-NG-' + Math.floor(100000 + Math.random() * 900000),
       createdAt: new Date().toISOString(),
-      providerNote: "Application logged in Credibly merchant queue. Awaiting provider credit facility terms."
+      providerNote: 'Application received. Provider approval and terms are not yet confirmed.'
     };
-    setBnplApplications(prev => [newApp, ...prev]);
-    showToast("Credibly BNPL application submitted for assessment!", "info");
-    return newApp;
+    const result = await addDoc(collection(firestore, 'bnplApplications'), payload);
+    showToast('BNPL application submitted for review.', 'info');
+    return { ...payload, id: result.id };
   };
 
-  const updateBNPLStatus = (appId: string, status: BNPLApplication['status'], note?: string) => {
-    setBnplApplications(prev => prev.map(a => {
-      if (a.id === appId) {
-        return {
-          ...a,
-          status,
-          ...(note ? { providerNote: note } : {})
-        };
-      }
-      return a;
-    }));
+  const updateBNPLStatus = async (appId: string, status: BNPLApplication['status'], note?: string) => {
+    await updateDoc(doc(firestore, 'bnplApplications', appId), { status, ...(note ? { providerNote: note } : {}), updatedAt: serverTimestamp() });
     showToast(`BNPL Application status updated to ${status}`);
   };
 
-  // Settings
-  const updateWholesaleSettings = (newSettings: Partial<WholesaleSettings>) => {
-    setWholesaleSettings(prev => ({ ...prev, ...newSettings }));
-    showToast("Wholesale tier rules saved");
+  const updateWholesaleSettings = async (newSettings: Partial<WholesaleSettings>) => {
+    const merged = { ...wholesaleSettings, ...newSettings };
+    await setDoc(doc(firestore, 'storeSettings', 'wholesale'), merged, { merge: true });
+    showToast('Wholesale tier rules saved');
   };
 
-  const updatePaymentSettings = (newSettings: Partial<PaymentSettings>) => {
-    setPaymentSettings(prev => ({ ...prev, ...newSettings }));
-    showToast("Payment gateways & bank account updated");
+  const updatePaymentSettings = async (newSettings: Partial<PaymentSettings>) => {
+    // Only public payment details are stored here; never persist secret credentials client-side.
+    const { bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode } = { ...paymentSettings, ...newSettings };
+    await setDoc(doc(firestore, 'storeSettings', 'payments'), {
+      bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode
+    }, { merge: true });
+    showToast('Payment details saved for all customers');
   };
 
   return (

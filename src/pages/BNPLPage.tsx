@@ -36,13 +36,14 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
   const [itemsSummary, setItemsSummary] = useState('Luxury Haute Couture & Accessories');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
       setIsAuthModalOpen(true);
       return;
     }
-    submitBNPLApplication({
+    try {
+    await submitBNPLApplication({
       customerId: currentUser.id,
       customerName: fullName || currentUser.name,
       customerEmail: email || currentUser.email,
@@ -55,6 +56,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
       bvnLast4: bvnLast4 || '0000'
     });
     setSubmitted(true);
+    } catch (error) { console.error('BNPL submission failed:', error); window.alert('We could not save your application. Please try again.'); }
   };
 
   const userApps = bnplApplications.filter(a => !currentUser || a.customerId === currentUser.id);

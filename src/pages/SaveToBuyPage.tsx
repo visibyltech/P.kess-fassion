@@ -59,6 +59,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const [depositAmount, setDepositAmount] = useState<number>(10000);
   const [depositMethod, setDepositMethod] = useState<'paystack' | 'bank_transfer'>('paystack');
   const [proofUrl, setProofUrl] = useState<string>('');
+  const [isUploadingProof, setIsUploadingProof] = useState(false);
   const [depositRef, setDepositRef] = useState<string>('');
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
 
@@ -95,7 +96,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   // Filter plans belonging to current user or show demo plans
   const userPlans = savingsPlans.filter(p => !currentUser || p.customerId === currentUser.id || currentUser.role === 'admin');
 
-  const handleStartPlan = (e: React.FormEvent) => {
+  const handleStartPlan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
       setIsAuthModalOpen(true);
@@ -110,7 +111,8 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     else if (frequency === 'biweekly') nextDate.setDate(nextDate.getDate() + 14);
     else if (frequency === 'monthly') nextDate.setMonth(nextDate.getMonth() + 1);
 
-    const plan = createSavingsPlan({
+    try {
+    await createSavingsPlan({
       customerId: currentUser.id,
       customerName: currentUser.name,
       customerEmail: currentUser.email,
@@ -128,6 +130,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     }, initialDepositAmount);
 
     setActiveTab('dashboard');
+    } catch (error) { console.error('Could not create savings plan:', error); }
   };
 
   const handleOpenDepositModal = (planId: string, suggestedAmount: number) => {
@@ -137,21 +140,18 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     setIsDepositModalOpen(true);
   };
 
-  const handleConfirmDeposit = () => {
+  const handleConfirmDeposit = async () => {
     if (!activePlanForDeposit) return;
-    addSavingsTransaction(
-      activePlanForDeposit, 
-      depositAmount, 
-      depositMethod, 
-      proofUrl || (depositMethod === 'bank_transfer' ? 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80' : undefined),
-      depositRef
-    );
-    setIsDepositModalOpen(false);
+    try {
+      if (depositMethod === 'bank_transfer' && !proofUrl) { window.alert('Please upload your actual transfer receipt before submitting.'); return; }
+      await addSavingsTransaction(activePlanForDeposit, depositAmount, depositMethod, proofUrl || undefined, depositRef);
+      setIsDepositModalOpen(false);
+    } catch (error) { console.error('Could not submit savings deposit:', error); }
   };
 
-  const handleCompleteToOrder = (plan: typeof savingsPlans[0]) => {
+  const handleCompleteToOrder = async (plan: typeof savingsPlans[0]) => {
     // Generate order from completed plan
-    createOrder({
+    await createOrder({
       customerId: plan.customerId,
       customerName: plan.customerName,
       customerEmail: plan.customerEmail,
@@ -677,14 +677,14 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => setDepositMethod('paystack')}
+                  onClick={() => window.alert('Paystack deposits are not activated yet. Please use bank transfer.')}
                   className={`p-3 rounded-xl border text-xs font-semibold transition-all ${
                     depositMethod === 'paystack'
                       ? 'border-[#D4AF37] bg-[#D4AF37]/15 text-[#ECC260]'
                       : 'border-zinc-800 text-zinc-400'
                   }`}
                 >
-                  Paystack (Instant Card/USSD)
+                  Paystack (coming soon)
                 </button>
                 <button
                   type="button"
@@ -700,6 +700,30 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
               </div>
             </div>
 
+            {depositMethod === 'bank_transfer' && (
+              <div className="p-4 rounded-xl bg-black/50 border border-zinc-800 space-y-2 text-xs">
+                <label className="block text-zinc-300 font-semibold">Upload actual transfer receipt</label>
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={isUploadingProof} onChange={async (e) => {
+                  const input = e.currentTarget;
+                  const file = input.files?.[0];
+                  if (!file) return;
+                  if (file.size > 10 * 1024 * 1024) { window.alert('Receipt must be under 10 MB.'); input.value = ''; return; }
+                  setIsUploadingProof(true);
+                  try {
+                    const body = new FormData();
+                    body.append('file', file);
+                    body.append('upload_preset', 'pkess-products');
+                    const response = await fetch('https://api.cloudinary.com/v1_1/jmit9wsv/image/upload', { method: 'POST', body });
+                    if (!response.ok) throw new Error('Receipt upload failed.');
+                    const result = await response.json();
+                    if (!result.secure_url) throw new Error('No receipt URL returned.');
+                    setProofUrl(result.secure_url);
+                  } catch (error) { console.error(error); window.alert('Could not upload receipt. Please try again.'); }
+                  finally { setIsUploadingProof(false); input.value = ''; }
+                }} className="block w-full text-xs text-zinc-300" />
+                {proofUrl && <p className="text-emerald-400">Receipt uploaded successfully.</p>}
+              </div>
+            )}
             {depositMethod === 'bank_transfer' && (
               <div className="p-4 rounded-xl bg-black/50 border border-zinc-800 space-y-2 text-xs">
                 <div className="text-zinc-400">P-Kess Bank Account:</div>
@@ -723,6 +747,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
 
             <button
               onClick={handleConfirmDeposit}
+              disabled={isUploadingProof}
               className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 shadow-lg"
             >
               Confirm ₦{depositAmount.toLocaleString()} Deposit
