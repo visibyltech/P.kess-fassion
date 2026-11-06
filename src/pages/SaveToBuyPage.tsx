@@ -95,7 +95,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   // Filter plans belonging to current user or show demo plans
   const userPlans = savingsPlans.filter(p => !currentUser || p.customerId === currentUser.id || currentUser.role === 'admin');
 
-  const handleStartPlan = (e: React.FormEvent) => {
+  const handleStartPlan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) {
       setIsAuthModalOpen(true);
@@ -110,7 +110,8 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     else if (frequency === 'biweekly') nextDate.setDate(nextDate.getDate() + 14);
     else if (frequency === 'monthly') nextDate.setMonth(nextDate.getMonth() + 1);
 
-    const plan = createSavingsPlan({
+    try {
+    await createSavingsPlan({
       customerId: currentUser.id,
       customerName: currentUser.name,
       customerEmail: currentUser.email,
@@ -128,6 +129,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     }, initialDepositAmount);
 
     setActiveTab('dashboard');
+    } catch (error) { console.error('Could not create savings plan:', error); }
   };
 
   const handleOpenDepositModal = (planId: string, suggestedAmount: number) => {
@@ -137,21 +139,18 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     setIsDepositModalOpen(true);
   };
 
-  const handleConfirmDeposit = () => {
+  const handleConfirmDeposit = async () => {
     if (!activePlanForDeposit) return;
-    addSavingsTransaction(
-      activePlanForDeposit, 
-      depositAmount, 
-      depositMethod, 
-      proofUrl || (depositMethod === 'bank_transfer' ? 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=400&q=80' : undefined),
-      depositRef
-    );
-    setIsDepositModalOpen(false);
+    try {
+      if (depositMethod === 'bank_transfer' && !proofUrl) { window.alert('Please upload your actual transfer receipt before submitting.'); return; }
+      await addSavingsTransaction(activePlanForDeposit, depositAmount, depositMethod, proofUrl || undefined, depositRef);
+      setIsDepositModalOpen(false);
+    } catch (error) { console.error('Could not submit savings deposit:', error); }
   };
 
-  const handleCompleteToOrder = (plan: typeof savingsPlans[0]) => {
+  const handleCompleteToOrder = async (plan: typeof savingsPlans[0]) => {
     // Generate order from completed plan
-    createOrder({
+    await createOrder({
       customerId: plan.customerId,
       customerName: plan.customerName,
       customerEmail: plan.customerEmail,
