@@ -42,6 +42,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
       setIsAuthModalOpen(true);
       return;
     }
+    try {
     await submitBNPLApplication({
       customerId: currentUser.id,
       customerName: fullName || currentUser.name,
@@ -55,6 +56,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
       bvnLast4: bvnLast4 || '0000'
     });
     setSubmitted(true);
+    } catch (error) { console.error('BNPL submission failed:', error); window.alert('We could not save your application. Please try again.'); }
   };
 
   const userApps = bnplApplications.filter(a => !currentUser || a.customerId === currentUser.id);
