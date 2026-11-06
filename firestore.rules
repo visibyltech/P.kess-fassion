@@ -2,17 +2,15 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Public catalogue reads. Product management is restricted to the
-    // authenticated P-Kess administrator account or a trusted admin profile.
+    function signedIn() { return request.auth != null; }
     function isStoreAdmin() {
-      return request.auth != null
-        && (
-          request.auth.token.email == 'pkessvariety@gmail.com'
-          || (
-            exists(/databases/$(database)/documents/users/$(request.auth.uid))
-            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
-          )
-        );
+      return signedIn() && (
+        request.auth.token.email == 'pkessvariety@gmail.com'
+        || (
+          exists(/databases/$(database)/documents/users/$(request.auth.uid))
+          && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        )
+      );
     }
 
     match /products/{productId} {
@@ -20,15 +18,42 @@ service cloud.firestore {
       allow create, update, delete: if isStoreAdmin();
     }
 
-    // Customers may access only their own profile. Role changes remain blocked.
+    match /orders/{orderId} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if isStoreAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update: if isStoreAdmin();
+      allow delete: if isStoreAdmin();
+    }
+
+    match /savingsPlans/{planId} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if isStoreAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update: if isStoreAdmin() || (
+        signedIn()
+        && resource.data.customerId == request.auth.uid
+        && request.resource.data.customerId == resource.data.customerId
+        && request.resource.data.amountSaved == resource.data.amountSaved
+        && request.resource.data.status == resource.data.status
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['transactions', 'updatedAt'])
+      );
+      allow delete: if isStoreAdmin();
+    }
+
+    match /bnplApplications/{applicationId} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if isStoreAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update, delete: if isStoreAdmin();
+    }
+
+    match /storeSettings/{settingId} {
+      allow read: if true;
+      allow write: if isStoreAdmin();
+    }
+
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.role == 'customer';
-      allow update: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.role == resource.data.role;
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow create: if signedIn() && request.auth.uid == userId && request.resource.data.role == 'customer';
+      allow update: if signedIn() && request.auth.uid == userId && request.resource.data.role == resource.data.role;
     }
   }
 }
