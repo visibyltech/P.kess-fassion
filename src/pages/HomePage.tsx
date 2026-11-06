@@ -243,9 +243,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <div className="text-base sm:text-lg font-bold text-[#ECC260]">10 - 24 Units</div>
                   <div className="text-xs text-zinc-400">15% Bulk Discount</div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
-                  <div className="text-lg font-bold text-[#ECC260]">25 - 49 Units</div>
-                  <div className="text-xs text-zinc-400">18% Bulk Discount</div>
+                <div className="p-3 sm:p-3.5 rounded-xl bg-black/40 border border-white/10">
+                  <div className="text-base sm:text-lg font-bold text-[#ECC260]">25 - 49 Units</div>
+                  <div className="text-xs text-zinc-400">15% Bulk Discount</div>
                 </div>
                 <div className="p-3 sm:p-3.5 rounded-xl bg-black/40 border border-[#E6007A]/40">
                   <div className="text-base sm:text-lg font-bold text-[#FF66B2]">50+ Units</div>
