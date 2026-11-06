@@ -17,9 +17,6 @@ import {
 import { 
   INITIAL_WHOLESALE_SETTINGS, 
   INITIAL_PAYMENT_SETTINGS, 
-  INITIAL_CUSTOMERS, 
-  INITIAL_ORDERS, 
-  INITIAL_SAVINGS_PLANS 
 } from '../data/initialData';
 
 interface Toast {
@@ -586,7 +583,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addSavingsTransaction = async (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => {
     const plan = savingsPlans.find(p => p.id === planId);
     if (!plan) throw new Error('Savings plan not found.');
-    const approved = false; // Never credit a deposit until payment is verified by the provider or an administrator.
     const tx = {
       id: `tx-${Date.now()}`, planId, amount,
       date: new Date().toISOString().split('T')[0], paymentMethod,
