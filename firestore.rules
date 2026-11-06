@@ -21,7 +21,17 @@ service cloud.firestore {
     match /orders/{orderId} {
       allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
       allow read: if isStoreAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
-      allow update: if isStoreAdmin();
+      allow update: if isStoreAdmin() || (
+        signedIn()
+        && resource.data.customerId == request.auth.uid
+        && request.resource.data.customerId == resource.data.customerId
+        && request.resource.data.paymentStatus == 'awaiting_verification'
+        && request.resource.data.proofOfPaymentUrl is string
+        && request.resource.data.bankTransferRef is string
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'proofOfPaymentUrl', 'bankTransferRef', 'paymentStatus', 'updatedAt'
+        ])
+      );
       allow delete: if isStoreAdmin();
     }
 
