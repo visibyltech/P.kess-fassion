@@ -132,6 +132,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     setActiveTab('dashboard');
     setActivePlanForDeposit(plan.id);
     setDepositAmount(initialDepositAmount);
+    setDepositRef('STB-' + Math.floor(100000 + Math.random() * 900000));
     setDepositMethod('bank_transfer');
     setProofUrl('');
     setIsDepositModalOpen(true);
