@@ -91,11 +91,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   };
 
   const handleSimulateReceiptUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
     const file = e.target.files?.[0];
     if (!file) return;
     if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type) || file.size > 10 * 1024 * 1024) {
       showToast('Choose a JPG, PNG, WebP or AVIF receipt under 10 MB.', 'error');
-      e.currentTarget.value = '';
+      input.value = '';
       return;
     }
     setIsUploadingProof(true);
@@ -114,7 +115,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       showToast(error instanceof Error ? error.message : 'Could not upload receipt.', 'error');
     } finally {
       setIsUploadingProof(false);
-      e.currentTarget.value = '';
+      input.value = '';
     }
   };
 
