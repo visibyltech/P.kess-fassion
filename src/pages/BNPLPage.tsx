@@ -42,7 +42,7 @@ export const BNPLPage: React.FC<BNPLPageProps> = ({ onNavigate }) => {
       setIsAuthModalOpen(true);
       return;
     }
-    submitBNPLApplication({
+    await submitBNPLApplication({
       customerId: currentUser.id,
       customerName: fullName || currentUser.name,
       customerEmail: email || currentUser.email,
