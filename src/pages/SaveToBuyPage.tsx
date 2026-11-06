@@ -14,7 +14,9 @@ import {
   Sparkles, 
   ShieldCheck, 
   AlertCircle,
-  Truck
+  Truck,
+  Copy,
+  Check
 } from 'lucide-react';
 
 interface SaveToBuyPageProps {
@@ -52,7 +54,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const [selectedColor, setSelectedColor] = useState<string>(initialColor || '');
   const [durationMonths, setDurationMonths] = useState<number>(2);
   const [frequency, setFrequency] = useState<'daily' | 'weekly' | 'biweekly' | 'monthly'>('weekly');
-  const [initialDepositPercent, setInitialDepositPercent] = useState<number>(20); // 20% initial deposit
+  const [initialDepositPercent, setInitialDepositPercent] = useState<number>(30); // Minimum 30% initial deposit
 
   // Deposit modal state
   const [activePlanForDeposit, setActivePlanForDeposit] = useState<string | null>(null);
@@ -62,6 +64,8 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const [isUploadingProof, setIsUploadingProof] = useState(false);
   const [depositRef, setDepositRef] = useState<string>('');
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
+  const [isInitialDeposit, setIsInitialDeposit] = useState(false);
+  const [copiedAccount, setCopiedAccount] = useState(false);
 
   const selectedProduct = products.find(p => p.id === selectedProductId) || products[0];
 
@@ -95,6 +99,23 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
 
   // Filter plans belonging to current user or show demo plans
   const userPlans = savingsPlans.filter(p => !currentUser || p.customerId === currentUser.id || currentUser.role === 'admin');
+  const activeDepositPlan = savingsPlans.find(plan => plan.id === activePlanForDeposit);
+  const firstDepositMinimum = Math.ceil((activeDepositPlan?.totalAmount || totalPlanAmount) * 0.30);
+  const minimumDepositAmount = isInitialDeposit || !activeDepositPlan?.transactions?.length
+    ? firstDepositMinimum
+    : 1;
+  const bankDetailsConfigured = Boolean(paymentSettings.bankName?.trim() && paymentSettings.accountName?.trim() && paymentSettings.accountNumber?.trim());
+
+  const copyBankAccount = async () => {
+    if (!paymentSettings.accountNumber) return;
+    try {
+      await navigator.clipboard.writeText(paymentSettings.accountNumber);
+      setCopiedAccount(true);
+      window.setTimeout(() => setCopiedAccount(false), 2500);
+    } catch {
+      window.alert('Could not copy automatically. Please select and copy the account number.');
+    }
+  };
 
   const handleStartPlan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,7 +152,8 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
 
     setActiveTab('dashboard');
     setActivePlanForDeposit(plan.id);
-    setDepositAmount(initialDepositAmount);
+    setIsInitialDeposit(true);
+    setDepositAmount(Math.max(initialDepositAmount, Math.ceil(totalPlanAmount * 0.30)));
     setDepositRef('STB-' + Math.floor(100000 + Math.random() * 900000));
     setDepositMethod('bank_transfer');
     setProofUrl('');
@@ -141,7 +163,8 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
 
   const handleOpenDepositModal = (planId: string, suggestedAmount: number) => {
     setActivePlanForDeposit(planId);
-    setDepositAmount(suggestedAmount);
+    setIsInitialDeposit(false);
+    setDepositAmount(Math.max(suggestedAmount, Math.ceil((savingsPlans.find(plan => plan.id === planId)?.totalAmount || 0) * 0.30)));
     setDepositRef('STB-' + Math.floor(100000 + Math.random() * 900000));
     setIsDepositModalOpen(true);
   };
@@ -149,6 +172,21 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const handleConfirmDeposit = async () => {
     if (!activePlanForDeposit) return;
     try {
+      const plan = savingsPlans.find(item => item.id === activePlanForDeposit);
+      const requiredMinimum = !plan?.transactions?.length ? Math.ceil((plan?.totalAmount || 0) * 0.30) : 1;
+      if (!plan) { window.alert('We could not find this savings plan. Refresh and try again.'); return; }
+      if (!Number.isFinite(depositAmount) || depositAmount < requiredMinimum) {
+        window.alert(`Your first deposit must be at least 30% of the plan total (₦${requiredMinimum.toLocaleString()}).`);
+        return;
+      }
+      if (depositAmount > Math.max(0, plan.totalAmount - plan.amountSaved)) {
+        window.alert('Your deposit cannot be greater than the outstanding balance.');
+        return;
+      }
+      if (!bankDetailsConfigured) {
+        window.alert('P-Kess bank details have not been configured yet. Please contact the store administrator.');
+        return;
+      }
       if (depositMethod === 'bank_transfer' && !proofUrl) { window.alert('Please upload your actual transfer receipt before submitting.'); return; }
       await addSavingsTransaction(activePlanForDeposit, depositAmount, depositMethod, proofUrl || undefined, depositRef);
       setIsDepositModalOpen(false);
@@ -380,7 +418,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                 </div>
                 <input
                   type="range"
-                  min="10"
+                  min="30"
                   max="50"
                   step="5"
                   value={initialDepositPercent}
@@ -388,7 +426,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                   className="w-full accent-[#E6007A] cursor-pointer"
                 />
                 <div className="flex justify-between text-[11px] text-zinc-500 mt-1">
-                  <span>10% (Min)</span>
+                  <span>30% (Minimum)</span>
                   <span>25%</span>
                   <span>50%</span>
                 </div>
@@ -579,6 +617,10 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                         </div>
                       </div>
 
+                      <div className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/5 p-3 text-[11px] text-amber-200">
+                        Products are only released for delivery or showroom pickup after 100% of the plan has been paid and every deposit has been approved by P-Kess.
+                      </div>
+
                       {/* Schedule info */}
                       <div className="p-3 rounded-xl bg-[#171722] border border-[#29293A] mt-4 flex justify-between items-center text-xs">
                         <div>
@@ -669,10 +711,17 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
               </label>
               <input
                 type="number"
+                min={minimumDepositAmount}
+                max={activeDepositPlan ? Math.max(0, activeDepositPlan.totalAmount - activeDepositPlan.amountSaved) : undefined}
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(Number(e.target.value))}
                 className="w-full bg-[#181824] border border-[#2E2E42] text-white text-base font-bold rounded-xl p-3 focus:outline-none focus:border-[#D4AF37]"
               />
+              {activeDepositPlan && !activeDepositPlan.transactions?.length && (
+                <p className="text-[11px] text-[#ECC260] mt-1.5">
+                  Mandatory first deposit: at least 30% of ₦{activeDepositPlan.totalAmount.toLocaleString()} = ₦{minimumDepositAmount.toLocaleString()}.
+                </p>
+              )}
             </div>
 
             {/* Payment Method Selector */}
@@ -708,53 +757,74 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
             </div>
 
             {depositMethod === 'bank_transfer' && (
-              <div className="p-4 rounded-xl bg-black/50 border border-zinc-800 space-y-2 text-xs">
-                <label className="block text-zinc-300 font-semibold">Upload actual transfer receipt</label>
-                <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={isUploadingProof} onChange={async (e) => {
-                  const input = e.currentTarget;
-                  const file = input.files?.[0];
-                  if (!file) return;
-                  if (file.size > 10 * 1024 * 1024) { window.alert('Receipt must be under 10 MB.'); input.value = ''; return; }
-                  setIsUploadingProof(true);
-                  try {
-                    const body = new FormData();
-                    body.append('file', file);
-                    body.append('upload_preset', 'pkess-products');
-                    const response = await fetch('https://api.cloudinary.com/v1_1/jmit9wsv/image/upload', { method: 'POST', body });
-                    if (!response.ok) throw new Error('Receipt upload failed.');
-                    const result = await response.json();
-                    if (!result.secure_url) throw new Error('No receipt URL returned.');
-                    setProofUrl(result.secure_url);
-                  } catch (error) { console.error(error); window.alert('Could not upload receipt. Please try again.'); }
-                  finally { setIsUploadingProof(false); input.value = ''; }
-                }} className="block w-full text-xs text-zinc-300" />
-                {proofUrl && <p className="text-emerald-400">Receipt uploaded successfully.</p>}
-              </div>
-            )}
-            {depositMethod === 'bank_transfer' && (
-              <div className="p-4 rounded-xl bg-black/50 border border-zinc-800 space-y-2 text-xs">
-                <div className="text-zinc-400">P-Kess Bank Account:</div>
-                <div className="text-white font-bold">{paymentSettings.bankName}</div>
-                <div className="text-[#ECC260] font-mono text-sm tracking-wider font-extrabold">
-                  {paymentSettings.accountNumber}
+              <>
+                <div className="p-4 rounded-xl bg-black/50 border border-[#D4AF37]/40 space-y-3 text-xs">
+                  <div className="text-[#ECC260] font-bold uppercase tracking-wide">P-Kess Fashion World — Pay To This Account</div>
+                  {bankDetailsConfigured ? (
+                    <>
+                      <div>
+                        <div className="text-zinc-500">Bank</div>
+                        <div className="text-white font-bold">{paymentSettings.bankName}</div>
+                      </div>
+                      <div>
+                        <div className="text-zinc-500">Account Name</div>
+                        <div className="text-white font-bold">{paymentSettings.accountName}</div>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="text-zinc-500">Account Number</div>
+                          <div className="text-[#ECC260] font-mono text-xl tracking-wider font-extrabold">{paymentSettings.accountNumber}</div>
+                        </div>
+                        <button type="button" onClick={copyBankAccount} className="shrink-0 inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-2 text-white font-semibold">
+                          {copiedAccount ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                          {copiedAccount ? 'Copied' : 'Copy'}
+                        </button>
+                      </div>
+                      {paymentSettings.bankInstructions && <p className="text-zinc-400 border-t border-zinc-800 pt-2">{paymentSettings.bankInstructions}</p>}
+                    </>
+                  ) : (
+                    <p className="text-amber-300">Bank account details are not configured yet. Please contact P-Kess Fashion World before making a transfer. The store administrator must add the bank details in Admin Dashboard → Payment Settings.</p>
+                  )}
+                  <div className="pt-2 border-t border-zinc-800">
+                    <label className="block text-zinc-400 mb-1">Payment Reference / Narration:</label>
+                    <input
+                      type="text"
+                      value={depositRef}
+                      onChange={(e) => setDepositRef(e.target.value)}
+                      className="w-full bg-[#161620] border border-zinc-700 rounded-lg p-2 text-xs text-white"
+                    />
+                  </div>
                 </div>
-                <div className="text-zinc-400">{paymentSettings.accountName}</div>
 
-                <div className="pt-2 border-t border-zinc-800">
-                  <label className="block text-zinc-400 mb-1">Payment Reference / Narration:</label>
-                  <input
-                    type="text"
-                    value={depositRef}
-                    onChange={(e) => setDepositRef(e.target.value)}
-                    className="w-full bg-[#161620] border border-zinc-700 rounded-lg p-2 text-xs text-white"
-                  />
+                <div className="p-4 rounded-xl bg-black/50 border border-zinc-800 space-y-2 text-xs">
+                  <label className="block text-zinc-300 font-semibold">Upload your bank transfer receipt (required)</label>
+                  <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={isUploadingProof} onChange={async (e) => {
+                    const input = e.currentTarget;
+                    const file = input.files?.[0];
+                    if (!file) return;
+                    if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type) || file.size > 10 * 1024 * 1024) { window.alert('Choose a JPG, PNG, WebP or AVIF receipt under 10 MB.'); input.value = ''; return; }
+                    setIsUploadingProof(true);
+                    try {
+                      const body = new FormData();
+                      body.append('file', file);
+                      body.append('upload_preset', 'pkess-products');
+                      const response = await fetch('https://api.cloudinary.com/v1_1/jmit9wsv/image/upload', { method: 'POST', body });
+                      if (!response.ok) throw new Error('Receipt upload failed.');
+                      const result = await response.json();
+                      if (!result.secure_url) throw new Error('No receipt URL returned.');
+                      setProofUrl(result.secure_url);
+                    } catch (error) { console.error(error); window.alert('Could not upload receipt. Please try again.'); }
+                    finally { setIsUploadingProof(false); input.value = ''; }
+                  }} className="block w-full text-xs text-zinc-300" />
+                  {isUploadingProof && <p className="text-amber-300">Uploading receipt…</p>}
+                  {proofUrl && <p className="text-emerald-400 inline-flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> Receipt uploaded successfully and ready to submit.</p>}
                 </div>
-              </div>
+              </>
             )}
 
             <button
               onClick={handleConfirmDeposit}
-              disabled={isUploadingProof}
+              disabled={isUploadingProof || !bankDetailsConfigured || !proofUrl || depositAmount < minimumDepositAmount}
               className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B88B22] text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 shadow-lg"
             >
               Confirm ₦{depositAmount.toLocaleString()} Deposit
