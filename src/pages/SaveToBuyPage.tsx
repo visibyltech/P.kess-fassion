@@ -57,7 +57,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   // Deposit modal state
   const [activePlanForDeposit, setActivePlanForDeposit] = useState<string | null>(null);
   const [depositAmount, setDepositAmount] = useState<number>(10000);
-  const [depositMethod, setDepositMethod] = useState<'paystack' | 'bank_transfer'>('paystack');
+  const [depositMethod, setDepositMethod] = useState<'paystack' | 'bank_transfer'>('bank_transfer');
   const [proofUrl, setProofUrl] = useState<string>('');
   const [isUploadingProof, setIsUploadingProof] = useState(false);
   const [depositRef, setDepositRef] = useState<string>('');
@@ -112,7 +112,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     else if (frequency === 'monthly') nextDate.setMonth(nextDate.getMonth() + 1);
 
     try {
-    await createSavingsPlan({
+    const plan = await createSavingsPlan({
       customerId: currentUser.id,
       customerName: currentUser.name,
       customerEmail: currentUser.email,
@@ -127,9 +127,14 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
       durationMonths,
       depositPerCycle,
       nextPaymentDate: nextDate.toISOString().split('T')[0],
-    }, initialDepositAmount);
+    });
 
     setActiveTab('dashboard');
+    setActivePlanForDeposit(plan.id);
+    setDepositAmount(initialDepositAmount);
+    setDepositMethod('bank_transfer');
+    setProofUrl('');
+    setIsDepositModalOpen(true);
     } catch (error) { console.error('Could not create savings plan:', error); }
   };
 
@@ -677,6 +682,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
+                  disabled
                   onClick={() => window.alert('Paystack deposits are not activated yet. Please use bank transfer.')}
                   className={`p-3 rounded-xl border text-xs font-semibold transition-all ${
                     depositMethod === 'paystack'

@@ -72,7 +72,7 @@ interface StoreContextType {
 
   // Save to Buy
   savingsPlans: SaveToBuyPlan[];
-  createSavingsPlan: (plan: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>, initialDeposit?: number) => Promise<SaveToBuyPlan>;
+  createSavingsPlan: (plan: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>) => Promise<SaveToBuyPlan>;
   addSavingsTransaction: (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => Promise<void>;
   verifySavingsTransaction: (planId: string, transactionId: string, approve: boolean) => Promise<void>;
 
@@ -611,19 +611,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Save to Buy plans and deposits are shared Firestore records.
   const createSavingsPlan = async (
-    planData: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>,
-    initialDeposit = 0
+    planData: Omit<SaveToBuyPlan, 'id' | 'createdAt' | 'amountSaved' | 'transactions' | 'status'>
   ): Promise<SaveToBuyPlan> => {
     if (!firebaseAuth.currentUser || firebaseAuth.currentUser.uid !== planData.customerId) throw new Error('Please sign in again.');
-    const planId = `stb-${Date.now()}`;
-    const initialTx = initialDeposit > 0 ? [{
-      id: `tx-${Date.now()}`, planId, amount: initialDeposit,
-      date: new Date().toISOString().split('T')[0], paymentMethod: 'bank_transfer' as const,
-      status: 'pending' as const, reference: 'DEP-INIT-' + Math.floor(1000 + Math.random() * 9000)
-    }] : [];
     const payload: Omit<SaveToBuyPlan, 'id'> = {
       ...planData, amountSaved: 0, status: 'active',
-      createdAt: new Date().toISOString().split('T')[0], transactions: initialTx
+      createdAt: new Date().toISOString().split('T')[0], transactions: []
     };
     const result = await addDoc(collection(firestore, 'savingsPlans'), payload);
     const plan = { ...payload, id: result.id };
