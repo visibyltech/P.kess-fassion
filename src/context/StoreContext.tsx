@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, getDocs, setDoc, query, where } from 'firebase/firestore';
+import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, getDocs, setDoc, query, where, runTransaction, writeBatch } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { firebaseAuth, firestore } from '../lib/firebase';
 import { 
@@ -58,7 +58,7 @@ interface StoreContextType {
   register: (name: string, email: string, phone: string, password: string) => Promise<boolean>;
   resetPassword: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
-  updateUserProfile: (updates: Partial<CustomerUser>) => void;
+  updateUserProfile: (updates: Partial<CustomerUser>) => Promise<void>;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
 
@@ -253,37 +253,60 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => { unsubWholesale(); unsubPayments(); };
   }, []);
 
-  // One-time, non-destructive import of records previously kept only in this
-  // administrator's browser. Existing Firestore collections are never overwritten.
+  // Idempotent, per-browser migration of legacy browser-only records.
+  // Existing Firestore documents are never overwritten and localStorage is never cleared.
   useEffect(() => {
     if (currentUser?.role !== 'admin') return;
     const migrateLegacyBrowserData = async () => {
-      const markerRef = doc(firestore, 'storeSettings', 'browser-data-migration-v1');
-      const markerSnapshot = await getDoc(markerRef);
-      if (markerSnapshot.exists()) return;
-      const migrateCollection = async (storageKey: string, collectionName: string) => {
-        const raw = localStorage.getItem(storageKey);
-        if (!raw) return;
-        let records: any[] = [];
-        try { records = JSON.parse(raw); } catch { return; }
-        if (!Array.isArray(records) || records.length === 0) return;
-        const target = collection(firestore, collectionName);
-        const existing = await getDocs(target);
-        if (!existing.empty) return;
-        await Promise.all(records.filter(record => record && record.id).map(record => {
-          const { id, ...data } = record;
-          return setDoc(doc(firestore, collectionName, String(id)), data);
-        }));
-      };
       try {
+        let migrationId = localStorage.getItem('pkess_browser_migration_id_v2');
+        if (!migrationId) {
+          migrationId = `browser-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+          localStorage.setItem('pkess_browser_migration_id_v2', migrationId);
+        }
+        const markerRef = doc(firestore, 'storeSettings', `browser-data-migration-v2-${migrationId}`);
+        if ((await getDoc(markerRef)).exists()) return;
+
+        const stats: Record<string, { imported: number; alreadyPresent: number }> = {};
+        const migrateCollection = async (storageKey: string, collectionName: string) => {
+          const raw = localStorage.getItem(storageKey);
+          if (!raw) { stats[collectionName] = { imported: 0, alreadyPresent: 0 }; return; }
+          let parsed: unknown;
+          try { parsed = JSON.parse(raw); } catch {
+            console.error(`Legacy migration skipped invalid JSON in ${storageKey}; source data was preserved.`);
+            return;
+          }
+          if (!Array.isArray(parsed)) return;
+          const records = parsed.filter((record: any) => record && typeof record === 'object' && record.id != null);
+          const existing = await getDocs(collection(firestore, collectionName));
+          const existingIds = new Set(existing.docs.map(item => item.id));
+          const missing = records.filter((record: any) => !existingIds.has(String(record.id)));
+          let imported = 0;
+          for (let offset = 0; offset < missing.length; offset += 450) {
+            const batch = writeBatch(firestore);
+            for (const record of missing.slice(offset, offset + 450)) {
+              const { id, ...data } = record;
+              batch.set(doc(firestore, collectionName, String(id)), data);
+              imported += 1;
+            }
+            await batch.commit();
+          }
+          stats[collectionName] = { imported, alreadyPresent: records.length - imported };
+        };
+
         await migrateCollection('pkess_orders', 'orders');
         await migrateCollection('pkess_savings_plans', 'savingsPlans');
         await migrateCollection('pkess_bnpl_apps', 'bnplApplications');
+
         const wholesaleRef = doc(firestore, 'storeSettings', 'wholesale');
         if (!(await getDoc(wholesaleRef)).exists()) {
           const raw = localStorage.getItem('pkess_wholesale_settings');
-          if (raw) { try { await setDoc(wholesaleRef, JSON.parse(raw)); } catch { /* retain defaults */ } }
+          if (raw) {
+            try { await setDoc(wholesaleRef, JSON.parse(raw)); }
+            catch (error) { console.error('Legacy wholesale settings were not imported; source data was preserved.', error); }
+          }
         }
+
         const paymentRef = doc(firestore, 'storeSettings', 'payments');
         if (!(await getDoc(paymentRef)).exists()) {
           const raw = localStorage.getItem('pkess_payment_settings');
@@ -292,13 +315,19 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               const legacy = JSON.parse(raw);
               const { bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode } = legacy;
               await setDoc(paymentRef, { bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode });
-            } catch { /* retain safe defaults */ }
+            } catch (error) { console.error('Legacy payment settings were not imported; source data was preserved.', error); }
           }
         }
-        await setDoc(markerRef, { completedAt: new Date().toISOString(), completedBy: currentUser.id });
-        console.info('Legacy P-Kess browser data migration completed.');
+
+        await setDoc(markerRef, {
+          version: 2,
+          completedAt: new Date().toISOString(),
+          completedBy: currentUser.id,
+          stats
+        });
+        console.info('Legacy P-Kess browser data migration completed without overwriting existing Firestore records.', stats);
       } catch (error) {
-        console.error('Legacy P-Kess data migration failed; original browser data was left untouched:', error);
+        console.error('Legacy P-Kess data migration failed; original browser data was left untouched. Sign in as admin again after resolving the Firestore issue to retry.', error);
       }
     };
     void migrateLegacyBrowserData();
@@ -501,10 +530,20 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const updateUserProfile = (updates: Partial<CustomerUser>) => {
-    if (!currentUser) return;
-    setCurrentUser(prev => prev ? { ...prev, ...updates } : null);
-    showToast("Profile details updated successfully");
+  const updateUserProfile = async (updates: Partial<CustomerUser>): Promise<void> => {
+    if (!currentUser) throw new Error('Please sign in before updating your profile.');
+    const safeUpdates = {
+      ...(updates.name !== undefined ? { name: updates.name } : {}),
+      ...(updates.phone !== undefined ? { phone: updates.phone } : {}),
+      ...(updates.avatarUrl !== undefined ? { avatarUrl: updates.avatarUrl } : {}),
+      ...(updates.savedAddress !== undefined ? { savedAddress: updates.savedAddress } : {}),
+      ...(updates.wishlist !== undefined ? { wishlist: updates.wishlist } : {})
+    };
+    if (currentUser.role !== 'admin' && Object.keys(safeUpdates).length > 0) {
+      await updateDoc(doc(firestore, 'users', currentUser.id), safeUpdates);
+    }
+    setCurrentUser(prev => prev ? { ...prev, ...safeUpdates } : null);
+    showToast('Profile details saved to your account.');
   };
 
   // Products CRUD — records and Cloudinary image URLs are stored in Firestore.
@@ -620,37 +659,60 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
     const result = await addDoc(collection(firestore, 'savingsPlans'), payload);
     const plan = { ...payload, id: result.id };
+    // Update local state immediately so the initial receipt can be submitted
+    // before Firestore's real-time snapshot arrives.
+    setSavingsPlans(prev => [plan, ...prev.filter(item => item.id !== plan.id)]);
     showToast(`Save to Buy plan created for ${planData.product.name}. Initial bank-transfer deposits await verification.`);
     return plan;
   };
 
   const addSavingsTransaction = async (planId: string, amount: number, paymentMethod: 'paystack' | 'bank_transfer', proofUrl?: string, reference?: string) => {
-    const plan = savingsPlans.find(p => p.id === planId);
-    if (!plan) throw new Error('Savings plan not found.');
+    if (!Number.isFinite(amount) || amount <= 0) throw new Error('Enter a valid deposit amount.');
+    if (paymentMethod === 'bank_transfer' && !proofUrl) throw new Error('Upload the actual bank-transfer receipt before submitting.');
     const tx = {
-      id: `tx-${Date.now()}`, planId, amount,
+      id: `tx-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      planId, amount,
       date: new Date().toISOString().split('T')[0], paymentMethod,
-      status: 'pending' as const, reference: reference || 'STB-DEP-' + Math.floor(1000 + Math.random() * 9000), proofUrl
+      status: 'pending' as const,
+      reference: reference || 'STB-DEP-' + Math.floor(1000 + Math.random() * 9000),
+      proofUrl
     };
-    await updateDoc(doc(firestore, 'savingsPlans', planId), {
-      transactions: [tx, ...plan.transactions], updatedAt: serverTimestamp()
+    await runTransaction(firestore, async transaction => {
+      const planRef = doc(firestore, 'savingsPlans', planId);
+      const snapshot = await transaction.get(planRef);
+      if (!snapshot.exists()) throw new Error('Savings plan not found.');
+      const plan = snapshot.data() as SaveToBuyPlan;
+      if (plan.customerId !== firebaseAuth.currentUser?.uid && firebaseAuth.currentUser?.email?.toLowerCase() !== ADMIN_EMAIL) {
+        throw new Error('You are not allowed to add a deposit to this plan.');
+      }
+      const transactions = Array.isArray(plan.transactions) ? plan.transactions : [];
+      if (transactions.some(item => item.id === tx.id)) throw new Error('Duplicate deposit submission.');
+      transaction.update(planRef, { transactions: [tx, ...transactions], updatedAt: serverTimestamp() });
     });
-    showToast('Deposit submitted and awaiting payment verification.', 'info');
+    showToast('Deposit receipt submitted and awaiting administrator verification.', 'info');
   };
 
   const verifySavingsTransaction = async (planId: string, transactionId: string, approve: boolean) => {
-    const plan = savingsPlans.find(p => p.id === planId);
-    if (!plan) throw new Error('Savings plan not found.');
-    const tx = plan.transactions.find(t => t.id === transactionId);
-    if (!tx || tx.status !== 'pending') throw new Error('This deposit has already been reviewed.');
-    const transactions = plan.transactions.map(t => t.id === transactionId ? { ...t, status: approve ? 'approved' as const : 'rejected' as const } : t);
-    const amountSaved = approve ? plan.amountSaved + tx.amount : plan.amountSaved;
-    await updateDoc(doc(firestore, 'savingsPlans', planId), {
-      transactions, amountSaved,
-      status: amountSaved >= plan.totalAmount ? 'completed' : plan.status,
-      updatedAt: serverTimestamp()
+    await runTransaction(firestore, async transaction => {
+      const planRef = doc(firestore, 'savingsPlans', planId);
+      const snapshot = await transaction.get(planRef);
+      if (!snapshot.exists()) throw new Error('Savings plan not found.');
+      const plan = snapshot.data() as SaveToBuyPlan;
+      const transactions = Array.isArray(plan.transactions) ? plan.transactions : [];
+      const tx = transactions.find(item => item.id === transactionId);
+      if (!tx || tx.status !== 'pending') throw new Error('This deposit has already been reviewed.');
+      const nextTransactions = transactions.map(item => item.id === transactionId
+        ? { ...item, status: approve ? 'approved' as const : 'rejected' as const }
+        : item);
+      const amountSaved = approve ? (Number(plan.amountSaved) || 0) + tx.amount : (Number(plan.amountSaved) || 0);
+      transaction.update(planRef, {
+        transactions: nextTransactions,
+        amountSaved,
+        status: amountSaved >= plan.totalAmount ? 'completed' : plan.status,
+        updatedAt: serverTimestamp()
+      });
     });
-    showToast(approve ? 'Deposit approved!' : 'Deposit rejected', approve ? 'success' : 'warning');
+    showToast(approve ? 'Deposit approved and savings balance updated.' : 'Deposit rejected', approve ? 'success' : 'warning');
   };
 
   const submitBNPLApplication = async (appData: Omit<BNPLApplication, 'id' | 'createdAt' | 'status' | 'referenceNumber' | 'providerNote'>): Promise<BNPLApplication> => {
