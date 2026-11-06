@@ -15,7 +15,6 @@ import {
   PaymentStatus
 } from '../types';
 import { 
-  INITIAL_PRODUCTS, 
   INITIAL_WHOLESALE_SETTINGS, 
   INITIAL_PAYMENT_SETTINGS, 
   INITIAL_CUSTOMERS, 
@@ -105,14 +104,9 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Firestore is the source of truth for the shared product catalogue.
-  const [products, setProducts] = useState<Product[]>(() => {
-    const saved = localStorage.getItem('pkess_products');
-    if (saved) {
-      try { return JSON.parse(saved) as Product[]; } catch { /* use starter catalogue */ }
-    }
-    return INITIAL_PRODUCTS;
-  });
-  const [productsLoaded, setProductsLoaded] = useState(false);
+  // Do not hydrate the shared catalogue from stale browser data or demo items.
+  // The Firestore snapshot below is the only authority, including when it is empty.
+  const [products, setProducts] = useState<Product[]>([]);
 
 
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -210,27 +204,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Subscribe to the shared Firestore catalogue. If it is empty, retain the
-  // starter display catalogue until the owner begins adding real products.
+  // Subscribe to the shared Firestore catalogue. An empty snapshot means
+  // there are genuinely no products; never repopulate deleted starter items.
   useEffect(() => {
     const unsubscribe = onSnapshot(
       collection(firestore, 'products'),
       snapshot => {
         const remoteProducts = snapshot.docs.map(item => ({ ...(item.data() as Omit<Product, 'id'>), id: item.id }));
-        setProducts(remoteProducts.length ? remoteProducts : INITIAL_PRODUCTS);
-        setProductsLoaded(true);
+        setProducts(remoteProducts);
       },
       error => {
         console.error('Firestore product catalogue listener failed:', error);
+        setProducts([]);
         setProductsLoaded(true);
       }
     );
     return unsubscribe;
   }, []);
 
+  // Remove the legacy product cache so deleted items cannot reappear on refresh.
   useEffect(() => {
-    if (productsLoaded) localStorage.setItem('pkess_products', JSON.stringify(products));
-  }, [products, productsLoaded]);
+    localStorage.removeItem('pkess_products');
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('pkess_cart', JSON.stringify(cart));
