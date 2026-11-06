@@ -66,6 +66,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isInitialDeposit, setIsInitialDeposit] = useState(false);
   const [copiedAccount, setCopiedAccount] = useState(false);
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<'home' | 'pickup'>('home');
 
   const selectedProduct = products.find(p => p.id === selectedProductId) || products[0];
 
@@ -194,16 +195,28 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   };
 
   const handleCompleteToOrder = async (plan: typeof savingsPlans[0]) => {
-    // Generate order from completed plan
+    // Fulfilment is strictly blocked until all deposits have been approved.
+    if (plan.status !== 'completed' || Number(plan.amountSaved) < Number(plan.totalAmount)) {
+      window.alert('Delivery or showroom pickup becomes available only after 100% of the plan has been paid and approved.');
+      return;
+    }
+
+    const isPickup = fulfillmentMethod === 'pickup';
+    const savedAddress = currentUser?.savedAddress;
+    if (!isPickup && !savedAddress?.street) {
+      window.alert('Please add your delivery address in your customer profile, or choose showroom pickup.');
+      return;
+    }
+
     await createOrder({
       customerId: plan.customerId,
       customerName: plan.customerName,
       customerEmail: plan.customerEmail,
       customerPhone: plan.customerPhone,
-      deliveryMethod: 'home',
-      state: 'Delta',
-      lga: 'Oshimili South (Asaba)',
-      address: 'Savings Plan Delivery Fulfillment',
+      deliveryMethod: isPickup ? 'pickup' : 'home',
+      state: isPickup ? 'Delta' : (savedAddress?.state || 'Delta'),
+      lga: isPickup ? 'Oshimili South (Asaba)' : (savedAddress?.lga || ''),
+      address: isPickup ? BRAND_CONSTANTS.address : savedAddress!.street,
       items: [{
         product: plan.product,
         quantity: plan.quantity,
@@ -214,12 +227,12 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
       }],
       subtotal: plan.totalAmount,
       wholesaleSavings: 0,
-      deliveryFee: 0, // Free delivery reward on completed savings plan!
+      deliveryFee: 0,
       total: plan.totalAmount,
       paymentMethod: 'bank_transfer',
       paymentStatus: 'verified',
       orderStatus: 'processing',
-      courier: 'P-Kess Direct Logistics'
+      courier: isPickup ? 'Showroom Pickup' : 'P-Kess Direct Logistics'
     });
     onNavigate('customer', { tab: 'orders' });
   };
@@ -550,7 +563,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
               {userPlans.map(plan => {
                 const percent = Math.min(100, Math.round((plan.amountSaved / plan.totalAmount) * 100));
                 const outstanding = Math.max(0, plan.totalAmount - plan.amountSaved);
-                const isCompleted = percent >= 100;
+                const isCompleted = Number(plan.amountSaved) >= Number(plan.totalAmount) && plan.status === 'completed';
 
                 return (
                   <div 
@@ -663,13 +676,24 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                     {/* Bottom Actions */}
                     <div className="pt-4 border-t border-zinc-800/80">
                       {isCompleted ? (
-                        <button
-                          onClick={() => handleCompleteToOrder(plan)}
-                          className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 shadow-lg"
-                        >
-                          <Truck className="w-4 h-4" />
-                          Target Complete — Arrange Free Delivery Now
-                        </button>
+                        <div className="space-y-3">
+                          <p className="text-xs text-emerald-300 font-semibold">100% paid and approved. Choose how you want to receive your order.</p>
+                          <div className="grid grid-cols-2 gap-2">
+                            <button type="button" onClick={() => setFulfillmentMethod('home')} className={`rounded-xl border p-3 text-xs font-semibold ${fulfillmentMethod === 'home' ? 'border-[#D4AF37] bg-[#D4AF37]/15 text-[#ECC260]' : 'border-zinc-700 text-zinc-300'}`}>
+                              <Truck className="w-4 h-4 mx-auto mb-1" /> Home Delivery
+                            </button>
+                            <button type="button" onClick={() => setFulfillmentMethod('pickup')} className={`rounded-xl border p-3 text-xs font-semibold ${fulfillmentMethod === 'pickup' ? 'border-[#D4AF37] bg-[#D4AF37]/15 text-[#ECC260]' : 'border-zinc-700 text-zinc-300'}`}>
+                              <Building2 className="w-4 h-4 mx-auto mb-1" /> Showroom Pickup
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => handleCompleteToOrder(plan)}
+                            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 hover:brightness-110 shadow-lg"
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            Confirm {fulfillmentMethod === 'pickup' ? 'Showroom Pickup' : 'Delivery'}
+                          </button>
+                        </div>
                       ) : (
                         <button
                           onClick={() => handleOpenDepositModal(plan.id, plan.depositPerCycle)}
