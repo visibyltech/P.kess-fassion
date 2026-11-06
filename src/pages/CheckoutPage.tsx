@@ -99,7 +99,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
     }
   };
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Require a customer account before exposing payment instructions.
@@ -149,11 +149,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
       return;
     }
 
-    // Process Bank Transfer Order
+    // Save the order to the shared Firestore database before showing confirmation.
     setIsProcessing(true);
-    setTimeout(() => {
-      const newOrder = createOrder({
-        customerId: currentUser?.id || 'guest-' + Date.now(),
+    try {
+      const newOrder = await createOrder({
+        customerId: currentUser.id,
         customerName: fullName,
         customerEmail: email,
         customerPhone: phone,
@@ -176,9 +176,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
         bankTransferRef: bankReference || 'TRF-' + Math.floor(10000000 + Math.random() * 90000000),
         courier: 'Pending Verification'
       });
-      setIsProcessing(false);
       setConfirmedOrder(newOrder);
-    }, 1200);
+    } catch (error) {
+      console.error('Order submission failed:', error);
+      showToast(error instanceof Error ? error.message : 'We could not save your order. Please try again.', 'error');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (confirmedOrder) {
