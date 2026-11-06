@@ -267,17 +267,17 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
     }
   };
 
-  const handleSaveWholesaleSettings = (e: React.FormEvent) => {
+  const handleSaveWholesaleSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateWholesaleSettings({
+    await updateWholesaleSettings({
       minUnits: Number(wsMinUnits),
       defaultDiscountPercent: Number(wsDiscount)
     });
   };
 
-  const handleSavePaymentSettings = (e: React.FormEvent) => {
+  const handleSavePaymentSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    updatePaymentSettings({
+    await updatePaymentSettings({
       bankName,
       accountName,
       accountNumber,
