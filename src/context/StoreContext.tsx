@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, setDoc, query, where } from 'firebase/firestore';
+import { onSnapshot, collection, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, getDoc, getDocs, setDoc, query, where } from 'firebase/firestore';
 import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { firebaseAuth, firestore } from '../lib/firebase';
 import { 
@@ -252,6 +252,57 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, error => console.error('Payment settings listener:', error));
     return () => { unsubWholesale(); unsubPayments(); };
   }, []);
+
+  // One-time, non-destructive import of records previously kept only in this
+  // administrator's browser. Existing Firestore collections are never overwritten.
+  useEffect(() => {
+    if (currentUser?.role !== 'admin') return;
+    const migrateLegacyBrowserData = async () => {
+      const markerRef = doc(firestore, 'storeSettings', 'browser-data-migration-v1');
+      const markerSnapshot = await getDoc(markerRef);
+      if (markerSnapshot.exists()) return;
+      const migrateCollection = async (storageKey: string, collectionName: string) => {
+        const raw = localStorage.getItem(storageKey);
+        if (!raw) return;
+        let records: any[] = [];
+        try { records = JSON.parse(raw); } catch { return; }
+        if (!Array.isArray(records) || records.length === 0) return;
+        const target = collection(firestore, collectionName);
+        const existing = await getDocs(target);
+        if (!existing.empty) return;
+        await Promise.all(records.filter(record => record && record.id).map(record => {
+          const { id, ...data } = record;
+          return setDoc(doc(firestore, collectionName, String(id)), data);
+        }));
+      };
+      try {
+        await migrateCollection('pkess_orders', 'orders');
+        await migrateCollection('pkess_savings_plans', 'savingsPlans');
+        await migrateCollection('pkess_bnpl_apps', 'bnplApplications');
+        const wholesaleRef = doc(firestore, 'storeSettings', 'wholesale');
+        if (!(await getDoc(wholesaleRef)).exists()) {
+          const raw = localStorage.getItem('pkess_wholesale_settings');
+          if (raw) { try { await setDoc(wholesaleRef, JSON.parse(raw)); } catch { /* retain defaults */ } }
+        }
+        const paymentRef = doc(firestore, 'storeSettings', 'payments');
+        if (!(await getDoc(paymentRef)).exists()) {
+          const raw = localStorage.getItem('pkess_payment_settings');
+          if (raw) {
+            try {
+              const legacy = JSON.parse(raw);
+              const { bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode } = legacy;
+              await setDoc(paymentRef, { bankName, accountName, accountNumber, bankInstructions, paystackPublicKey, paystackLiveMode });
+            } catch { /* retain safe defaults */ }
+          }
+        }
+        await setDoc(markerRef, { completedAt: new Date().toISOString(), completedBy: currentUser.id });
+        console.info('Legacy P-Kess browser data migration completed.');
+      } catch (error) {
+        console.error('Legacy P-Kess data migration failed; original browser data was left untouched:', error);
+      }
+    };
+    void migrateLegacyBrowserData();
+  }, [currentUser?.id, currentUser?.role]);
 
   // Toast notification helper
   const showToast = (message: string, type: Toast['type'] = 'success') => {
