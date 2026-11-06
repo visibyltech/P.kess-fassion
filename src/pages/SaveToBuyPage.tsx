@@ -102,7 +102,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const userPlans = savingsPlans.filter(p => !currentUser || p.customerId === currentUser.id || currentUser.role === 'admin');
   const activeDepositPlan = savingsPlans.find(plan => plan.id === activePlanForDeposit);
   const firstDepositMinimum = Math.ceil((activeDepositPlan?.totalAmount || totalPlanAmount) * 0.30);
-  const minimumDepositAmount = isInitialDeposit || !activeDepositPlan?.transactions?.length
+  const minimumDepositAmount = isInitialDeposit || Number(activeDepositPlan?.amountSaved || 0) <= 0
     ? firstDepositMinimum
     : 1;
   const bankDetailsConfigured = Boolean(paymentSettings.bankName?.trim() && paymentSettings.accountName?.trim() && paymentSettings.accountNumber?.trim());
@@ -165,7 +165,9 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
   const handleOpenDepositModal = (planId: string, suggestedAmount: number) => {
     setActivePlanForDeposit(planId);
     setIsInitialDeposit(false);
-    setDepositAmount(Math.max(suggestedAmount, Math.ceil((savingsPlans.find(plan => plan.id === planId)?.totalAmount || 0) * 0.30)));
+    const plan = savingsPlans.find(item => item.id === planId);
+    const firstPaymentMinimum = Number(plan?.amountSaved || 0) <= 0 ? Math.ceil((plan?.totalAmount || 0) * 0.30) : 1;
+    setDepositAmount(Math.max(suggestedAmount, firstPaymentMinimum));
     setDepositRef('STB-' + Math.floor(100000 + Math.random() * 900000));
     setIsDepositModalOpen(true);
   };
@@ -174,7 +176,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
     if (!activePlanForDeposit) return;
     try {
       const plan = savingsPlans.find(item => item.id === activePlanForDeposit);
-      const requiredMinimum = !plan?.transactions?.length ? Math.ceil((plan?.totalAmount || 0) * 0.30) : 1;
+      const requiredMinimum = Number(plan?.amountSaved || 0) <= 0 ? Math.ceil((plan?.totalAmount || 0) * 0.30) : 1;
       if (!plan) { window.alert('We could not find this savings plan. Refresh and try again.'); return; }
       if (!Number.isFinite(depositAmount) || depositAmount < requiredMinimum) {
         window.alert(`Your first deposit must be at least 30% of the plan total (₦${requiredMinimum.toLocaleString()}).`);
@@ -440,7 +442,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                 />
                 <div className="flex justify-between text-[11px] text-zinc-500 mt-1">
                   <span>30% (Minimum)</span>
-                  <span>25%</span>
+                  <span>40%</span>
                   <span>50%</span>
                 </div>
               </div>
@@ -741,7 +743,7 @@ export const SaveToBuyPage: React.FC<SaveToBuyPageProps> = ({
                 onChange={(e) => setDepositAmount(Number(e.target.value))}
                 className="w-full bg-[#181824] border border-[#2E2E42] text-white text-base font-bold rounded-xl p-3 focus:outline-none focus:border-[#D4AF37]"
               />
-              {activeDepositPlan && !activeDepositPlan.transactions?.length && (
+              {activeDepositPlan && Number(activeDepositPlan.amountSaved || 0) <= 0 && (
                 <p className="text-[11px] text-[#ECC260] mt-1.5">
                   Mandatory first deposit: at least 30% of ₦{activeDepositPlan.totalAmount.toLocaleString()} = ₦{minimumDepositAmount.toLocaleString()}.
                 </p>
