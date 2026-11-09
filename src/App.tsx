@@ -35,7 +35,7 @@ interface NavigationState {
 }
 
 const AppContent: React.FC = () => {
-  const { toasts, removeToast, isAuthInitializing } = useStore();
+  const { toasts, removeToast, isAuthInitializing, products } = useStore();
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   const [navState, setNavState] = useState<NavigationState>(() => {
@@ -48,6 +48,87 @@ const AppContent: React.FC = () => {
     }
     return { page: 'home', params: {} };
   });
+
+  // Keep document metadata aligned with the visible storefront page.
+  useEffect(() => {
+    const product = navState.page === 'product-detail'
+      ? products.find(item => item.slug === navState.params?.slug)
+      : undefined;
+    const pageMeta: Record<string, { title: string; description: string }> = {
+      home: { title: 'P-Kess Fashion World | Nigerian Fashion, Shoes, Bags & Accessories', description: 'Shop P-Kess Fashion World for designer clothing, Nigerian native wear, T-shirts, shoes, handbags and fashion accessories. Visit our showroom in Asaba, Delta State, or shop online across Nigeria.' },
+      shop: { title: 'Shop Fashion, Shoes, Bags & Accessories | P-Kess Fashion World', description: 'Explore the P-Kess Fashion World online collection of clothing, native wear, T-shirts, shoes, handbags and fashion accessories. Shop online in Nigeria.' },
+      clothing: { title: 'Clothing & Nigerian Native Wear | P-Kess Fashion World', description: 'Explore clothing and Nigerian native-inspired styles from P-Kess Fashion World. Shop online from Asaba, Delta State, with nationwide shopping.' },
+      't-shirts': { title: 'T-Shirts & Everyday Wear | P-Kess Fashion World', description: 'Browse T-shirts and everyday fashion from P-Kess Fashion World. Discover styles and shop online in Nigeria.' },
+      shoes: { title: 'Shoes & Sandals | P-Kess Fashion World', description: 'Discover shoes and sandals at P-Kess Fashion World. Browse the collection and shop online in Nigeria.' },
+      bags: { title: 'Bags & Handbags | P-Kess Fashion World', description: 'Explore bags and handbags at P-Kess Fashion World. Find a style for everyday wear and special occasions.' },
+      accessories: { title: 'Fashion Accessories | P-Kess Fashion World', description: 'Shop fashion accessories from P-Kess Fashion World in Asaba, Nigeria.' },
+      wholesale: { title: 'Wholesale Fashion & Bulk Orders | P-Kess Fashion World', description: 'Explore wholesale fashion offers for boutiques, retailers and bulk buyers at P-Kess Fashion World.' },
+      about: { title: 'About P-Kess Fashion World | Asaba, Delta State', description: 'Learn about P-Kess Fashion World, a Nigerian fashion brand based in Asaba, Delta State.' },
+      contact: { title: 'Contact P-Kess Fashion World | Asaba, Nigeria', description: 'Contact P-Kess Fashion World for product enquiries, sizing, wholesale orders and showroom information in Asaba, Delta State.' },
+      'track-order': { title: 'Track Your Order | P-Kess Fashion World', description: 'Check the status of your P-Kess Fashion World order.' }
+    };
+    const fallback = pageMeta[navState.page] || { title: 'P-Kess Fashion World | Online Fashion Store Nigeria', description: 'Discover clothing, shoes, bags and fashion accessories at P-Kess Fashion World.' };
+    const title = product ? `${product.name} | P-Kess Fashion World` : fallback.title;
+    const description = product
+      ? `${product.description} Shop ${product.name} at P-Kess Fashion World, Asaba, Nigeria.`.slice(0, 300)
+      : fallback.description;
+    document.title = title;
+    let descriptionTag = document.querySelector('meta[name="description"]');
+    if (!descriptionTag) {
+      descriptionTag = document.createElement('meta');
+      descriptionTag.setAttribute('name', 'description');
+      document.head.appendChild(descriptionTag);
+    }
+    descriptionTag.setAttribute('content', description);
+    for (const [property, content] of [['og:title', title], ['og:description', description], ['og:type', 'website']]) {
+      let tag = document.querySelector(`meta[property="${property}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('property', property);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    }
+    let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twitterTitle) {
+      twitterTitle = document.createElement('meta');
+      twitterTitle.setAttribute('name', 'twitter:title');
+      document.head.appendChild(twitterTitle);
+    }
+    twitterTitle.setAttribute('content', title);
+    let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (!twitterDescription) {
+      twitterDescription = document.createElement('meta');
+      twitterDescription.setAttribute('name', 'twitter:description');
+      document.head.appendChild(twitterDescription);
+    }
+    twitterDescription.setAttribute('content', description);
+
+    const existingProductSchema = document.getElementById('pkess-product-schema');
+    if (existingProductSchema) existingProductSchema.remove();
+    if (product) {
+      const productSchema = document.createElement('script');
+      productSchema.id = 'pkess-product-schema';
+      productSchema.type = 'application/ld+json';
+      productSchema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: product.images?.filter(Boolean),
+        sku: product.sku || product.id,
+        brand: { '@type': 'Brand', name: 'P-Kess Fashion World' },
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'NGN',
+          price: Number(product.retailPrice || 0),
+          availability: Number(product.stock || 0) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          url: 'https://pkessfashionworld.com.ng/'
+        }
+      });
+      document.head.appendChild(productSchema);
+    }
+  }, [navState.page, navState.params?.slug, products]);
 
   // Keep the first in-app page in the browser history so Back returns to the store, not a blank external entry.
   useEffect(() => {
