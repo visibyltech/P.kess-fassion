@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /customer
+Disallow: /checkout
+Disallow: /cart
+Disallow: /save-to-buy
+Disallow: /bnpl
+
+Sitemap: https://pkessfashionworld.com.ng/sitemap.xml
