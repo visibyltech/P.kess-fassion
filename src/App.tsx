@@ -103,6 +103,31 @@ const AppContent: React.FC = () => {
       document.head.appendChild(twitterDescription);
     }
     twitterDescription.setAttribute('content', description);
+
+    const existingProductSchema = document.getElementById('pkess-product-schema');
+    if (existingProductSchema) existingProductSchema.remove();
+    if (product) {
+      const productSchema = document.createElement('script');
+      productSchema.id = 'pkess-product-schema';
+      productSchema.type = 'application/ld+json';
+      productSchema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: product.images?.filter(Boolean),
+        sku: product.sku || product.id,
+        brand: { '@type': 'Brand', name: 'P-Kess Fashion World' },
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'NGN',
+          price: Number(product.retailPrice || 0),
+          availability: Number(product.stock || 0) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          url: 'https://pkessfashionworld.com.ng/'
+        }
+      });
+      document.head.appendChild(productSchema);
+    }
   }, [navState.page, navState.params?.slug, products]);
 
   // Keep the first in-app page in the browser history so Back returns to the store, not a blank external entry.
